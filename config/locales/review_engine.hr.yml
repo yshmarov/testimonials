@@ -4,7 +4,7 @@ hr:
       - "Tko ste i kako koristite %{app}?"
       - "Kako vam je %{app} pomogao?"
       - "Što je najbolje kod %{app}?"
-    consent: "Možete ovo objaviti s mojim imenom i fotografijom."
+    consent: "Dajem dopuštenje da se ovaj osvrt koristi na društvenim mrežama i u drugim marketinškim aktivnostima."
     cta: "Ostavite recenziju"
     update_title: "Ažurirajte svoju recenziju"
     enjoying: "Sviđa li vam se %{app}?"

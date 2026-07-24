@@ -4,7 +4,7 @@ it:
       - "Chi sei e come usi %{app}?"
       - "In che modo %{app} ti ha aiutato?"
       - "Qual è la cosa migliore di %{app}?"
-    consent: "Potete pubblicarlo con il mio nome e la mia foto."
+    consent: "Autorizzo l'uso di questa testimonianza sui social e in altre attività di marketing."
     cta: "Lascia una recensione"
     update_title: "Aggiorna la tua recensione"
     enjoying: "Ti piace %{app}?"

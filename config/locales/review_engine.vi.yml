@@ -4,7 +4,7 @@ vi:
       - "Bạn là ai và bạn dùng %{app} như thế nào?"
       - "%{app} đã giúp bạn ra sao?"
       - "Điều tuyệt nhất ở %{app} là gì?"
-    consent: "Bạn có thể đăng nội dung này cùng tên và ảnh của tôi."
+    consent: "Tôi cho phép sử dụng cảm nhận này trên mạng xã hội và các hoạt động tiếp thị khác."
     cta: "Để lại đánh giá"
     update_title: "Cập nhật đánh giá của bạn"
     enjoying: "Bạn thích %{app} chứ?"

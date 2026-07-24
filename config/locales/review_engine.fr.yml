@@ -4,7 +4,7 @@ fr:
       - "Qui êtes-vous et comment utilisez-vous %{app} ?"
       - "Comment %{app} vous a-t-il aidé ?"
       - "Quelle est la meilleure chose à propos de %{app} ?"
-    consent: "Vous pouvez publier ceci avec mon nom et ma photo."
+    consent: "J'autorise l'utilisation de ce témoignage sur les réseaux sociaux et dans d'autres actions marketing."
     cta: "Laisser un avis"
     update_title: "Mettre à jour votre avis"
     enjoying: "Vous aimez %{app} ?"

@@ -39,8 +39,10 @@ ReviewEngine.configure do |config|
   # config.reprompt_after = 90.days
   # config.max_prompts = 3
 
-  # Consent line stored verbatim with each submission. nil = localized default.
-  # config.consent_text = "You may publish this with my name and photo."
+  # Consent line stored verbatim with each submission. nil = localized default:
+  # "I give permission to use this testimonial across social channels and
+  # other marketing efforts."
+  # config.consent_text = "..."
 
   # The standalone collection page at /reviews/new — share it with customers
   # outside the app. Set false to disable.

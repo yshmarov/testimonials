@@ -4,7 +4,7 @@ pl:
       - "Kim jesteś i jak korzystasz z %{app}?"
       - "Jak %{app} Ci pomogło?"
       - "Co jest najlepsze w %{app}?"
-    consent: "Możecie to opublikować z moim imieniem i zdjęciem."
+    consent: "Wyrażam zgodę na wykorzystanie tej opinii w mediach społecznościowych i innych działaniach marketingowych."
     cta: "Zostaw opinię"
     update_title: "Zaktualizuj swoją opinię"
     enjoying: "Podoba Ci się %{app}?"

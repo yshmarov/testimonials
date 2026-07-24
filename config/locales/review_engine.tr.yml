@@ -4,7 +4,7 @@ tr:
       - "Kimsiniz ve %{app} uygulamasını nasıl kullanıyorsunuz?"
       - "%{app} size nasıl yardımcı oldu?"
       - "%{app} uygulamasının en iyi yanı nedir?"
-    consent: "Bunu adım ve fotoğrafımla yayımlayabilirsiniz."
+    consent: "Bu yorumun sosyal medyada ve diğer pazarlama çalışmalarında kullanılmasına izin veriyorum."
     cta: "Yorum bırak"
     update_title: "Yorumunuzu güncelleyin"
     enjoying: "%{app} hoşunuza gidiyor mu?"

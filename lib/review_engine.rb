@@ -51,7 +51,9 @@ module ReviewEngine
 
     def consent_text
       config.consent_text.presence ||
-        I18n.t('review_engine.consent', default: 'You may publish this with my name and photo.')
+        I18n.t('review_engine.consent',
+               default: 'I give permission to use this testimonial across social channels ' \
+                        'and other marketing efforts.')
     end
 
     private

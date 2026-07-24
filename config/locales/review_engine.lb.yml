@@ -4,7 +4,7 @@ lb:
       - "Wien sidd Dir a wéi benotzt Dir %{app}?"
       - "Wéi huet %{app} Iech gehollef?"
       - "Wat ass dat Bescht un %{app}?"
-    consent: "Dir dierft dëst mat mengem Numm a Foto publizéieren."
+    consent: "Ech ginn d'Erlaabnis, dësen Temoignage op soziale Medien an an anere Marketingaktivitéiten ze benotzen."
     cta: "Eng Bewäertung hannerloossen"
     update_title: "Är Bewäertung aktualiséieren"
     enjoying: "Gefällt Iech %{app}?"

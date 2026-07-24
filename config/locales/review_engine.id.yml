@@ -4,7 +4,7 @@ id:
       - "Siapa Anda dan bagaimana Anda menggunakan %{app}?"
       - "Bagaimana %{app} membantu Anda?"
       - "Apa hal terbaik dari %{app}?"
-    consent: "Anda boleh memublikasikan ini dengan nama dan foto saya."
+    consent: "Saya mengizinkan testimoni ini digunakan di media sosial dan upaya pemasaran lainnya."
     cta: "Tulis ulasan"
     update_title: "Perbarui ulasan Anda"
     enjoying: "Suka dengan %{app}?"

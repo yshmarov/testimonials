@@ -45,7 +45,7 @@ RSpec.describe ReviewEngine do
 
   describe '.consent_text' do
     it 'has a localized default' do
-      expect(described_class.consent_text).to include('publish')
+      expect(described_class.consent_text).to include('permission')
     end
 
     it 'prefers the configured text' do

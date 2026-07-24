@@ -4,7 +4,7 @@ en:
       - "Who are you, and how do you use %{app}?"
       - "How has %{app} helped you?"
       - "What is the best thing about %{app}?"
-    consent: "You may publish this with my name and photo."
+    consent: "I give permission to use this testimonial across social channels and other marketing efforts."
     cta: "Leave a review"
     update_title: "Update your review"
     enjoying: "Enjoying %{app}?"
