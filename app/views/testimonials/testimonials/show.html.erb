@@ -29,15 +29,20 @@
     <p class="message"><%= @testimonial.body %></p>
   <% end %>
 
-  <%# The customer's words are never edited — but the admin can pick a pull-quote. %>
+  <%# The customer's words are never edited — but the admin picks the line
+      worth featuring. %>
   <%= form_with model: @testimonial, url: testimonial_path(@testimonial), method: :patch,
                 class: 'excerpt-form', local: true do |form| %>
-    <label class="muted" for="testimonial_excerpt">
-      <%= t('testimonials.dashboard.excerpt', default: 'Excerpt (the pull-quote shown by default; leave blank to use the full text)') %>
+    <label for="testimonial_excerpt">
+      <%= t('testimonials.dashboard.excerpt', default: 'Best line') %>
     </label>
+    <p class="muted" style="margin: 2px 0 6px;">
+      <%= t('testimonials.dashboard.excerpt_hint',
+            default: 'The quote your site will show. Leave blank to use the full text. For videos, type the best thing they said.') %>
+    </p>
     <%= form.text_area :excerpt, rows: 2, id: 'testimonial_excerpt' %>
     <button class="small" style="margin-top: 8px;">
-      <%= t('testimonials.dashboard.save_excerpt', default: 'Save excerpt') %>
+      <%= t('testimonials.dashboard.save_excerpt', default: 'Save') %>
     </button>
   <% end %>
 </div>
