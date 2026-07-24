@@ -1,0 +1,13 @@
+<%# The "★ 4.9 from 87 reviews" chip. Same numbers the API's /api/stats serves. %>
+
+<% scope = ReviewEngine::Testimonial.publishable.where.not(rating: nil) %>
+<% if (count = scope.count).positive? %>
+  <a href="#wall-of-love"
+     style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+            border: 1px solid #e5e7eb; border-radius: 999px; text-decoration: none;
+            font: 600 14px system-ui, sans-serif; color: inherit;">
+    <span style="color: #f59e0b;">★</span>
+    <%= scope.average(:rating).to_f.round(1) %>
+    <span style="font-weight: 400; color: #6b7280;">from <%= count %> reviews</span>
+  </a>
+<% end %>

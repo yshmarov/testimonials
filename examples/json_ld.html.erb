@@ -1,0 +1,28 @@
+<%# schema.org structured data for Google rich snippets (star ratings in
+    search results). Put it in the <head> of the page that shows the reviews. %>
+
+<% scope = ReviewEngine::Testimonial.publishable %>
+<% rated = scope.where.not(rating: nil) %>
+<% if rated.exists? %>
+  <script type="application/ld+json">
+    <%= raw({
+          '@context' => 'https://schema.org',
+          '@type' => 'Product',
+          name: ReviewEngine.app_name,
+          aggregateRating: {
+            '@type' => 'AggregateRating',
+            ratingValue: rated.average(:rating).to_f.round(2),
+            reviewCount: rated.count
+          },
+          review: scope.featured_first.limit(5).map do |testimonial|
+            {
+              '@type' => 'Review',
+              reviewBody: testimonial.quote,
+              author: { '@type' => 'Person', name: testimonial.name },
+              reviewRating: testimonial.rating &&
+                { '@type' => 'Rating', ratingValue: testimonial.rating }
+            }.compact
+          end
+        }.to_json) %>
+  </script>
+<% end %>

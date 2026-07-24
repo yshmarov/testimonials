@@ -1,0 +1,42 @@
+<%# A wall of love: drop into any view of the host app and restyle at will.
+    Videos stream through the engine's gated media route (admin, or
+    public_api + publishable). %>
+
+<style>
+  .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .wall-card { border: 1px solid #e5e7eb; border-radius: 14px; padding: 18px; background: #fff;
+               font: 15px/1.5 system-ui, sans-serif; break-inside: avoid; }
+  .wall-stars { color: #f59e0b; letter-spacing: 2px; margin-bottom: 6px; }
+  .wall-quote { margin: 0 0 12px; }
+  .wall-author { display: flex; align-items: center; gap: 10px; }
+  .wall-author img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+  .wall-author b { display: block; font-size: 14px; }
+  .wall-author span { font-size: 13px; color: #6b7280; }
+  .wall-card video { width: 100%; border-radius: 10px; background: #000; margin-bottom: 10px; }
+</style>
+
+<div class="wall">
+  <% ReviewEngine::Testimonial.publishable.featured_first.limit(12).each do |testimonial| %>
+    <figure class="wall-card">
+      <% if testimonial.rating %>
+        <div class="wall-stars"><%= '★' * testimonial.rating %></div>
+      <% end %>
+      <% if testimonial.video_attached? %>
+        <video controls preload="metadata"
+               src="<%= review_engine.testimonial_video_path(testimonial) %>"></video>
+      <% end %>
+      <% if testimonial.quote.present? %>
+        <blockquote class="wall-quote">“<%= testimonial.quote %>”</blockquote>
+      <% end %>
+      <figcaption class="wall-author">
+        <% if testimonial.avatar_attached? %>
+          <img src="<%= review_engine.testimonial_avatar_path(testimonial) %>" alt="">
+        <% end %>
+        <div>
+          <b><%= testimonial.name %></b>
+          <span><%= testimonial.title_company %></span>
+        </div>
+      </figcaption>
+    </figure>
+  <% end %>
+</div>
