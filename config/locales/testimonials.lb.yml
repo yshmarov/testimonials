@@ -56,6 +56,7 @@ lb:
       page: "Sammelsäit"
       nps: "NPS-Suivi"
       collection_page: "Frot no Temoignagen"
+      download_video: "Video eroflueden"
     statuses:
       pending: "Am Waardestand"
       approved: "Guttgeheescht"

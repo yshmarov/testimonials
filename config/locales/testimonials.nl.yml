@@ -56,6 +56,7 @@ nl:
       page: "Verzamelpagina"
       nps: "NPS-opvolging"
       collection_page: "Vraag om testimonials"
+      download_video: "Video downloaden"
     statuses:
       pending: "In afwachting"
       approved: "Goedgekeurd"

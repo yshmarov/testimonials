@@ -14,16 +14,22 @@ module Testimonials
     def video
       head :not_found and return unless @testimonial.video_attached?
 
-      redirect_to main_app.rails_blob_path(@testimonial.video_file, disposition: 'inline')
+      redirect_to main_app.rails_blob_path(@testimonial.video_file, disposition: disposition)
     end
 
     def avatar
       head :not_found and return unless @testimonial.avatar_attached?
 
-      redirect_to main_app.rails_blob_path(@testimonial.avatar, disposition: 'inline')
+      redirect_to main_app.rails_blob_path(@testimonial.avatar, disposition: disposition)
     end
 
     private
+
+    # ?download=1 turns the redirect into a file download instead of
+    # inline playback.
+    def disposition
+      params[:download].present? ? 'attachment' : 'inline'
+    end
 
     def set_testimonial
       @testimonial = Testimonial.find(params[:id])

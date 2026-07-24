@@ -56,6 +56,7 @@ zh-CN:
       page: "收集页面"
       nps: "NPS 跟进"
       collection_page: "征集用户评价"
+      download_video: "下载视频"
     statuses:
       pending: "待处理"
       approved: "已批准"

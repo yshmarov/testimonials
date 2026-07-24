@@ -56,6 +56,7 @@ ko:
       page: "수집 페이지"
       nps: "NPS 후속"
       collection_page: "후기 요청하기"
+      download_video: "동영상 다운로드"
     statuses:
       pending: "대기 중"
       approved: "승인됨"

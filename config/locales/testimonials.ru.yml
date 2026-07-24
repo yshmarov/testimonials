@@ -56,6 +56,7 @@ ru:
       page: "Страница сбора"
       nps: "После NPS"
       collection_page: "Попросить отзывы"
+      download_video: "Скачать видео"
     statuses:
       pending: "Ожидает"
       approved: "Одобрено"

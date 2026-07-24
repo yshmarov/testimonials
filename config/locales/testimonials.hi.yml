@@ -56,6 +56,7 @@ hi:
       page: "संग्रह पृष्ठ"
       nps: "NPS फ़ॉलो-अप"
       collection_page: "प्रशंसापत्र माँगें"
+      download_video: "वीडियो डाउनलोड करें"
     statuses:
       pending: "लंबित"
       approved: "स्वीकृत"

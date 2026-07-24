@@ -81,6 +81,33 @@ RSpec.describe 'testimonial submission', type: :request do
     expect(testimonial.video_file).not_to be_attached
   end
 
+  it 'rate-limits guest submissions per IP' do
+    statuses = 7.times.map do |i|
+      post '/testimonials', params: { testimonial: { body: "spam #{i}", name: 'B', email: 'b@example.com' } }
+      response.status
+    end
+
+    expect(statuses.first(5)).to all(eq(201))
+    expect(statuses.last(2)).to all(eq(429))
+    expect(Testimonials::Testimonial.count).to eq(5)
+  end
+
+  it 'serves video downloads with attachment disposition' do
+    Testimonials.config.current_user = ->(_request) { user }
+    file = Rack::Test::UploadedFile.new(
+      StringIO.new('fake video bytes'), 'video/webm', original_filename: 'testimonial.webm'
+    )
+    post '/testimonials', params: { testimonial: { video_file: file } }
+    testimonial = Testimonials::Testimonial.last
+
+    get "/testimonials/#{testimonial.id}/video", params: { download: 1 }
+    expect(response).to have_http_status(:redirect)
+    expect(response.headers['Location']).to include('disposition=attachment')
+
+    get "/testimonials/#{testimonial.id}/video"
+    expect(response.headers['Location']).to include('disposition=inline')
+  end
+
   it 'lets the author fetch their own video through the media route' do
     Testimonials.config.current_user = ->(_request) { user }
     file = Rack::Test::UploadedFile.new(

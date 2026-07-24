@@ -56,6 +56,7 @@ th:
       page: "หน้ารวบรวม"
       nps: "ติดตามผล NPS"
       collection_page: "ขอคำรับรอง"
+      download_video: "ดาวน์โหลดวิดีโอ"
     statuses:
       pending: "รอดำเนินการ"
       approved: "อนุมัติแล้ว"

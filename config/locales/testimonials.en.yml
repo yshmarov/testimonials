@@ -56,6 +56,7 @@ en:
       page: "Collection page"
       nps: "NPS follow-up"
       collection_page: "Ask for testimonials"
+      download_video: "Download video"
     statuses:
       pending: "Pending"
       approved: "Approved"

@@ -56,6 +56,7 @@ bg:
       page: "Страница за събиране"
       nps: "Продължение след NPS"
       collection_page: "Поискайте отзиви"
+      download_video: "Изтегляне на видеото"
     statuses:
       pending: "Чакащи"
       approved: "Одобрени"

@@ -56,6 +56,7 @@ pl:
       page: "Strona zbierania"
       nps: "Kontynuacja NPS"
       collection_page: "Poproś o opinie"
+      download_video: "Pobierz wideo"
     statuses:
       pending: "Oczekujące"
       approved: "Zatwierdzone"

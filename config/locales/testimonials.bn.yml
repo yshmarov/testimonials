@@ -56,6 +56,7 @@ bn:
       page: "সংগ্রহ পাতা"
       nps: "NPS ফলো-আপ"
       collection_page: "প্রশংসাপত্র চান"
+      download_video: "ভিডিও ডাউনলোড করুন"
     statuses:
       pending: "অপেক্ষমাণ"
       approved: "অনুমোদিত"

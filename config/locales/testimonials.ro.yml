@@ -56,6 +56,7 @@ ro:
       page: "Pagină de colectare"
       nps: "Continuare NPS"
       collection_page: "Cere testimoniale"
+      download_video: "Descarcă videoclipul"
     statuses:
       pending: "În așteptare"
       approved: "Aprobat"

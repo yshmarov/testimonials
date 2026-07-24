@@ -56,6 +56,7 @@ ar:
       page: "صفحة الجمع"
       nps: "متابعة NPS"
       collection_page: "اطلب شهادات"
+      download_video: "تنزيل الفيديو"
     statuses:
       pending: "قيد الانتظار"
       approved: "معتمد"

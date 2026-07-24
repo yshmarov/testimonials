@@ -56,6 +56,7 @@ de:
       page: "Sammelseite"
       nps: "NPS-Nachfrage"
       collection_page: "Um Erfahrungsberichte bitten"
+      download_video: "Video herunterladen"
     statuses:
       pending: "Ausstehend"
       approved: "Freigegeben"

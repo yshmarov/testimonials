@@ -56,6 +56,7 @@ tr:
       page: "Toplama sayfası"
       nps: "NPS takibi"
       collection_page: "Görüş isteyin"
+      download_video: "Videoyu indir"
     statuses:
       pending: "Beklemede"
       approved: "Onaylandı"

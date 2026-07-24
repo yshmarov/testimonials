@@ -56,6 +56,7 @@ id:
       page: "Halaman pengumpulan"
       nps: "Tindak lanjut NPS"
       collection_page: "Minta testimoni"
+      download_video: "Unduh video"
     statuses:
       pending: "Menunggu"
       approved: "Disetujui"

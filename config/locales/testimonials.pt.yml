@@ -56,6 +56,7 @@ pt:
       page: "Página de coleta"
       nps: "Acompanhamento NPS"
       collection_page: "Pedir depoimentos"
+      download_video: "Baixar o vídeo"
     statuses:
       pending: "Pendente"
       approved: "Aprovado"
