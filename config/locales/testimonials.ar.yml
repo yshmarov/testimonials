@@ -29,7 +29,7 @@ ar:
     video_check_title: "فحص الكاميرا"
     video_hint: "حتى %{seconds} ثانية. يمكنك مراجعته قبل الإرسال."
     start_recording: "بدء التسجيل"
-    stop_recording: "إيقاف"
+    stop_recording: "إنهاء"
     record_again: "إعادة التسجيل"
     use_video: "استخدام هذا الفيديو"
     upload_instead: "رفع ملف فيديو بدلًا من ذلك"

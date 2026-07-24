@@ -29,7 +29,7 @@ pt:
     video_check_title: "Teste de câmera"
     video_hint: "Até %{seconds} segundos. Você pode revisar antes de enviar."
     start_recording: "Iniciar gravação"
-    stop_recording: "Parar"
+    stop_recording: "Concluir"
     record_again: "Gravar novamente"
     use_video: "Usar este vídeo"
     upload_instead: "Enviar um arquivo de vídeo em vez disso"

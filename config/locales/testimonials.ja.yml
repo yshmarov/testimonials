@@ -29,7 +29,7 @@ ja:
     video_check_title: "カメラの確認"
     video_hint: "最長%{seconds}秒。送信前に確認できます。"
     start_recording: "録画を開始"
-    stop_recording: "停止"
+    stop_recording: "完了"
     record_again: "撮り直す"
     use_video: "この動画を使う"
     upload_instead: "代わりに動画ファイルをアップロード"

@@ -29,7 +29,7 @@ id:
     video_check_title: "Pemeriksaan kamera"
     video_hint: "Hingga %{seconds} detik. Anda dapat meninjaunya sebelum mengirim."
     start_recording: "Mulai merekam"
-    stop_recording: "Berhenti"
+    stop_recording: "Selesai"
     record_again: "Rekam ulang"
     use_video: "Gunakan video ini"
     upload_instead: "Unggah berkas video saja"

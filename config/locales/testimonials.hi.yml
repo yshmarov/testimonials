@@ -29,7 +29,7 @@ hi:
     video_check_title: "कैमरा जाँच"
     video_hint: "अधिकतम %{seconds} सेकंड। भेजने से पहले आप इसे देख सकते हैं।"
     start_recording: "रिकॉर्डिंग शुरू करें"
-    stop_recording: "रोकें"
+    stop_recording: "समाप्त करें"
     record_again: "फिर से रिकॉर्ड करें"
     use_video: "यह वीडियो इस्तेमाल करें"
     upload_instead: "इसके बजाय वीडियो फ़ाइल अपलोड करें"

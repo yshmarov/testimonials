@@ -29,7 +29,7 @@ it:
     video_check_title: "Verifica della fotocamera"
     video_hint: "Fino a %{seconds} secondi. Potrai rivederlo prima dell'invio."
     start_recording: "Avvia registrazione"
-    stop_recording: "Ferma"
+    stop_recording: "Termina"
     record_again: "Registra di nuovo"
     use_video: "Usa questo video"
     upload_instead: "Carica invece un file video"

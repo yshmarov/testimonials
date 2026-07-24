@@ -203,10 +203,13 @@ Left before announcing v0.1.0:
 - **Direct uploads + progress bar** — worth it only if real users hit request
   timeouts on slow connections (e.g. Heroku's 30s router limit with large
   clips). Costs ~100 lines of widget JS and host CORS setup; zero gem deps.
-- **Poster frames** — `preload="metadata"` already shows a first frame;
-  client-side canvas capture is ~30 lines if walls ever need instant thumbs.
-- **Camera/mic device pickers** — helps multi-device users; browser default
-  is right for most. ~60 lines plus permissions edge cases.
+- **Poster frames** — solved cheaply: every playback src carries a `#t=0.1`
+  media fragment, which makes browsers paint that frame as the thumbnail.
+  Client-side canvas capture (~30 lines + an attachment) only if that ever
+  proves insufficient.
+- **Camera/mic device pickers** — hold until someone asks. Helps multi-device
+  users; browser default is right for most. ~60 lines plus permissions edge
+  cases.
 - **Thank-you redirect** after submit.
 - **NPS trend over time** in the dashboard.
 - **Admin → host-user link**: a `config.user_path` lambda so the author name

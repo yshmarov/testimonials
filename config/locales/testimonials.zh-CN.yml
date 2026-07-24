@@ -29,7 +29,7 @@ zh-CN:
     video_check_title: "摄像头检查"
     video_hint: "最长 %{seconds} 秒。发送前可以先查看。"
     start_recording: "开始录制"
-    stop_recording: "停止"
+    stop_recording: "完成"
     record_again: "重新录制"
     use_video: "使用此视频"
     upload_instead: "改为上传视频文件"

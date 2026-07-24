@@ -29,7 +29,7 @@ tr:
     video_check_title: "Kamera kontrolü"
     video_hint: "En fazla %{seconds} saniye. Göndermeden önce izleyebilirsiniz."
     start_recording: "Kaydı başlat"
-    stop_recording: "Durdur"
+    stop_recording: "Bitir"
     record_again: "Yeniden kaydet"
     use_video: "Bu videoyu kullan"
     upload_instead: "Bunun yerine video dosyası yükle"

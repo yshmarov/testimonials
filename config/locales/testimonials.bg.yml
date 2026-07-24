@@ -29,7 +29,7 @@ bg:
     video_check_title: "Проверка на камерата"
     video_hint: "До %{seconds} секунди. Можете да го прегледате преди изпращане."
     start_recording: "Започни запис"
-    stop_recording: "Спри"
+    stop_recording: "Готово"
     record_again: "Запиши отново"
     use_video: "Използвай това видео"
     upload_instead: "Качете видеофайл вместо това"

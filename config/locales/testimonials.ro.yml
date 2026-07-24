@@ -29,7 +29,7 @@ ro:
     video_check_title: "Verificarea camerei"
     video_hint: "Până la %{seconds} secunde. Îl puteți revedea înainte de trimitere."
     start_recording: "Începe înregistrarea"
-    stop_recording: "Oprește"
+    stop_recording: "Finalizează"
     record_again: "Înregistrează din nou"
     use_video: "Folosește acest videoclip"
     upload_instead: "Încărcați în schimb un fișier video"

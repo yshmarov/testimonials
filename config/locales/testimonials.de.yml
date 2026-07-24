@@ -29,7 +29,7 @@ de:
     video_check_title: "Kamera-Check"
     video_hint: "Bis zu %{seconds} Sekunden. Sie können es vor dem Senden ansehen."
     start_recording: "Aufnahme starten"
-    stop_recording: "Stopp"
+    stop_recording: "Fertig"
     record_again: "Erneut aufnehmen"
     use_video: "Dieses Video verwenden"
     upload_instead: "Stattdessen Videodatei hochladen"

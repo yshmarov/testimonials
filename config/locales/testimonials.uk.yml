@@ -29,7 +29,7 @@ uk:
     video_check_title: "Перевірка камери"
     video_hint: "До %{seconds} секунд. Ви зможете переглянути перед надсиланням."
     start_recording: "Почати запис"
-    stop_recording: "Зупинити"
+    stop_recording: "Завершити"
     record_again: "Записати ще раз"
     use_video: "Використати це відео"
     upload_instead: "Натомість завантажити відеофайл"

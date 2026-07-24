@@ -29,7 +29,7 @@ hr:
     video_check_title: "Provjera kamere"
     video_hint: "Do %{seconds} sekundi. Možete pregledati prije slanja."
     start_recording: "Počni snimanje"
-    stop_recording: "Zaustavi"
+    stop_recording: "Završi"
     record_again: "Snimi ponovno"
     use_video: "Koristi ovaj video"
     upload_instead: "Umjesto toga prenesite videodatoteku"

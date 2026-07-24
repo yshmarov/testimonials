@@ -29,7 +29,7 @@ nl:
     video_check_title: "Cameracheck"
     video_hint: "Maximaal %{seconds} seconden. Je kunt het bekijken voordat je het verstuurt."
     start_recording: "Opname starten"
-    stop_recording: "Stoppen"
+    stop_recording: "Klaar"
     record_again: "Opnieuw opnemen"
     use_video: "Deze video gebruiken"
     upload_instead: "In plaats daarvan een videobestand uploaden"

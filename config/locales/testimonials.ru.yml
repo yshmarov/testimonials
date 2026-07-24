@@ -29,7 +29,7 @@ ru:
     video_check_title: "Проверка камеры"
     video_hint: "До %{seconds} секунд. Вы сможете просмотреть запись перед отправкой."
     start_recording: "Начать запись"
-    stop_recording: "Остановить"
+    stop_recording: "Завершить"
     record_again: "Записать заново"
     use_video: "Использовать это видео"
     upload_instead: "Загрузить видеофайл вместо записи"

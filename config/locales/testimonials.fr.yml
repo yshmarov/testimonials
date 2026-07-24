@@ -29,7 +29,7 @@ fr:
     video_check_title: "Vérification de la caméra"
     video_hint: "Jusqu'à %{seconds} secondes. Vous pourrez la revoir avant l'envoi."
     start_recording: "Démarrer l'enregistrement"
-    stop_recording: "Arrêter"
+    stop_recording: "Terminer"
     record_again: "Réenregistrer"
     use_video: "Utiliser cette vidéo"
     upload_instead: "Téléverser un fichier vidéo à la place"

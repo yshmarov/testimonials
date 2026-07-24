@@ -29,7 +29,7 @@ el:
     video_check_title: "Έλεγχος κάμερας"
     video_hint: "Έως %{seconds} δευτερόλεπτα. Μπορείτε να το δείτε πριν την αποστολή."
     start_recording: "Έναρξη εγγραφής"
-    stop_recording: "Διακοπή"
+    stop_recording: "Τέλος"
     record_again: "Εγγραφή ξανά"
     use_video: "Χρήση αυτού του βίντεο"
     upload_instead: "Ανεβάστε αρχείο βίντεο αντ' αυτού"

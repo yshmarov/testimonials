@@ -29,7 +29,7 @@ th:
     video_check_title: "ตรวจสอบกล้อง"
     video_hint: "สูงสุด %{seconds} วินาที คุณสามารถดูก่อนส่งได้"
     start_recording: "เริ่มอัด"
-    stop_recording: "หยุด"
+    stop_recording: "เสร็จสิ้น"
     record_again: "อัดใหม่"
     use_video: "ใช้วิดีโอนี้"
     upload_instead: "อัปโหลดไฟล์วิดีโอแทน"

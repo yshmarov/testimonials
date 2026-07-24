@@ -29,7 +29,7 @@ ko:
     video_check_title: "카메라 확인"
     video_hint: "최대 %{seconds}초. 보내기 전에 확인할 수 있습니다."
     start_recording: "녹화 시작"
-    stop_recording: "정지"
+    stop_recording: "완료"
     record_again: "다시 녹화"
     use_video: "이 동영상 사용"
     upload_instead: "대신 동영상 파일 업로드"

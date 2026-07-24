@@ -127,7 +127,7 @@ module Testimonials
           videoHint: t(:video_hint, 'Up to %{seconds} seconds. You can review it before sending.',
                        seconds: Testimonials.config.max_video_seconds.to_i),
           startRecording: t(:start_recording, 'Start recording'),
-          stopRecording: t(:stop_recording, 'Stop'),
+          stopRecording: t(:stop_recording, 'Finish'),
           recordAgain: t(:record_again, 'Record again'),
           useVideo: t(:use_video, 'Use this video'),
           uploadInstead: t(:upload_instead, 'Upload a video file instead'),

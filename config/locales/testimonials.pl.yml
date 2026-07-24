@@ -29,7 +29,7 @@ pl:
     video_check_title: "Sprawdzenie kamery"
     video_hint: "Do %{seconds} sekund. Możesz obejrzeć nagranie przed wysłaniem."
     start_recording: "Rozpocznij nagrywanie"
-    stop_recording: "Zatrzymaj"
+    stop_recording: "Zakończ"
     record_again: "Nagraj ponownie"
     use_video: "Użyj tego wideo"
     upload_instead: "Prześlij plik wideo zamiast tego"

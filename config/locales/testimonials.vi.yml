@@ -29,7 +29,7 @@ vi:
     video_check_title: "Kiểm tra camera"
     video_hint: "Tối đa %{seconds} giây. Bạn có thể xem lại trước khi gửi."
     start_recording: "Bắt đầu quay"
-    stop_recording: "Dừng"
+    stop_recording: "Hoàn tất"
     record_again: "Quay lại"
     use_video: "Dùng video này"
     upload_instead: "Tải lên tệp video thay thế"

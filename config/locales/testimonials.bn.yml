@@ -29,7 +29,7 @@ bn:
     video_check_title: "ক্যামেরা পরীক্ষা"
     video_hint: "সর্বোচ্চ %{seconds} সেকেন্ড। পাঠানোর আগে দেখে নিতে পারবেন।"
     start_recording: "রেকর্ডিং শুরু করুন"
-    stop_recording: "থামান"
+    stop_recording: "শেষ করুন"
     record_again: "আবার রেকর্ড করুন"
     use_video: "এই ভিডিওটি ব্যবহার করুন"
     upload_instead: "এর বদলে ভিডিও ফাইল আপলোড করুন"
