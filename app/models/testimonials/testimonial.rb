@@ -47,7 +47,7 @@ module Testimonials
 
     # The curated pull-quote when the admin picked one, else the full text.
     def quote
-      excerpt.presence || body
+      best_line.presence || body
     end
   end
 end

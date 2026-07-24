@@ -11,7 +11,7 @@ Testimonial.to / Senja / Delighted.
 inside your app with an iOS-style "Enjoying this app?" prompt, from a
 shareable public page, and from NPS promoters routed straight into the
 testimonial ask. Everything lands in your own database with a minimal
-dashboard to approve, feature, and excerpt. Display is **headless**: render
+dashboard to approve, feature, and pick each one’s best line. Display is **headless**: render
 approved testimonials with your own markup via the models or a JSON API —
 copy-paste examples included.
 
@@ -43,7 +43,7 @@ copy-paste examples included.
    now"). Tapping a star expands into the full form: guiding questions,
    text, optional video recording, consent.
 3. Submissions land in `testimonials_testimonials` as `pending`. You
-   approve, feature, and excerpt them at the mount path (`/testimonials`).
+   approve, feature, and pick best lines at the mount path (`/testimonials`).
 4. You render approved testimonials wherever you like — see
    [`examples/`](examples/) for a wall of love, quote card, rating badge,
    JSON-LD rich snippets, and a static-site (Astro) recipe.
@@ -159,7 +159,7 @@ The dashboard shows your NPS score and every response at
 ## Dashboard
 
 Browse at the mount path: pending → approved → archived tabs, search,
-quick-approve, inline video playback, feature toggle, and an excerpt picker —
+quick-approve, inline video playback, feature toggle, and a “Best line” picker —
 the customer's words are never editable, but you choose the pull-quote.
 Gated by `config.authorize_admin` (development-only until you set it).
 

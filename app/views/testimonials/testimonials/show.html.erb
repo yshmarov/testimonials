@@ -32,17 +32,17 @@
   <%# The customer's words are never edited — but the admin picks the line
       worth featuring. %>
   <%= form_with model: @testimonial, url: testimonial_path(@testimonial), method: :patch,
-                class: 'excerpt-form', local: true do |form| %>
-    <label for="testimonial_excerpt">
-      <%= t('testimonials.dashboard.excerpt', default: 'Best line') %>
+                class: 'best-line-form', local: true do |form| %>
+    <label for="testimonial_best_line">
+      <%= t('testimonials.dashboard.best_line', default: 'Best line') %>
     </label>
     <p class="muted" style="margin: 2px 0 6px;">
-      <%= t('testimonials.dashboard.excerpt_hint',
+      <%= t('testimonials.dashboard.best_line_hint',
             default: 'The quote your site will show. Leave blank to use the full text. For videos, type the best thing they said.') %>
     </p>
-    <%= form.text_area :excerpt, rows: 2, id: 'testimonial_excerpt' %>
+    <%= form.text_area :best_line, rows: 2, id: 'testimonial_best_line' %>
     <button class="small" style="margin-top: 8px;">
-      <%= t('testimonials.dashboard.save_excerpt', default: 'Save') %>
+      <%= t('testimonials.dashboard.save_best_line', default: 'Save') %>
     </button>
   <% end %>
 </div>

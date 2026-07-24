@@ -30,10 +30,10 @@ RSpec.describe Testimonials::Testimonial do
   end
 
   describe '#quote' do
-    it 'prefers the excerpt, falls back to the body' do
-      testimonial = described_class.new(body: 'Long story.', excerpt: 'Story.')
+    it 'prefers the best_line, falls back to the body' do
+      testimonial = described_class.new(body: 'Long story.', best_line: 'Story.')
       expect(testimonial.quote).to eq('Story.')
-      testimonial.excerpt = nil
+      testimonial.best_line = nil
       expect(testimonial.quote).to eq('Long story.')
     end
   end

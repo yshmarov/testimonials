@@ -49,7 +49,7 @@ RSpec.describe 'testimonial submission', type: :request do
     Testimonials.config.current_user = ->(_request) { user }
     existing = Testimonials::Testimonial.create!(kind: 'text', body: 'Old words', rating: 3,
                                                  author_id: '42', status: 'approved',
-                                                 excerpt: 'Old', consent_given: true)
+                                                 best_line: 'Old', consent_given: true)
 
     post '/testimonials', params: { testimonial: { body: 'New words', rating: 5, consent_given: '1' } }
 
@@ -59,7 +59,7 @@ RSpec.describe 'testimonial submission', type: :request do
     expect(existing.body).to eq('New words')
     expect(existing.rating).to eq(5)
     expect(existing.status).to eq('pending')
-    expect(existing.excerpt).to be_nil
+    expect(existing.best_line).to be_nil
   end
 
   it 'keeps an attached video on a text-only update, and purges it when asked' do

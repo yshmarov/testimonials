@@ -25,7 +25,7 @@ module Testimonials
           id: testimonial.id,
           kind: testimonial.kind,
           body: testimonial.body,
-          excerpt: testimonial.excerpt,
+          best_line: testimonial.best_line,
           quote: testimonial.quote,
           rating: testimonial.rating,
           name: testimonial.name,

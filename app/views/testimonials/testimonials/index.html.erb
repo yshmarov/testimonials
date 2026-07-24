@@ -73,7 +73,7 @@
               <%= time_ago_in_words(testimonial.created_at) %>
             </td>
             <td class="row-actions">
-              <%# Inline status triage; feature/excerpt/delete live on the show page. %>
+              <%# Inline status triage; feature / best line / delete live on the show page. %>
               <% unless testimonial.approved? %>
                 <%= button_to t('testimonials.dashboard.move_to_approved', default: 'Approve'),
                               testimonial_path(testimonial),

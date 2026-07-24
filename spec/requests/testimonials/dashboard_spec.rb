@@ -49,14 +49,14 @@ RSpec.describe 'dashboard', type: :request do
       expect(response.body).not_to include('Wonderful tool')
     end
 
-    it 'approves, features, excerpts, and deletes' do
+    it 'approves, features, best_lines, and deletes' do
       patch "/testimonials/#{testimonial.id}", params: { testimonial: { status: 'approved' } }
       expect(testimonial.reload.status).to eq('approved')
 
       patch "/testimonials/#{testimonial.id}", params: { testimonial: { featured: true } }
       expect(testimonial.reload.featured).to be(true)
 
-      patch "/testimonials/#{testimonial.id}", params: { testimonial: { excerpt: 'Wonderful' } }
+      patch "/testimonials/#{testimonial.id}", params: { testimonial: { best_line: 'Wonderful' } }
       expect(testimonial.reload.quote).to eq('Wonderful')
 
       delete "/testimonials/#{testimonial.id}"

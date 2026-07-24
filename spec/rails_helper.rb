@@ -12,7 +12,7 @@ ActiveRecord::Schema.define do
     t.string :kind, null: false, default: 'text'
     t.text :body
     t.integer :rating
-    t.text :excerpt
+    t.text :best_line
     t.string :status, null: false, default: 'pending'
     t.boolean :featured, null: false, default: false
     t.boolean :consent_given, null: false, default: false

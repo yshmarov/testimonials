@@ -59,7 +59,7 @@ Localized thanks message; the widget auto-closes, the public page keeps it on sc
 
 ### 3.4b One review per signed-in user (added post-PRD)
 
-The App Store / G2 model: a signed-in user's re-submission edits their review in place. The widget opens pre-filled (rating, text, consent state, playable attached video with a remove control), skipping the star card; the edit resets status to `pending` for re-moderation and clears the admin's excerpt. Guests have no reliable identity, so guest submissions stay separate records.
+The App Store / G2 model: a signed-in user's re-submission edits their review in place. The widget opens pre-filled (rating, text, consent state, playable attached video with a remove control), skipping the star card; the edit resets status to `pending` for re-moderation and clears the admin's best line. Guests have no reliable identity, so guest submissions stay separate records.
 
 ### 3.5 NPS (ships in this gem — decided)
 
@@ -75,8 +75,8 @@ The App Store / G2 model: a signed-in user's re-submission edits their review in
 
 Mounted at the engine path, gated by `config.authorize_admin`. Visually the sibling of feedback_engine's triage UI (tabs, search, light/dark).
 
-- **Inbox:** pending → approved → archived tabs with counts, kind filter, search. Rows show rating, quote, author name (plain text — a clickable link into the host's own user admin is a §12 idea), consent, received-at, and inline Approve/Archive (the moderation-queue pattern; feature/excerpt/delete live on the show page).
-- **Show page:** full text, inline video player, consent snapshot, metadata, status transitions, feature toggle, excerpt picker. **Deliberately no editing of the customer's words.**
+- **Inbox:** pending → approved → archived tabs with counts, kind filter, search. Rows show rating, quote, author name (plain text — a clickable link into the host's own user admin is a §12 idea), consent, received-at, and inline Approve/Archive (the moderation-queue pattern; feature / best line / delete live on the show page).
+- **Show page:** full text, inline video player, consent snapshot, metadata, status transitions, feature toggle, best-line picker. **Deliberately no editing of the customer's words.**
 - **CSP note:** the dashboard ships no inline JS — delete confirms and the auto-submitting filter run from a tiny same-origin `dashboard.js`, same delivery pattern as the widget.
 - **NPS tab:** score, responses, trend.
 - All records are plain ActiveRecord models for anything custom.
@@ -103,7 +103,7 @@ Instead the gem ships:
 
 ```
 testimonials_testimonials
-  kind (text|video), body, rating (1..5, null allowed), excerpt,
+  kind (text|video), body, rating (1..5, null allowed), best_line,
   status (pending|approved|archived), featured (bool),
   consent_given (bool), consent_text (string snapshot),
   author_id (loose string, no FK), name, email, title_company,

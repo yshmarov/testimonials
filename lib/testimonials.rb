@@ -10,7 +10,7 @@ require 'testimonials/engine'
 # star ratings and testimonials (text or video) at moments your code chooses;
 # a public page collects them from shareable links; NPS promoters are routed
 # straight into the testimonial ask. Everything lands in your own database
-# with a minimal dashboard to approve, feature, and excerpt — and a read API
+# with a minimal dashboard to approve, feature, and pick best lines — and a read API
 # to render approved testimonials wherever you like.
 module Testimonials
   class << self

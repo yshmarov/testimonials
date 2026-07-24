@@ -71,7 +71,7 @@ module Testimonials
     end
 
     def admin_params
-      params.require(:testimonial).permit(:status, :featured, :excerpt)
+      params.require(:testimonial).permit(:status, :featured, :best_line)
     end
 
     # Case-insensitive match on the free-text columns. LOWER() keeps it
@@ -89,7 +89,7 @@ module Testimonials
 
     # One review per signed-in user: a re-submission edits their existing
     # review in place (the App Store model). The edit goes back through
-    # moderation, and the admin's excerpt is cleared — it may no longer
+    # moderation, and the admin's best_line is cleared — it may no longer
     # match the new wording. Guests have no reliable identity, so each guest
     # submission stays a new record.
     def build_testimonial
@@ -97,7 +97,7 @@ module Testimonials
       testimonial.assign_attributes(testimonial_params)
       if testimonial.persisted?
         testimonial.status = 'pending'
-        testimonial.excerpt = nil
+        testimonial.best_line = nil
       end
       testimonial.kind = wants_video?(testimonial) ? 'video' : 'text'
       testimonial.source = 'widget' unless Testimonial::SOURCES.include?(testimonial.source)
