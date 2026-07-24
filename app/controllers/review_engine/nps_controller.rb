@@ -6,9 +6,7 @@ module ReviewEngine
     before_action :require_nps
 
     if respond_to?(:rate_limit) && ReviewEngine.config.rate_limit
-      rate_limit(**ReviewEngine.config.rate_limit,
-                 only: :create,
-                 with: -> { render json: { errors: [I18n.t('review_engine.error_rate_limited', default: 'Too many submissions. Please wait a moment and try again.')] }, status: :too_many_requests })
+      rate_limit(**ReviewEngine.config.rate_limit, only: :create, with: -> { render_rate_limited })
     end
 
     def create

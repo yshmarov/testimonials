@@ -73,7 +73,7 @@ module ReviewEngine
     attr_accessor :on_submit
 
     # Called with each NPS response scored 0–6. Route it into your feedback
-    # tool: `->(nps) { FeedbackEngine::Feedback.create!(kind: "other", message: nps.comment.presence || "NPS #{nps.score}") }`
+    # tool, e.g. create a FeedbackEngine::Feedback from nps.comment.
     attr_accessor :on_detractor
 
     # Per-IP throttle for the public endpoints, as keyword arguments for

@@ -11,6 +11,10 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+# Accessors in Configuration are separated by explanatory comments on purpose.
+Style/AccessorGrouping:
+  Enabled: false
+
 # I18n defaults interpolate with %{}-style tokens.
 Style/FormatStringToken:
   EnforcedStyle: template

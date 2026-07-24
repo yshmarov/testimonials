@@ -20,6 +20,12 @@ module ReviewEngine
       head :forbidden unless ReviewEngine.enabled?(request)
     end
 
+    def render_rate_limited
+      message = I18n.t('review_engine.error_rate_limited',
+                       default: 'Too many submissions. Please wait a moment and try again.')
+      render json: { errors: [message] }, status: :too_many_requests
+    end
+
     # Server-side gate for the dashboard. Default: development only.
     def require_admin
       return if ReviewEngine.admin?(request)

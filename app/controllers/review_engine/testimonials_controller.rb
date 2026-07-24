@@ -16,9 +16,7 @@ module ReviewEngine
     # into Rails 7.2+ (backed by Rails.cache); on Rails 7.1 this is a no-op.
     # Tune or disable via config.rate_limit — read once at boot.
     if respond_to?(:rate_limit) && ReviewEngine.config.rate_limit
-      rate_limit(**ReviewEngine.config.rate_limit,
-                 only: :create,
-                 with: -> { render json: { errors: [I18n.t('review_engine.error_rate_limited', default: 'Too many submissions. Please wait a moment and try again.')] }, status: :too_many_requests })
+      rate_limit(**ReviewEngine.config.rate_limit, only: :create, with: -> { render_rate_limited })
     end
 
     def index
