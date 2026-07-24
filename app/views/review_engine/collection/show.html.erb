@@ -7,5 +7,6 @@
       locale: I18n.locale,
       authenticated: ReviewEngine.config.current_user.call(request).present?,
       mode: 'page',
+      existing: @existing,
       nonce: (content_security_policy_nonce if respond_to?(:content_security_policy_nonce))
     ).html_safe %>

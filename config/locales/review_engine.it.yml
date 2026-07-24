@@ -5,6 +5,8 @@ it:
       - "In che modo %{app} ti ha aiutato?"
       - "Qual è la cosa migliore di %{app}?"
     consent: "Potete pubblicarlo con il mio nome e la mia foto."
+    cta: "Lascia una recensione"
+    update_title: "Aggiorna la tua recensione"
     enjoying: "Ti piace %{app}?"
     not_now: "Non ora"
     rate_aria: "Vota %{count} su 5"

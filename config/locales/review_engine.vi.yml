@@ -5,6 +5,8 @@ vi:
       - "%{app} đã giúp bạn ra sao?"
       - "Điều tuyệt nhất ở %{app} là gì?"
     consent: "Bạn có thể đăng nội dung này cùng tên và ảnh của tôi."
+    cta: "Để lại đánh giá"
+    update_title: "Cập nhật đánh giá của bạn"
     enjoying: "Bạn thích %{app} chứ?"
     not_now: "Để sau"
     rate_aria: "Chấm %{count} trên 5"

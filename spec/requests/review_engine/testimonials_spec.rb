@@ -45,6 +45,33 @@ RSpec.describe 'testimonial submission', type: :request do
     expect(ReviewEngine::PromptEvent.last.author_id).to eq('42')
   end
 
+  it 'updates a signed-in user\'s existing review in place, back through moderation' do
+    ReviewEngine.config.current_user = ->(_request) { user }
+    existing = ReviewEngine::Testimonial.create!(kind: 'text', body: 'Old words', rating: 3,
+                                                 author_id: '42', status: 'approved',
+                                                 excerpt: 'Old', consent_given: true)
+
+    post '/reviews/testimonials', params: { testimonial: { body: 'New words', rating: 5, consent_given: '1' } }
+
+    expect(response).to have_http_status(:created)
+    expect(ReviewEngine::Testimonial.count).to eq(1)
+    existing.reload
+    expect(existing.body).to eq('New words')
+    expect(existing.rating).to eq(5)
+    expect(existing.status).to eq('pending')
+    expect(existing.excerpt).to be_nil
+  end
+
+  it 'keeps guest submissions as separate records' do
+    ReviewEngine::Testimonial.create!(kind: 'text', body: 'First guest', name: 'G', email: 'g@example.com')
+
+    post '/reviews/testimonials', params: {
+      testimonial: { body: 'Second guest', name: 'G', email: 'g@example.com' }
+    }
+
+    expect(ReviewEngine::Testimonial.count).to eq(2)
+  end
+
   it 'rejects blank text testimonials' do
     post '/reviews/testimonials', params: { testimonial: { body: '' } }
     expect(response).to have_http_status(:unprocessable_entity)

@@ -5,6 +5,8 @@ lb:
       - "Wéi huet %{app} Iech gehollef?"
       - "Wat ass dat Bescht un %{app}?"
     consent: "Dir dierft dëst mat mengem Numm a Foto publizéieren."
+    cta: "Eng Bewäertung hannerloossen"
+    update_title: "Är Bewäertung aktualiséieren"
     enjoying: "Gefällt Iech %{app}?"
     not_now: "Net elo"
     rate_aria: "Mat %{count} vu 5 bewäerten"

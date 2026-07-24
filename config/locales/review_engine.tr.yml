@@ -5,6 +5,8 @@ tr:
       - "%{app} size nasıl yardımcı oldu?"
       - "%{app} uygulamasının en iyi yanı nedir?"
     consent: "Bunu adım ve fotoğrafımla yayımlayabilirsiniz."
+    cta: "Yorum bırak"
+    update_title: "Yorumunuzu güncelleyin"
     enjoying: "%{app} hoşunuza gidiyor mu?"
     not_now: "Şimdi değil"
     rate_aria: "5 üzerinden %{count} puan ver"

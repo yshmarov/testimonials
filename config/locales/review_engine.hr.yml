@@ -5,6 +5,8 @@ hr:
       - "Kako vam je %{app} pomogao?"
       - "Što je najbolje kod %{app}?"
     consent: "Možete ovo objaviti s mojim imenom i fotografijom."
+    cta: "Ostavite recenziju"
+    update_title: "Ažurirajte svoju recenziju"
     enjoying: "Sviđa li vam se %{app}?"
     not_now: "Ne sada"
     rate_aria: "Ocijenite s %{count} od 5"

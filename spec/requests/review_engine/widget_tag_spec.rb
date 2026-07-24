@@ -51,6 +51,37 @@ RSpec.describe 'widget tag and prompt flow', type: :request do
     end
   end
 
+  describe 'review_engine_button' do
+    it 'renders a localized opener with the gem\'s own strings' do
+      get '/sample'
+      expect(response.body).to include('data-review-prompt')
+      expect(response.body).to include('>Leave a review</button>')
+    end
+
+    it 'switches to the update label once the user has a review' do
+      ReviewEngine.config.current_user = ->(_request) { user }
+      ReviewEngine::Testimonial.create!(kind: 'text', body: 'Mine', author_id: '42')
+
+      get '/sample'
+      expect(response.body).to include('>Update your review</button>')
+    end
+  end
+
+  describe 'existing review prefill' do
+    it 'carries the signed-in user\'s review in the widget config' do
+      ReviewEngine.config.current_user = ->(_request) { user }
+      ReviewEngine::Testimonial.create!(kind: 'text', body: 'My old review', rating: 4, author_id: '42')
+
+      get '/sample'
+      expect(response.body).to include('"existing":{"rating":4,"body":"My old review"}')
+    end
+
+    it 'is null for users without a review' do
+      get '/sample'
+      expect(response.body).to include('"existing":null')
+    end
+  end
+
   describe 'events endpoint' do
     it 'records shown/dismissed and hands guests a visitor cookie' do
       post '/reviews/events', params: { kind: 'testimonial', event_action: 'shown' }

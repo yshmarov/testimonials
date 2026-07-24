@@ -84,15 +84,37 @@ module ReviewEngine
       )
     end
 
+    # One review per signed-in user: a re-submission edits their existing
+    # review in place (the App Store model). The edit goes back through
+    # moderation, and the admin's excerpt is cleared — it may no longer
+    # match the new wording. Guests have no reliable identity, so each guest
+    # submission stays a new record.
     def build_testimonial
-      testimonial = Testimonial.new(testimonial_params)
-      testimonial.kind = params.dig(:testimonial, :video_file).present? ? 'video' : 'text'
+      testimonial = existing_testimonial || Testimonial.new
+      testimonial.assign_attributes(testimonial_params)
+      if testimonial.persisted?
+        testimonial.status = 'pending'
+        testimonial.excerpt = nil
+      end
+      testimonial.kind = wants_video?(testimonial) ? 'video' : 'text'
       testimonial.source = 'widget' unless Testimonial::SOURCES.include?(testimonial.source)
-      testimonial.consent_text = ReviewEngine.consent_text if testimonial.consent_given?
+      testimonial.consent_text = testimonial.consent_given? ? ReviewEngine.consent_text : nil
       testimonial.locale = I18n.locale.to_s
       testimonial.user_agent = request.user_agent
       attribute_author(testimonial)
       testimonial
+    end
+
+    def existing_testimonial
+      return if current_author_id.blank?
+
+      Testimonial.where(author_id: current_author_id.to_s).newest_first.first
+    end
+
+    # A fresh upload makes it a video review; on an edit without a new
+    # upload, an already-attached video stays.
+    def wants_video?(testimonial)
+      params.dig(:testimonial, :video_file).present? || testimonial.video_attached?
     end
 
     def testimonial_params

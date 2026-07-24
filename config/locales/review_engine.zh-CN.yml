@@ -5,6 +5,8 @@ zh-CN:
       - "%{app} 是如何帮助您的？"
       - "%{app} 最棒的地方是什么？"
     consent: "您可以使用我的姓名和照片发布此内容。"
+    cta: "写评价"
+    update_title: "更新您的评价"
     enjoying: "喜欢 %{app} 吗？"
     not_now: "暂不"
     rate_aria: "评 %{count} 分（满分 5 分）"

@@ -5,6 +5,8 @@ id:
       - "Bagaimana %{app} membantu Anda?"
       - "Apa hal terbaik dari %{app}?"
     consent: "Anda boleh memublikasikan ini dengan nama dan foto saya."
+    cta: "Tulis ulasan"
+    update_title: "Perbarui ulasan Anda"
     enjoying: "Suka dengan %{app}?"
     not_now: "Nanti saja"
     rate_aria: "Beri nilai %{count} dari 5"

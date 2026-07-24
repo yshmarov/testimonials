@@ -5,6 +5,8 @@ nl:
       - "Hoe heeft %{app} je geholpen?"
       - "Wat is het beste aan %{app}?"
     consent: "Jullie mogen dit publiceren met mijn naam en foto."
+    cta: "Laat een review achter"
+    update_title: "Werk je review bij"
     enjoying: "Bevalt %{app} je?"
     not_now: "Niet nu"
     rate_aria: "Beoordeel %{count} van 5"

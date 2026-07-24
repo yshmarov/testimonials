@@ -6,6 +6,10 @@ module ReviewEngine
   # enabled for the request. The widget stays invisible until opened — by a
   # `review_prompt!` from a controller (throttled), by any element with a
   # `data-review-prompt` attribute, or by `window.ReviewEngine.open()`.
+  #
+  # `review_engine_button` renders a ready-made opener with a localized
+  # label ("Leave a review", or "Update your review" once the user has one),
+  # so hosts get a user-facing entry point without any i18n setup.
   module WidgetHelper
     def review_engine_tag
       return unless ReviewEngine.enabled?(request)
@@ -14,8 +18,23 @@ module ReviewEngine
         locale: I18n.locale,
         authenticated: review_engine_author.present?,
         auto_open: review_engine_auto_open,
+        existing: review_engine_existing_testimonial,
         nonce: (content_security_policy_nonce if respond_to?(:content_security_policy_nonce))
       ).html_safe
+    end
+
+    # A plain, unstyled <button> so it picks up the host's own styles. Put it
+    # anywhere on a page that also renders review_engine_tag. Pass label: to
+    # override the localized default, and any other options (class:, etc.)
+    # through to the tag.
+    def review_engine_button(label: nil, **)
+      return unless ReviewEngine.enabled?(request)
+
+      key = review_engine_existing_testimonial ? :update_title : :cta
+      default = key == :cta ? 'Leave a review' : 'Update your review'
+      text = label || I18n.t(key, scope: :review_engine, default: default)
+
+      tag.button(text, type: 'button', 'data-review-prompt': '', **)
     end
 
     private
@@ -24,6 +43,16 @@ module ReviewEngine
       return @review_engine_author if defined?(@review_engine_author)
 
       @review_engine_author = ReviewEngine.config.current_user.call(request)
+    end
+
+    # One review per signed-in user: this is the record the widget opens
+    # pre-filled, and the one the create endpoint updates in place.
+    def review_engine_existing_testimonial
+      return @review_engine_existing_testimonial if defined?(@review_engine_existing_testimonial)
+
+      author = review_engine_author
+      @review_engine_existing_testimonial =
+        author.respond_to?(:id) ? Testimonial.where(author_id: author.id.to_s).newest_first.first : nil
     end
 
     # A prompt requested via review_prompt! rides the flash, so it survives

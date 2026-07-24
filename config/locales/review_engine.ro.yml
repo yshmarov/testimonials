@@ -5,6 +5,8 @@ ro:
       - "Cum v-a ajutat %{app}?"
       - "Care este cel mai bun lucru la %{app}?"
     consent: "Puteți publica acest lucru cu numele și fotografia mea."
+    cta: "Lasă o recenzie"
+    update_title: "Actualizează-ți recenzia"
     enjoying: "Vă place %{app}?"
     not_now: "Nu acum"
     rate_aria: "Acordați %{count} din 5"

@@ -10,7 +10,8 @@ class SampleController < ActionController::Base
         <head><%= csrf_meta_tags %></head>
         <body>
           <h1>Sample page</h1>
-          <a href="#" id="custom-opener" data-review-prompt>Leave a review</a>
+          <a href="#" id="custom-opener" data-review-prompt>Open</a>
+          <%= review_engine_button(class: "btn") %>
           <%= review_engine_tag %>
         </body>
       </html>

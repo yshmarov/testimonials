@@ -30,15 +30,15 @@ module ReviewEngine
       #
       # `nonce:` stamps only the widget script (the code), so it runs under a
       # nonce-based Content-Security-Policy; pass nil when the app has no nonce.
-      def snippet(locale:, authenticated:, auto_open: nil, mode: 'widget', nonce: nil)
-        json = config_json(locale:, authenticated:, auto_open:, mode:)
+      def snippet(locale:, authenticated:, auto_open: nil, mode: 'widget', existing: nil, nonce: nil)
+        json = config_json(locale:, authenticated:, auto_open:, mode:, existing:)
         nonce_attr = nonce ? %( nonce="#{nonce}") : ''
 
         %(<script type="application/json" data-review-engine-config>#{json}</script>) +
           %(<script data-review-engine-widget#{nonce_attr}>#{javascript}</script>)
       end
 
-      def config_json(locale:, authenticated:, auto_open:, mode:)
+      def config_json(locale:, authenticated:, auto_open:, mode:, existing: nil)
         config = ReviewEngine.config
         payload = {
           endpoints: {
@@ -53,6 +53,9 @@ module ReviewEngine
           mode: mode.to_s,
           questions: ReviewEngine.questions,
           consent: ReviewEngine.consent_text,
+          # The signed-in user's current review, if any: the widget opens it
+          # pre-filled for editing instead of starting a second one.
+          existing: existing && { rating: existing.rating, body: existing.body },
           video: {
             enabled: config.video_enabled?,
             maxSeconds: config.max_video_seconds.to_i,
@@ -82,6 +85,7 @@ module ReviewEngine
           notNow: t(:not_now, 'Not now'),
           rateAria: t(:rate_aria, 'Rate %{count} of 5'),
           shareTitle: t(:share_title, 'Share your experience'),
+          updateTitle: t(:update_title, 'Update your review'),
           promoterTitle: t(:promoter_title, 'Glad to hear it! Mind saying that publicly?'),
           questionsTitle: t(:questions_title, 'Questions'),
           message: t(:message, 'Your testimonial'),

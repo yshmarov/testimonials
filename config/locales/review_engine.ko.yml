@@ -5,6 +5,8 @@ ko:
       - "%{app}이(가) 어떻게 도움이 되었나요?"
       - "%{app}의 가장 좋은 점은 무엇인가요?"
     consent: "제 이름과 사진과 함께 게시해도 됩니다."
+    cta: "리뷰 남기기"
+    update_title: "리뷰 수정하기"
     enjoying: "%{app}이(가) 마음에 드시나요?"
     not_now: "나중에"
     rate_aria: "5점 만점에 %{count}점 주기"
