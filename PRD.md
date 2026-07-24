@@ -2,9 +2,9 @@
 
 **One-liner:** Collect, curate, and expose customer testimonials — text and video — plus NPS, from inside your Rails app. Self-hosted alternative to Testimonial.to / Senja. Zero UI dependencies. Headless display: the gem stores and serves data; you render it wherever you want.
 
-- Gem name: `testimonials` (decided)
+- Gem name: `testimonials` (renamed from `review_engine` pre-release; name confirmed free on rubygems)
 - Repo: [yshmarov/testimonials-engine](https://github.com/yshmarov/testimonials-engine)
-- Status: approved, in build (2026-07-24)
+- Status: **v0.1.0 built and verified in a real host app (2026-07-24); this document describes the gem as shipped.** Deferred ideas live in §12.
 
 ## 1. Problem & positioning
 
@@ -38,25 +38,28 @@ Two-stage widget, deliberately modeled on `SKStoreReviewController`:
 
 **Throttling (hard requirement):** never auto-prompt a user who submitted, dismissed within N days (default 90), or was prompted M times total (default 3). Stored per-user for authenticated users, per-cookie for guests. Explicit invocations (user clicked a link) bypass throttling.
 
-### 3.2 Video recording
+### 3.2 Video recording (as shipped)
 
 - `getUserMedia` + `MediaRecorder`, plain JS, no dependencies.
-- Device-check screen (camera/mic pickers, live preview) → 3-2-1 countdown → recording with elapsed timer and configurable max duration (default 120s) → review screen with playback → **Record again** / **Confirm**.
-- Upload via Active Storage direct upload (signed endpoint, `fetch`-based — no `@rails/activestorage` npm dependency) with a progress bar.
-- Fallback: "Choose a file to submit" for browsers/devices where recording fails.
-- Stored as recorded (webm from Chrome/Firefox, mp4 from Safari). **No transcoding in v1**; document an optional `after_video_upload` hook where the host can enqueue ffmpeg. Poster frame captured client-side and uploaded alongside.
-- **Risk item:** Safari/iOS codec matrix. Spike this before committing to the video milestone (Testimonial.to has a "disable video recording for iPhone users" toggle for a reason).
+- Camera-check screen (live preview, default devices) → 3-2-1 countdown → recording with a remaining-time overlay and configurable max duration (default 120s) → review screen with playback → **Record again** / **Use this video**. The guiding questions stay pinned above the preview the whole time.
+- Upload is **plain multipart form data** through the create endpoint — a ≤120s clip fits comfortably in a normal request; no direct-upload machinery, no progress bar (see §12 for when that trade-off should be revisited).
+- Fallback: "Upload a video file instead" for browsers/devices where recording fails.
+- Stored as recorded (webm from Chrome/Firefox, mp4 from Safari). No transcoding, no poster frames — consumers use `<video preload="metadata">`, which shows the first frame.
+- Desktop Safari verified by hand (record, replay, submit, re-edit). iOS remains untested.
 
 ### 3.3 Public collection page
 
 `GET /testimonials/new` on the mounted engine — a standalone, self-styled page (logo, header, guiding questions, Record video / Send text buttons) for sharing with customers outside the app. Guest flow adds name (required), email (required), title/company, headshot upload.
 
-- **Togglable via `config.public_collection` — ON by default.** Off = the page 404s; only in-app collection remains.
-- Optionally tokenized links (`?token=`) so admins can revoke/scope a campaign.
+- **Togglable via `config.public_collection` — ON by default.** Off = the page 404s; only in-app collection remains. The dashboard header links to the page so admins can grab the URL.
 
 ### 3.4 Thank-you state
 
-Configurable title/message (i18n-able), optional redirect URL. No image customization in v1.
+Localized thanks message; the widget auto-closes, the public page keeps it on screen. No redirect, no image customization (§12).
+
+### 3.4b One review per signed-in user (added post-PRD)
+
+The App Store / G2 model: a signed-in user's re-submission edits their review in place. The widget opens pre-filled (rating, text, consent state, playable attached video with a remove control), skipping the star card; the edit resets status to `pending` for re-moderation and clears the admin's excerpt. Guests have no reliable identity, so guest submissions stay separate records.
 
 ### 3.5 NPS (ships in this gem — decided)
 
@@ -66,14 +69,15 @@ Configurable title/message (i18n-able), optional redirect URL. No image customiz
 - **Auto-routing:**
   - score ≥ 9 → immediately offer the testimonial form: "Glad to hear it! Mind saying that publicly?"
   - score ≤ 6 → configurable lambda; documented recipe routes it into `feedback_engine` if installed.
-- Admin sees NPS score (%promoters − %detractors), response list, simple trend.
+- Admin sees NPS score (%promoters − %detractors), promoter/passive/detractor counts, and the response list. (No over-time trend chart — §12.)
 
 ## 4. Admin dashboard
 
 Mounted at the engine path, gated by `config.authorize_admin`. Visually the sibling of feedback_engine's triage UI (tabs, search, light/dark).
 
-- **Inbox:** pending → approved → archived. Cards show rating, text, inline video player, author (linked to host user record when attributed — clickable via a configurable `user_path` lambda), consent status, source (widget / link / NPS-routed), submitted-at.
-- **Actions:** approve, archive, feature/unfeature, select excerpt (highlight the best sentence). **Deliberately no editing of the customer's words.**
+- **Inbox:** pending → approved → archived tabs with counts, kind filter, search. Rows show rating, quote, author name (plain text — a clickable link into the host's own user admin is a §12 idea), consent, received-at, and inline Approve/Archive (the moderation-queue pattern; feature/excerpt/delete live on the show page).
+- **Show page:** full text, inline video player, consent snapshot, metadata, status transitions, feature toggle, excerpt picker. **Deliberately no editing of the customer's words.**
+- **CSP note:** the dashboard ships no inline JS — delete confirms and the auto-submitting filter run from a tiny same-origin `dashboard.js`, same delivery pattern as the widget.
 - **NPS tab:** score, responses, trend.
 - All records are plain ActiveRecord models for anything custom.
 
@@ -84,7 +88,7 @@ Mounted at the engine path, gated by `config.authorize_admin`. Visually the sibl
 Instead the gem ships:
 
 1. **A read API** (see §6) that host code and — optionally — external sites consume.
-2. **Copy-paste examples** in the repo (`examples/` + rendered in the dummy app): a wall of love, a single quote card, a rating badge (default and stacked-avatars variants), and a schema.org `AggregateRating`/`Review` JSON-LD snippet. Devs see the final-result value visually, then own the markup. Screenshots of these examples go in the README.
+2. **Copy-paste examples** in the repo's `examples/`: a wall of love, a single quote card, a rating badge, a schema.org `AggregateRating`/`Review` JSON-LD snippet, and a static-site (Astro) recipe. Devs see the final-result value, then own the markup. (Screenshots for the README still pending — needs a browser.)
 
 ## 6. Read API
 
@@ -102,19 +106,26 @@ testimonials_testimonials
   kind (text|video), body, rating (1..5, null allowed), excerpt,
   status (pending|approved|archived), featured (bool),
   consent_given (bool), consent_text (string snapshot),
-  author (polymorphic, optional), guest_name, guest_email, guest_title_company,
-  source (widget|link|nps), page_url, locale, token (nullable)
-  + Active Storage: video, poster, avatar
+  author_id (loose string, no FK), name, email, title_company,
+  source (widget|page|nps), page_url, user_agent, locale
+  + Active Storage: video_file, avatar
 
 testimonials_nps_responses
-  score (0..10), comment, author (polymorphic, optional), guest_email, source
+  score (0..10), comment, author_id, name, email,
+  page_url, user_agent, locale
 
 testimonials_prompt_events   # throttling ledger
-  author (polymorphic) or cookie_id, kind (testimonial|nps),
-  action (shown|dismissed|submitted), occurred_at
+  author_id or visitor_token (permanent cookie), kind (testimonial|nps),
+  action (shown|dismissed|submitted), created_at
 ```
 
-No "spaces": the host app is the space. Single-product by design.
+Attribution follows house style: loose `author_id` string plus denormalized
+name/email, no FK to the host's user table — portable across apps. Signed-in
+users are attributed server-side via `config.user_display`; the endpoint never
+trusts client contact fields for them. No "spaces": the host app is the
+space. Single-product by design. Note the engine table prefix makes the main
+table `testimonials_testimonials` — standard engine convention, and safer
+than squatting a bare `testimonials` table the host might own.
 
 ## 8. Configuration sketch
 
@@ -138,15 +149,20 @@ Testimonials.configure do |config|
   config.max_video_seconds = 120
   config.reprompt_after = 90.days
   config.max_prompts = 3
-  config.consent_text = "You may publish this with my name and photo."
+  # config.consent_text = nil          # localized default: explicit marketing permission
 
   config.public_collection = true      # standalone /testimonials/new page (ON by default)
   config.public_api = false            # unauthenticated read API (OFF by default)
+  config.mount_path = "/testimonials"  # keep in sync with the mount line
 
   config.nps = true
   config.on_detractor = ->(response) { FeedbackEngine::Feedback.create!(...) } # optional
 end
 ```
+
+The full option list lives in the generated initializer; see the README for
+`testimonials_tag`, `testimonials_button`, `testimonials_cta_label`, and
+`testimonial_prompt!`.
 
 ## 9. Out of scope — absolute (decided)
 
@@ -160,17 +176,42 @@ Brand monitoring, case studies, multi-product/spaces, email invitation campaigns
 - **No tokenized collection links** in v1 — `config.public_collection` toggle only (ON by default). Revisit if someone actually asks.
 - **Attribution follows house style:** loose `author_id` string + denormalized name/email fields, no FK to the host's user table (portable across apps, same as feedback_engine).
 
-## 10. Milestones
+## 10. Status (2026-07-24)
 
-1. **v0.1** — text testimonials: two-stage widget, `testimonial_prompt!`, throttling, public collection page + toggle, admin inbox, consent.
-2. **v0.2** — video: codec spike first, then recorder flow, direct upload, poster, admin playback.
-3. **v0.3** — read API (`/api/testimonials`, `/api/stats`), `public_api` toggle, CORS; `examples/` wall + card + badge + JSON-LD with screenshots.
-4. **v0.4** — NPS + auto-routing + admin NPS view.
-5. **v1.0** — locales, RTL, strict-CSP compliance (apply the i18n_feedback v0.8.2 lessons from day one), demo GIF, README with the "replaces $50/mo" table.
+Everything in §3–§6 is built, spec'd (160 examples, CI matrix Rails 7.1–8.1 ×
+Ruby 3.2–3.4), and verified in ethicsportal.eu — including hard-won lessons
+now baked in: the widget and dashboard JS ship as same-origin scripts (inline
++ nonce breaks under Turbo body swaps), ETag-only caching (a time-based cache
+can leave stale widget code running against new markup), flat routes (the
+mount path IS the resource: `/2`, `/2/video`, `/new`), and 26 locales
+including the guiding questions and CTA labels.
+
+Left before announcing v0.1.0:
+1. RubyGems trusted publishing setup, then `git tag v0.1.0`.
+2. Demo GIF + dashboard/example screenshots for the README (needs a browser).
+3. One iOS Safari recording pass.
 
 ## 11. Success criteria
 
-- Install-to-first-testimonial in under 5 minutes on a fresh Rails app.
-- Widget works under Turbo Drive and strict CSP with zero host asset-pipeline involvement.
-- A video recorded on Safari/iOS plays back in the admin and via the API-consumed examples in Chrome.
-- A static marketing site can render a wall of love from the public API with no Rails involved.
+- Install-to-first-testimonial in under 5 minutes on a fresh Rails app. ✓
+- Widget works under Turbo Drive and strict CSP with zero host asset-pipeline involvement. ✓ (verified against a `script-src 'self'` + nonce policy)
+- A video recorded in Safari plays back in the admin and in the edit form. ✓ desktop; iOS pending
+- A static marketing site can render a wall of love from the public API with no Rails involved. ✓ (recipe in examples/static_site.md)
+
+## 12. Deferred — revisit only on real demand
+
+- **Direct uploads + progress bar** — worth it only if real users hit request
+  timeouts on slow connections (e.g. Heroku's 30s router limit with large
+  clips). Costs ~100 lines of widget JS and host CORS setup; zero gem deps.
+- **Poster frames** — `preload="metadata"` already shows a first frame;
+  client-side canvas capture is ~30 lines if walls ever need instant thumbs.
+- **Camera/mic device pickers** — helps multi-device users; browser default
+  is right for most. ~60 lines plus permissions edge cases.
+- **Thank-you redirect** after submit.
+- **NPS trend over time** in the dashboard.
+- **Admin → host-user link**: a `config.user_path` lambda so the author name
+  in the dashboard links into the host's own user admin.
+- **Tokenized collection links** (revocable/scoped campaigns).
+- **prompt_events pruning** helper/recipe (the ledger grows unbounded).
+- **System/browser specs** (manual QA currently covers this, and has caught
+  what request specs could not).
