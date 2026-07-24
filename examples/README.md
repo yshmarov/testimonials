@@ -1,7 +1,7 @@
 # Display examples
 
-review_engine deliberately ships **no display UI** — approved testimonials are
-yours to render, via `ReviewEngine::Testimonial.publishable` inside the app or
+testimonials deliberately ships **no display UI** — approved testimonials are
+yours to render, via `Testimonials::Testimonial.publishable` inside the app or
 via the JSON API anywhere else. These files are copy-paste starting points so
 you can see the end result in minutes. Take them, restyle them, own them.
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= t('testimonials.page.title', app: Testimonials.app_name, default: "Share your experience with #{Testimonials.app_name}") %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= csrf_meta_tags %>
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin: 0; background: #f6f7f9; color: #1c2024;
+           font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    @media (prefers-color-scheme: dark) { body { background: #111418; color: #e6e8ea; } }
+    .container { max-width: 640px; margin: 0 auto; padding: 48px 16px 64px; }
+    h1 { font-size: 28px; text-align: center; margin: 0 0 8px; }
+    .subtitle { text-align: center; color: #6b7280; margin: 0 0 32px; }
+    @media (prefers-color-scheme: dark) { .subtitle { color: #9aa2ab; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <%= yield %>
+  </div>
+</body>
+</html>

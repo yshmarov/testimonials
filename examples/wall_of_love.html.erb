@@ -16,21 +16,21 @@
 </style>
 
 <div class="wall">
-  <% ReviewEngine::Testimonial.publishable.featured_first.limit(12).each do |testimonial| %>
+  <% Testimonials::Testimonial.publishable.featured_first.limit(12).each do |testimonial| %>
     <figure class="wall-card">
       <% if testimonial.rating %>
         <div class="wall-stars"><%= '★' * testimonial.rating %></div>
       <% end %>
       <% if testimonial.video_attached? %>
         <video controls preload="metadata"
-               src="<%= review_engine.testimonial_video_path(testimonial) %>"></video>
+               src="<%= testimonials.testimonial_video_path(testimonial) %>"></video>
       <% end %>
       <% if testimonial.quote.present? %>
         <blockquote class="wall-quote">“<%= testimonial.quote %>”</blockquote>
       <% end %>
       <figcaption class="wall-author">
         <% if testimonial.avatar_attached? %>
-          <img src="<%= review_engine.testimonial_avatar_path(testimonial) %>" alt="">
+          <img src="<%= testimonials.testimonial_avatar_path(testimonial) %>" alt="">
         <% end %>
         <div>
           <b><%= testimonial.name %></b>

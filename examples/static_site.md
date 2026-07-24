@@ -4,21 +4,21 @@ Your Rails app collects and curates; your marketing site (Astro, Eleventy,
 plain HTML on Cloudflare — anything) renders. Turn on the public API:
 
 ```ruby
-# config/initializers/review_engine.rb
+# config/initializers/testimonials.rb
 config.public_api = true
 ```
 
-`GET https://app.example.com/reviews/api/testimonials` now serves approved +
-consented records to anyone (CORS `*`), and `/reviews/api/stats` serves the
+`GET https://app.example.com/testimonials/api/testimonials` now serves approved +
+consented records to anyone (CORS `*`), and `/testimonials/api/stats` serves the
 badge numbers. Emails are never included.
 
 ## Astro example (build-time fetch)
 
 ```astro
 ---
-const res = await fetch("https://app.example.com/reviews/api/testimonials?limit=12");
+const res = await fetch("https://app.example.com/testimonials/api/testimonials?limit=12");
 const { testimonials } = await res.json();
-const stats = await (await fetch("https://app.example.com/reviews/api/stats")).json();
+const stats = await (await fetch("https://app.example.com/testimonials/api/stats")).json();
 ---
 
 <p>★ {stats.average_rating} from {stats.count} reviews</p>

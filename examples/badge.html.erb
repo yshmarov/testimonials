@@ -1,6 +1,6 @@
 <%# The "★ 4.9 from 87 reviews" chip. Same numbers the API's /api/stats serves. %>
 
-<% scope = ReviewEngine::Testimonial.publishable.where.not(rating: nil) %>
+<% scope = Testimonials::Testimonial.publishable.where.not(rating: nil) %>
 <% if (count = scope.count).positive? %>
   <a href="#wall-of-love"
      style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ReviewEngine::Engine.routes.draw do
+Testimonials::Engine.routes.draw do
   # Everything with a fixed name goes first; the flat testimonial routes at
   # the bottom own "/:id".
   get 'widget.js', to: 'widgets#show', as: :widget
@@ -19,8 +19,8 @@ ReviewEngine::Engine.routes.draw do
   get ':id/video', to: 'media#video', as: :testimonial_video, constraints: { id: /\d+/ }
   get ':id/avatar', to: 'media#avatar', as: :testimonial_avatar, constraints: { id: /\d+/ }
 
-  # Flat, human URLs: the mount path IS the resource. /reviews is the
-  # dashboard, POST /reviews the widget endpoint, /reviews/2 a testimonial.
+  # Flat, human URLs: the mount path IS the resource. /testimonials is the
+  # dashboard, POST /testimonials the widget endpoint, /testimonials/2 a testimonial.
   resources :testimonials, path: '', only: %i[create index show update destroy],
                            constraints: { id: /\d+/ }
 

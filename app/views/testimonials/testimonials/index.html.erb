@@ -1,0 +1,108 @@
+<h1><%= t('testimonials.dashboard.title', default: 'Testimonials') %></h1>
+
+<div class="tabs">
+  <% Testimonials::Testimonial::STATUSES.each do |status| %>
+    <%= link_to testimonials_path(status: status, kind: @kind, q: @query),
+                class: ('active' if status == @status) do %>
+      <%= t("testimonials.statuses.#{status}", default: status.humanize) %>
+      <span class="count"><%= @counts.fetch(status, 0) %></span>
+    <% end %>
+  <% end %>
+</div>
+
+<form class="filters" method="get">
+  <input type="hidden" name="status" value="<%= @status %>">
+  <select name="kind" onchange="this.form.submit()">
+    <option value=""><%= t('testimonials.dashboard.all_kinds', default: 'All kinds') %></option>
+    <% Testimonials::Testimonial::KINDS.each do |kind| %>
+      <option value="<%= kind %>" <%= 'selected' if kind == @kind %>>
+        <%= t("testimonials.kinds.#{kind}", default: kind.humanize) %>
+      </option>
+    <% end %>
+  </select>
+  <input type="search" name="q" value="<%= @query %>"
+         placeholder="<%= t('testimonials.dashboard.search_placeholder', default: 'Search text, name, email…') %>"
+         aria-label="<%= t('testimonials.dashboard.search', default: 'Search') %>">
+  <button><%= t('testimonials.dashboard.search', default: 'Search') %></button>
+</form>
+
+<div class="card">
+  <% if @testimonials.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th><%= t('testimonials.dashboard.rating', default: 'Rating') %></th>
+          <th><%= t('testimonials.dashboard.testimonial', default: 'Testimonial') %></th>
+          <th><%= t('testimonials.dashboard.from', default: 'From') %></th>
+          <th><%= t('testimonials.dashboard.consent', default: 'Consent') %></th>
+          <th><%= t('testimonials.dashboard.received', default: 'Received') %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @testimonials.each do |testimonial| %>
+          <tr>
+            <td>
+              <% if testimonial.rating %>
+                <span class="stars"><%= '★' * testimonial.rating %><span class="off"><%= '★' * (5 - testimonial.rating) %></span></span>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to testimonial_path(testimonial) do %>
+                <% if testimonial.body.present? %>
+                  <%= truncate(testimonial.body, length: 110) %>
+                <% else %>
+                  <em><%= t('testimonials.kinds.video', default: 'Video') %></em>
+                <% end %>
+              <% end %>
+              <% if testimonial.video_attached? %>
+                <div class="muted">🎥 <%= t('testimonials.kinds.video', default: 'Video') %></div>
+              <% end %>
+              <% if testimonial.featured? %>
+                <div class="muted">⭐ <%= t('testimonials.dashboard.featured', default: 'Featured') %></div>
+              <% end %>
+            </td>
+            <td>
+              <%= testimonial.display_name %>
+              <% if testimonial.title_company.present? %>
+                <div class="muted"><%= testimonial.title_company %></div>
+              <% end %>
+            </td>
+            <td><%= testimonial.consent_given? ? '✓' : '—' %></td>
+            <td class="muted" title="<%= testimonial.created_at %>">
+              <%= time_ago_in_words(testimonial.created_at) %>
+            </td>
+            <td class="row-actions">
+              <%# Inline status triage; feature/excerpt/delete live on the show page. %>
+              <% unless testimonial.approved? %>
+                <%= button_to t('testimonials.dashboard.move_to_approved', default: 'Approve'),
+                              testimonial_path(testimonial),
+                              method: :patch, params: { testimonial: { status: 'approved' } },
+                              class: 'small primary' %>
+              <% end %>
+              <% unless testimonial.archived? %>
+                <%= button_to t('testimonials.dashboard.move_to_archived', default: 'Archive'),
+                              testimonial_path(testimonial),
+                              method: :patch, params: { testimonial: { status: 'archived' } },
+                              class: 'small' %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="empty"><%= t('testimonials.dashboard.empty', default: 'Nothing here yet.') %></div>
+  <% end %>
+</div>
+
+<div class="pager">
+  <% if @page > 1 %>
+    <%= link_to t('testimonials.dashboard.newer', default: '← Newer'),
+                testimonials_path(status: @status, kind: @kind, q: @query, page: @page - 1) %>
+  <% end %>
+  <% if @more %>
+    <%= link_to t('testimonials.dashboard.older', default: 'Older →'),
+                testimonials_path(status: @status, kind: @kind, q: @query, page: @page + 1) %>
+  <% end %>
+</div>

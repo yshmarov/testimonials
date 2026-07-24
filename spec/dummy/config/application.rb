@@ -7,7 +7,7 @@ require "active_record/railtie"
 require "action_controller/railtie"
 require "active_storage/engine"
 
-require "review_engine"
+require "testimonials"
 
 module Dummy
   class Application < Rails::Application
@@ -16,7 +16,7 @@ module Dummy
     config.root = File.expand_path("..", __dir__)
     config.load_defaults 7.1
     config.eager_load = false
-    config.secret_key_base = "review-engine-dummy-secret"
+    config.secret_key_base = "testimonials-dummy-secret"
     config.i18n.available_locales = %i[en fr]
     config.i18n.default_locale = :en
 

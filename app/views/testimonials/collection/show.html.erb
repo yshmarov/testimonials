@@ -1,0 +1,12 @@
+<h1><%= t('testimonials.page.title', app: Testimonials.app_name, default: "Share your experience with #{Testimonials.app_name}") %></h1>
+<p class="subtitle"><%= t('testimonials.page.subtitle', default: 'Your words help others decide — thank you!') %></p>
+
+<div data-testimonials-inline></div>
+
+<%= Testimonials::Widget.snippet(
+      locale: I18n.locale,
+      authenticated: Testimonials.config.current_user.call(request).present?,
+      mode: 'page',
+      existing: @existing,
+      nonce: (content_security_policy_nonce if respond_to?(:content_security_policy_nonce))
+    ).html_safe %>

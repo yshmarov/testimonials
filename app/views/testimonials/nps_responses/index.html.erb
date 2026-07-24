@@ -1,0 +1,67 @@
+<h1><%= t('testimonials.dashboard.nps', default: 'NPS') %></h1>
+
+<div class="stat-row">
+  <div class="stat">
+    <b><%= @score.nil? ? '—' : @score %></b>
+    <span><%= t('testimonials.dashboard.nps_score', default: 'NPS score') %></span>
+  </div>
+  <div class="stat">
+    <b><%= @promoters %></b>
+    <span><%= t('testimonials.dashboard.promoters', default: 'Promoters (9–10)') %></span>
+  </div>
+  <div class="stat">
+    <b><%= @passives %></b>
+    <span><%= t('testimonials.dashboard.passives', default: 'Passives (7–8)') %></span>
+  </div>
+  <div class="stat">
+    <b><%= @detractors %></b>
+    <span><%= t('testimonials.dashboard.detractors', default: 'Detractors (0–6)') %></span>
+  </div>
+</div>
+
+<div class="card">
+  <% if @responses.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th><%= t('testimonials.dashboard.score', default: 'Score') %></th>
+          <th><%= t('testimonials.dashboard.comment', default: 'Comment') %></th>
+          <th><%= t('testimonials.dashboard.from', default: 'From') %></th>
+          <th><%= t('testimonials.dashboard.received', default: 'Received') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @responses.each do |response| %>
+          <tr>
+            <td>
+              <span class="badge nps-<%= response.promoter? ? 'promoter' : (response.detractor? ? 'detractor' : 'passive') %>">
+                <%= response.score %>
+              </span>
+            </td>
+            <td class="message"><%= response.comment %></td>
+            <td>
+              <%= response.name.presence || (response.author_id.present? ? "##{response.author_id}" : nil) %>
+              <% if response.email.present? %>
+                <div class="muted"><%= response.email %></div>
+              <% end %>
+            </td>
+            <td class="muted" title="<%= response.created_at %>">
+              <%= time_ago_in_words(response.created_at) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="empty"><%= t('testimonials.dashboard.empty', default: 'Nothing here yet.') %></div>
+  <% end %>
+</div>
+
+<div class="pager">
+  <% if @page > 1 %>
+    <%= link_to t('testimonials.dashboard.newer', default: '← Newer'), nps_responses_path(page: @page - 1) %>
+  <% end %>
+  <% if @more %>
+    <%= link_to t('testimonials.dashboard.older', default: 'Older →'), nps_responses_path(page: @page + 1) %>
+  <% end %>
+</div>

@@ -8,7 +8,7 @@ require 'rspec/rails'
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Schema.define do
-  create_table :review_engine_testimonials, force: true do |t|
+  create_table :testimonials_testimonials, force: true do |t|
     t.string :kind, null: false, default: 'text'
     t.text :body
     t.integer :rating
@@ -27,10 +27,10 @@ ActiveRecord::Schema.define do
     t.string :locale
     t.timestamps
   end
-  add_index :review_engine_testimonials, :status
-  add_index :review_engine_testimonials, %i[status consent_given]
+  add_index :testimonials_testimonials, :status
+  add_index :testimonials_testimonials, %i[status consent_given]
 
-  create_table :review_engine_nps_responses, force: true do |t|
+  create_table :testimonials_nps_responses, force: true do |t|
     t.integer :score, null: false
     t.text :comment
     t.string :author_id
@@ -41,17 +41,17 @@ ActiveRecord::Schema.define do
     t.string :locale
     t.timestamps
   end
-  add_index :review_engine_nps_responses, :score
+  add_index :testimonials_nps_responses, :score
 
-  create_table :review_engine_prompt_events, force: true do |t|
+  create_table :testimonials_prompt_events, force: true do |t|
     t.string :kind, null: false
     t.string :action, null: false
     t.string :author_id
     t.string :visitor_token
     t.timestamps
   end
-  add_index :review_engine_prompt_events, %i[author_id kind]
-  add_index :review_engine_prompt_events, %i[visitor_token kind]
+  add_index :testimonials_prompt_events, %i[author_id kind]
+  add_index :testimonials_prompt_events, %i[visitor_token kind]
 
   # Active Storage tables, so video and avatar attachments work in specs.
   create_table :active_storage_blobs, force: true do |t|
@@ -92,9 +92,9 @@ RSpec.configure do |config|
   # Start every example from a fresh config, so a stub in one example can never
   # leak into another under random order.
   config.around do |example|
-    ReviewEngine.instance_variable_set(:@config, ReviewEngine::Configuration.new)
+    Testimonials.instance_variable_set(:@config, Testimonials::Configuration.new)
     example.run
-    ReviewEngine.instance_variable_set(:@config, nil)
+    Testimonials.instance_variable_set(:@config, nil)
   end
 
   # The rate limiter counts per IP in Rails.cache; without a reset, create
@@ -104,5 +104,5 @@ end
 
 # Most request specs need an admin; the default gate is development-only.
 def as_admin!
-  ReviewEngine.config.authorize_admin = ->(_request) { true }
+  Testimonials.config.authorize_admin = ->(_request) { true }
 end

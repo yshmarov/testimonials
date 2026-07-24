@@ -1,8 +1,8 @@
-# PRD: review_engine
+# PRD: testimonials
 
 **One-liner:** Collect, curate, and expose customer testimonials — text and video — plus NPS, from inside your Rails app. Self-hosted alternative to Testimonial.to / Senja. Zero UI dependencies. Headless display: the gem stores and serves data; you render it wherever you want.
 
-- Gem name: `review_engine` (decided)
+- Gem name: `testimonials` (decided)
 - Repo: [yshmarov/testimonials-engine](https://github.com/yshmarov/testimonials-engine)
 - Status: approved, in build (2026-07-24)
 
@@ -10,7 +10,7 @@
 
 SaaS testimonial tools cost $25–95/mo per product, hold your social proof in their database, and can't connect a testimonial to the actual user record in your app. For a Rails app, collection and curation belong in the app itself — with better attribution than any external tool, because the reviewer is already authenticated.
 
-Family positioning: `feedback_engine` captures private feedback; `review_engine` captures public praise and sentiment (NPS); `i18n_feedback` fixes the words. Same architecture across the suite: mountable engine, plain-JS self-styled widget, install generator, pluggable gating, broad locale coverage.
+Family positioning: `feedback_engine` captures private feedback; `testimonials` captures public praise and sentiment (NPS); `i18n_feedback` fixes the words. Same architecture across the suite: mountable engine, plain-JS self-styled widget, install generator, pluggable gating, broad locale coverage.
 
 ## 2. Personas
 
@@ -32,9 +32,9 @@ Two-stage widget, deliberately modeled on `SKStoreReviewController`:
 
 **Invocation — three ways:**
 
-1. **Declarative:** any element with `data-review-prompt` opens it (a nav link, a menu item).
-2. **JS API:** `window.ReviewEngine.open()` / `window.ReviewEngine.openNps()`.
-3. **Server-side:** `review_prompt!` in a controller (e.g. after a "success moment": 10th invoice sent, subscription renewed) sets a flash-like signal; the widget auto-opens on the next page render. App logic knows the right moment natively — no "automation" product needed.
+1. **Declarative:** any element with `data-testimonial-prompt` opens it (a nav link, a menu item).
+2. **JS API:** `window.Testimonials.open()` / `window.Testimonials.openNps()`.
+3. **Server-side:** `testimonial_prompt!` in a controller (e.g. after a "success moment": 10th invoice sent, subscription renewed) sets a flash-like signal; the widget auto-opens on the next page render. App logic knows the right moment natively — no "automation" product needed.
 
 **Throttling (hard requirement):** never auto-prompt a user who submitted, dismissed within N days (default 90), or was prompted M times total (default 3). Stored per-user for authenticated users, per-cookie for guests. Explicit invocations (user clicked a link) bypass throttling.
 
@@ -49,7 +49,7 @@ Two-stage widget, deliberately modeled on `SKStoreReviewController`:
 
 ### 3.3 Public collection page
 
-`GET /reviews/new` on the mounted engine — a standalone, self-styled page (logo, header, guiding questions, Record video / Send text buttons) for sharing with customers outside the app. Guest flow adds name (required), email (required), title/company, headshot upload.
+`GET /testimonials/new` on the mounted engine — a standalone, self-styled page (logo, header, guiding questions, Record video / Send text buttons) for sharing with customers outside the app. Guest flow adds name (required), email (required), title/company, headshot upload.
 
 - **Togglable via `config.public_collection` — ON by default.** Off = the page 404s; only in-app collection remains.
 - Optionally tokenized links (`?token=`) so admins can revoke/scope a campaign.
@@ -88,7 +88,7 @@ Instead the gem ships:
 
 ## 6. Read API
 
-- **Internal:** `ReviewEngine::Testimonial.approved` etc. — plain ActiveRecord, always available.
+- **Internal:** `Testimonials::Testimonial.approved` etc. — plain ActiveRecord, always available.
 - **HTTP JSON API**, mounted under the engine:
   - `GET /api/testimonials` — approved + consented records only; filters: `featured`, `min_rating`, `limit`; never serializes emails or any guest PII beyond name/title/company/avatar URL.
   - `GET /api/stats` — count, average rating (powers badge examples).
@@ -98,7 +98,7 @@ Instead the gem ships:
 ## 7. Data model
 
 ```
-review_engine_testimonials
+testimonials_testimonials
   kind (text|video), body, rating (1..5, null allowed), excerpt,
   status (pending|approved|archived), featured (bool),
   consent_given (bool), consent_text (string snapshot),
@@ -106,10 +106,10 @@ review_engine_testimonials
   source (widget|link|nps), page_url, locale, token (nullable)
   + Active Storage: video, poster, avatar
 
-review_engine_nps_responses
+testimonials_nps_responses
   score (0..10), comment, author (polymorphic, optional), guest_email, source
 
-review_engine_prompt_events   # throttling ledger
+testimonials_prompt_events   # throttling ledger
   author (polymorphic) or cookie_id, kind (testimonial|nps),
   action (shown|dismissed|submitted), occurred_at
 ```
@@ -119,7 +119,7 @@ No "spaces": the host app is the space. Single-product by design.
 ## 8. Configuration sketch
 
 ```ruby
-ReviewEngine.configure do |config|
+Testimonials.configure do |config|
   config.app_name = "SupeRails"
   config.logo = "logo.png"
   config.current_user = ->(request) { request.env["warden"]&.user }
@@ -128,7 +128,7 @@ ReviewEngine.configure do |config|
 
   # Guiding prompts shown above the textarea / recorder (not form fields).
   # Default nil = the gem's built-in best-practice questions, localized via
-  # the gem's own locale files (`review_engine.questions`, %{app} interpolated).
+  # the gem's own locale files (`testimonials.questions`, %{app} interpolated).
   # Override with an array of literal strings, or a lambda for host i18n:
   #   config.questions = -> { I18n.t("myapp.review_questions") }
   # Empty array = don't render the section at all.
@@ -140,7 +140,7 @@ ReviewEngine.configure do |config|
   config.max_prompts = 3
   config.consent_text = "You may publish this with my name and photo."
 
-  config.public_collection = true      # standalone /reviews/new page (ON by default)
+  config.public_collection = true      # standalone /testimonials/new page (ON by default)
   config.public_api = false            # unauthenticated read API (OFF by default)
 
   config.nps = true
@@ -162,7 +162,7 @@ Brand monitoring, case studies, multi-product/spaces, email invitation campaigns
 
 ## 10. Milestones
 
-1. **v0.1** — text testimonials: two-stage widget, `review_prompt!`, throttling, public collection page + toggle, admin inbox, consent.
+1. **v0.1** — text testimonials: two-stage widget, `testimonial_prompt!`, throttling, public collection page + toggle, admin inbox, consent.
 2. **v0.2** — video: codec spike first, then recorder flow, direct upload, poster, admin playback.
 3. **v0.3** — read API (`/api/testimonials`, `/api/stats`), `public_api` toggle, CORS; `examples/` wall + card + badge + JSON-LD with screenshots.
 4. **v0.4** — NPS + auto-routing + admin NPS view.
