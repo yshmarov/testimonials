@@ -56,8 +56,10 @@ module ReviewEngine
 
     private
 
+    # The application's module name, verbatim ("EthicsPortal", "SupeRails") —
+    # no inflection games. Set config.app_name for anything fancier.
     def rails_app_name
-      Rails.application.class.module_parent_name.underscore.humanize
+      Rails.application.class.module_parent_name
     rescue StandardError
       'this app'
     end
