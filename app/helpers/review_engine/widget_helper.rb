@@ -30,11 +30,18 @@ module ReviewEngine
     def review_engine_button(label: nil, **)
       return unless ReviewEngine.enabled?(request)
 
-      key = review_engine_existing_testimonial ? :update_title : :cta
-      default = key == :cta ? 'Leave a review' : 'Update your review'
-      text = label || I18n.t(key, scope: :review_engine, default: default)
+      tag.button(label || review_engine_cta_label, type: 'button', 'data-review-prompt': '', **)
+    end
 
-      tag.button(text, type: 'button', 'data-review-prompt': '', **)
+    # The localized call-to-action on its own — "Leave a review", or "Update
+    # your review" once the user has one — for hosts composing their own
+    # opener markup (icons, list items) around a data-review-prompt element.
+    def review_engine_cta_label
+      if review_engine_existing_testimonial
+        I18n.t(:update_title, scope: :review_engine, default: 'Update your review')
+      else
+        I18n.t(:cta, scope: :review_engine, default: 'Leave a review')
+      end
     end
 
     private
