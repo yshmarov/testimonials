@@ -1,0 +1,22 @@
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - "spec/dummy/**/*"
+    - "bin/**/*"
+    - "vendor/**/*"
+    - "tmp/**/*"
+
+Style/Documentation:
+  Enabled: false
+
+# I18n defaults interpolate with %{}-style tokens.
+Style/FormatStringToken:
+  EnforcedStyle: template
+
+Metrics:
+  Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
