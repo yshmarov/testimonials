@@ -1,0 +1,11 @@
+<h1><%= t('review_engine.page.title', app: ReviewEngine.app_name, default: "Share your experience with #{ReviewEngine.app_name}") %></h1>
+<p class="subtitle"><%= t('review_engine.page.subtitle', default: 'Your words help others decide — thank you!') %></p>
+
+<div data-review-engine-inline></div>
+
+<%= ReviewEngine::Widget.snippet(
+      locale: I18n.locale,
+      authenticated: ReviewEngine.config.current_user.call(request).present?,
+      mode: 'page',
+      nonce: (content_security_policy_nonce if respond_to?(:content_security_policy_nonce))
+    ).html_safe %>

@@ -2,7 +2,14 @@
 
 module ReviewEngine
   class TestimonialsController < ApplicationController
+    PER_PAGE = 50
+
+    layout 'review_engine/application', except: :create
+
+    # create is the public widget endpoint; everything else is the dashboard.
     before_action :require_enabled, only: :create
+    before_action :require_admin, except: :create
+    before_action :set_testimonial, only: %i[show update destroy]
 
     # Throttle the public endpoint per IP so one user or bot can't flood the
     # table (a submission may carry a video). Uses the rate limiter built
@@ -12,6 +19,33 @@ module ReviewEngine
       rate_limit(**ReviewEngine.config.rate_limit,
                  only: :create,
                  with: -> { render json: { errors: [I18n.t('review_engine.error_rate_limited', default: 'Too many submissions. Please wait a moment and try again.')] }, status: :too_many_requests })
+    end
+
+    def index
+      @status = Testimonial::STATUSES.include?(params[:status]) ? params[:status] : 'pending'
+      @kind = Testimonial::KINDS.include?(params[:kind]) ? params[:kind] : nil
+      @query = params[:q].to_s.strip.presence
+      @counts = Testimonial.group(:status).count
+
+      scope = Testimonial.where(status: @status)
+      scope = scope.where(kind: @kind) if @kind
+      scope = search(scope) if @query
+      @page = [params[:page].to_i, 1].max
+      @testimonials = scope.newest_first.offset((@page - 1) * PER_PAGE).limit(PER_PAGE + 1).to_a
+      @more = @testimonials.size > PER_PAGE
+      @testimonials = @testimonials.first(PER_PAGE)
+    end
+
+    def show; end
+
+    def update
+      @testimonial.update!(admin_params)
+      redirect_back fallback_location: testimonial_path(@testimonial), status: :see_other
+    end
+
+    def destroy
+      @testimonial.destroy!
+      redirect_to root_path, status: :see_other
     end
 
     def create
@@ -30,6 +64,27 @@ module ReviewEngine
     end
 
     private
+
+    def set_testimonial
+      @testimonial = Testimonial.find(params[:id])
+    end
+
+    def admin_params
+      params.require(:testimonial).permit(:status, :featured, :excerpt)
+    end
+
+    # Case-insensitive match on the free-text columns. LOWER() keeps it
+    # portable across SQLite/PostgreSQL/MySQL, and the explicit ESCAPE makes
+    # the sanitized backslash escapes work on SQLite, which has no default
+    # LIKE escape character.
+    def search(scope)
+      pattern = "%#{Testimonial.sanitize_sql_like(@query.downcase)}%"
+      scope.where(
+        "LOWER(COALESCE(body, '')) LIKE :q ESCAPE '\\' OR LOWER(COALESCE(name, '')) LIKE :q ESCAPE '\\' " \
+        "OR LOWER(COALESCE(email, '')) LIKE :q ESCAPE '\\'",
+        q: pattern
+      )
+    end
 
     def build_testimonial
       testimonial = Testimonial.new(testimonial_params)
