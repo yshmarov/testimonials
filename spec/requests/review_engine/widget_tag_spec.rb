@@ -8,8 +8,16 @@ RSpec.describe 'widget tag and prompt flow', type: :request do
   it 'renders the widget with a CSP nonce and no auto-open by default' do
     get '/sample'
     expect(response.body).to include('data-review-engine-config')
-    expect(response.body).to include('data-review-engine-widget nonce="testnonce"')
+    expect(response.body).to include('<script src="/reviews/widget.js" defer nonce="testnonce"')
     expect(response.body).to include('"autoOpen":null')
+  end
+
+  it 'serves the widget code as same-origin JavaScript' do
+    get '/reviews/widget.js'
+    expect(response).to have_http_status(:ok)
+    expect(response.media_type).to eq('text/javascript')
+    expect(response.body).to include('review_engine widget')
+    expect(response.headers['Cache-Control']).to include('public')
   end
 
   it 'renders nothing when disabled' do
@@ -68,12 +76,14 @@ RSpec.describe 'widget tag and prompt flow', type: :request do
   end
 
   describe 'existing review prefill' do
-    it 'carries the signed-in user\'s review in the widget config' do
+    it 'carries the signed-in user\'s review — rating, body, consent, video — in the widget config' do
       ReviewEngine.config.current_user = ->(_request) { user }
-      ReviewEngine::Testimonial.create!(kind: 'text', body: 'My old review', rating: 4, author_id: '42')
+      ReviewEngine::Testimonial.create!(kind: 'text', body: 'My old review', rating: 4,
+                                        author_id: '42', consent_given: true)
 
       get '/sample'
-      expect(response.body).to include('"existing":{"rating":4,"body":"My old review"}')
+      expect(response.body)
+        .to include('"existing":{"rating":4,"body":"My old review","consent":true,"videoUrl":null}')
     end
 
     it 'is null for users without a review' do

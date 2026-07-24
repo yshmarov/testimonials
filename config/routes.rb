@@ -5,6 +5,7 @@ ReviewEngine::Engine.routes.draw do
   # events here; /new is the shareable collection page.
   resources :testimonials, only: %i[create index show update destroy]
   resources :events, only: :create
+  get 'widget.js', to: 'widgets#show', as: :widget
   resource :nps, only: :create, controller: 'nps'
   get 'new', to: 'collection#show', as: :collection
 

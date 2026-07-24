@@ -31,6 +31,9 @@ module ReviewEngine
 
     def authorize_media
       return if ReviewEngine.admin?(request)
+      # Authors can always see their own media — the widget replays their
+      # attached video when they edit their review.
+      return if current_author_id.present? && @testimonial.author_id == current_author_id.to_s
       return if ReviewEngine.config.public_api && @testimonial.approved? && @testimonial.consent_given?
 
       head :forbidden

@@ -28,14 +28,19 @@ module ReviewEngine
       # re-run it on a soft visit — which means it needs no CSP nonce and the
       # widget can re-read the *current* page's config on every `turbo:load`.
       #
-      # `nonce:` stamps only the widget script (the code), so it runs under a
-      # nonce-based Content-Security-Policy; pass nil when the app has no nonce.
+      # The code is a same-origin `src` script served by the engine — NOT
+      # inlined. Under a nonce-based CSP, Turbo Drive body swaps re-run body
+      # scripts against the *original* page's CSP header, so a fresh inline
+      # nonce gets refused; a same-origin src is covered by `'self'` on every
+      # visit. `nonce:` is still stamped for hosts whose script-src has no
+      # 'self'; pass nil when the app has no nonce.
       def snippet(locale:, authenticated:, auto_open: nil, mode: 'widget', existing: nil, nonce: nil)
         json = config_json(locale:, authenticated:, auto_open:, mode:, existing:)
         nonce_attr = nonce ? %( nonce="#{nonce}") : ''
+        src = "#{ReviewEngine.config.mount_path.chomp('/')}/widget.js"
 
         %(<script type="application/json" data-review-engine-config>#{json}</script>) +
-          %(<script data-review-engine-widget#{nonce_attr}>#{javascript}</script>)
+          %(<script src="#{src}" defer#{nonce_attr} data-review-engine-widget></script>)
       end
 
       def config_json(locale:, authenticated:, auto_open:, mode:, existing: nil)
@@ -54,8 +59,14 @@ module ReviewEngine
           questions: ReviewEngine.questions,
           consent: ReviewEngine.consent_text,
           # The signed-in user's current review, if any: the widget opens it
-          # pre-filled for editing instead of starting a second one.
-          existing: existing && { rating: existing.rating, body: existing.body },
+          # pre-filled for editing instead of starting a second one — rating,
+          # text, consent state, and a playable URL for an attached video.
+          existing: existing && {
+            rating: existing.rating,
+            body: existing.body,
+            consent: existing.consent_given ? true : false,
+            videoUrl: existing_video_url(existing)
+          },
           video: {
             enabled: config.video_enabled?,
             maxSeconds: config.max_video_seconds.to_i,
@@ -73,6 +84,12 @@ module ReviewEngine
       end
 
       private
+
+      def existing_video_url(existing)
+        return unless existing.video_attached?
+
+        "#{ReviewEngine.config.mount_path.chomp('/')}/testimonials/#{existing.id}/video"
+      end
 
       # Every user-facing string in the widget, resolved through Rails I18n so
       # the form follows the app's current locale. Each lookup carries an

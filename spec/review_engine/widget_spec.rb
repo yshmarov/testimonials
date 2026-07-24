@@ -8,16 +8,18 @@ RSpec.describe ReviewEngine::Widget do
     JSON.parse(json.gsub('<\/', '</'))
   end
 
-  it 'renders a JSON config block and the widget script' do
+  it 'renders a JSON config block and a same-origin src script (never inline code)' do
     snippet = described_class.snippet(locale: :en, authenticated: false)
     expect(snippet).to include('data-review-engine-config')
+    expect(snippet).to include('<script src="/reviews/widget.js" defer')
     expect(snippet).to include('data-review-engine-widget')
-    expect(snippet).to include('review_engine widget')
+    # Inline code would be refused on Turbo body swaps under a nonce CSP.
+    expect(snippet).not_to include('review_engine widget')
   end
 
   it 'stamps a nonce on the code script only' do
     snippet = described_class.snippet(locale: :en, authenticated: false, nonce: 'abc123')
-    expect(snippet).to include('data-review-engine-widget nonce="abc123"')
+    expect(snippet).to include('defer nonce="abc123" data-review-engine-widget')
     expect(snippet.scan('nonce=').size).to eq(1)
   end
 

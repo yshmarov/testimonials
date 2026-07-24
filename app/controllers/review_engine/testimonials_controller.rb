@@ -53,6 +53,9 @@ module ReviewEngine
       return render json: { errors: [error] }, status: :unprocessable_entity if error
 
       if testimonial.save
+        # Purge only after a valid save, so a failed update can't strand a
+        # review with its video already gone.
+        testimonial.video_file.purge if remove_video? && testimonial.video_attached?
         record_submission
         notify_host(testimonial)
         head :created
@@ -112,9 +115,15 @@ module ReviewEngine
     end
 
     # A fresh upload makes it a video review; on an edit without a new
-    # upload, an already-attached video stays.
+    # upload, an already-attached video stays — unless the user removed it.
     def wants_video?(testimonial)
-      params.dig(:testimonial, :video_file).present? || testimonial.video_attached?
+      return true if params.dig(:testimonial, :video_file).present?
+
+      testimonial.video_attached? && !remove_video?
+    end
+
+    def remove_video?
+      params.dig(:testimonial, :remove_video).present? && params.dig(:testimonial, :video_file).blank?
     end
 
     def testimonial_params

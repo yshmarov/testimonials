@@ -62,6 +62,41 @@ RSpec.describe 'testimonial submission', type: :request do
     expect(existing.excerpt).to be_nil
   end
 
+  it 'keeps an attached video on a text-only update, and purges it when asked' do
+    ReviewEngine.config.current_user = ->(_request) { user }
+    file = Rack::Test::UploadedFile.new(
+      StringIO.new('fake video bytes'), 'video/webm', original_filename: 'testimonial.webm'
+    )
+    post '/reviews/testimonials', params: { testimonial: { body: '', video_file: file } }
+    testimonial = ReviewEngine::Testimonial.last
+
+    post '/reviews/testimonials', params: { testimonial: { body: 'Now with words' } }
+    testimonial.reload
+    expect(testimonial.kind).to eq('video')
+    expect(testimonial.video_file).to be_attached
+
+    post '/reviews/testimonials', params: { testimonial: { body: 'Words only now', remove_video: '1' } }
+    testimonial.reload
+    expect(testimonial.kind).to eq('text')
+    expect(testimonial.video_file).not_to be_attached
+  end
+
+  it 'lets the author fetch their own video through the media route' do
+    ReviewEngine.config.current_user = ->(_request) { user }
+    file = Rack::Test::UploadedFile.new(
+      StringIO.new('fake video bytes'), 'video/webm', original_filename: 'testimonial.webm'
+    )
+    post '/reviews/testimonials', params: { testimonial: { video_file: file } }
+    testimonial = ReviewEngine::Testimonial.last
+
+    get "/reviews/testimonials/#{testimonial.id}/video"
+    expect(response).to have_http_status(:redirect)
+
+    ReviewEngine.config.current_user = ->(_request) {}
+    get "/reviews/testimonials/#{testimonial.id}/video"
+    expect(response).to have_http_status(:forbidden)
+  end
+
   it 'keeps guest submissions as separate records' do
     ReviewEngine::Testimonial.create!(kind: 'text', body: 'First guest', name: 'G', email: 'g@example.com')
 
