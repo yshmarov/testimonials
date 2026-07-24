@@ -6,7 +6,7 @@ RSpec.describe 'testimonial submission', type: :request do
   let(:user) { Struct.new(:id, :name, :email).new(42, 'Ada Lovelace', 'ada@example.com') }
 
   it 'stores a guest text testimonial with consent snapshot and locale' do
-    post '/reviews/testimonials', params: {
+    post '/reviews', params: {
       testimonial: { body: 'Love it!', rating: 5, consent_given: '1',
                      name: 'Grace', email: 'grace@example.com', page_url: 'http://x/pricing' }
     }
@@ -25,7 +25,7 @@ RSpec.describe 'testimonial submission', type: :request do
   it 'attributes signed-in users server-side, ignoring client contact fields' do
     ReviewEngine.config.current_user = ->(_request) { user }
 
-    post '/reviews/testimonials', params: {
+    post '/reviews', params: {
       testimonial: { body: 'Great', name: 'Mallory', email: 'spoof@example.com' }
     }
 
@@ -39,7 +39,7 @@ RSpec.describe 'testimonial submission', type: :request do
     ReviewEngine.config.current_user = ->(_request) { user }
 
     expect do
-      post '/reviews/testimonials', params: { testimonial: { body: 'Great' } }
+      post '/reviews', params: { testimonial: { body: 'Great' } }
     end.to change { ReviewEngine::PromptEvent.where(kind: 'testimonial', action: 'submitted').count }.by(1)
 
     expect(ReviewEngine::PromptEvent.last.author_id).to eq('42')
@@ -51,7 +51,7 @@ RSpec.describe 'testimonial submission', type: :request do
                                                  author_id: '42', status: 'approved',
                                                  excerpt: 'Old', consent_given: true)
 
-    post '/reviews/testimonials', params: { testimonial: { body: 'New words', rating: 5, consent_given: '1' } }
+    post '/reviews', params: { testimonial: { body: 'New words', rating: 5, consent_given: '1' } }
 
     expect(response).to have_http_status(:created)
     expect(ReviewEngine::Testimonial.count).to eq(1)
@@ -67,15 +67,15 @@ RSpec.describe 'testimonial submission', type: :request do
     file = Rack::Test::UploadedFile.new(
       StringIO.new('fake video bytes'), 'video/webm', original_filename: 'testimonial.webm'
     )
-    post '/reviews/testimonials', params: { testimonial: { body: '', video_file: file } }
+    post '/reviews', params: { testimonial: { body: '', video_file: file } }
     testimonial = ReviewEngine::Testimonial.last
 
-    post '/reviews/testimonials', params: { testimonial: { body: 'Now with words' } }
+    post '/reviews', params: { testimonial: { body: 'Now with words' } }
     testimonial.reload
     expect(testimonial.kind).to eq('video')
     expect(testimonial.video_file).to be_attached
 
-    post '/reviews/testimonials', params: { testimonial: { body: 'Words only now', remove_video: '1' } }
+    post '/reviews', params: { testimonial: { body: 'Words only now', remove_video: '1' } }
     testimonial.reload
     expect(testimonial.kind).to eq('text')
     expect(testimonial.video_file).not_to be_attached
@@ -86,21 +86,21 @@ RSpec.describe 'testimonial submission', type: :request do
     file = Rack::Test::UploadedFile.new(
       StringIO.new('fake video bytes'), 'video/webm', original_filename: 'testimonial.webm'
     )
-    post '/reviews/testimonials', params: { testimonial: { video_file: file } }
+    post '/reviews', params: { testimonial: { video_file: file } }
     testimonial = ReviewEngine::Testimonial.last
 
-    get "/reviews/testimonials/#{testimonial.id}/video"
+    get "/reviews/#{testimonial.id}/video"
     expect(response).to have_http_status(:redirect)
 
     ReviewEngine.config.current_user = ->(_request) {}
-    get "/reviews/testimonials/#{testimonial.id}/video"
+    get "/reviews/#{testimonial.id}/video"
     expect(response).to have_http_status(:forbidden)
   end
 
   it 'keeps guest submissions as separate records' do
     ReviewEngine::Testimonial.create!(kind: 'text', body: 'First guest', name: 'G', email: 'g@example.com')
 
-    post '/reviews/testimonials', params: {
+    post '/reviews', params: {
       testimonial: { body: 'Second guest', name: 'G', email: 'g@example.com' }
     }
 
@@ -108,7 +108,7 @@ RSpec.describe 'testimonial submission', type: :request do
   end
 
   it 'rejects blank text testimonials' do
-    post '/reviews/testimonials', params: { testimonial: { body: '' } }
+    post '/reviews', params: { testimonial: { body: '' } }
     expect(response).to have_http_status(:unprocessable_entity)
   end
 
@@ -116,7 +116,7 @@ RSpec.describe 'testimonial submission', type: :request do
     file = Rack::Test::UploadedFile.new(
       StringIO.new('fake video bytes'), 'video/webm', original_filename: 'testimonial.webm'
     )
-    post '/reviews/testimonials', params: { testimonial: { body: '', video_file: file } }
+    post '/reviews', params: { testimonial: { body: '', video_file: file } }
 
     expect(response).to have_http_status(:created)
     testimonial = ReviewEngine::Testimonial.last
@@ -129,7 +129,7 @@ RSpec.describe 'testimonial submission', type: :request do
     file = Rack::Test::UploadedFile.new(
       StringIO.new('too many bytes'), 'video/webm', original_filename: 'testimonial.webm'
     )
-    post '/reviews/testimonials', params: { testimonial: { video_file: file } }
+    post '/reviews', params: { testimonial: { video_file: file } }
 
     expect(response).to have_http_status(:unprocessable_entity)
     expect(ReviewEngine::Testimonial.count).to eq(0)
@@ -139,20 +139,20 @@ RSpec.describe 'testimonial submission', type: :request do
     file = Rack::Test::UploadedFile.new(
       StringIO.new('<html>'), 'text/html', original_filename: 'evil.html'
     )
-    post '/reviews/testimonials', params: { testimonial: { video_file: file } }
+    post '/reviews', params: { testimonial: { video_file: file } }
 
     expect(response).to have_http_status(:unprocessable_entity)
   end
 
   it 'is gated by config.enabled' do
     ReviewEngine.config.enabled = ->(_request) { false }
-    post '/reviews/testimonials', params: { testimonial: { body: 'x' } }
+    post '/reviews', params: { testimonial: { body: 'x' } }
     expect(response).to have_http_status(:forbidden)
   end
 
   it 'survives a raising on_submit hook' do
     ReviewEngine.config.on_submit = ->(_record) { raise 'boom' }
-    post '/reviews/testimonials', params: { testimonial: { body: 'Still saved' } }
+    post '/reviews', params: { testimonial: { body: 'Still saved' } }
     expect(response).to have_http_status(:created)
     expect(ReviewEngine::Testimonial.count).to eq(1)
   end

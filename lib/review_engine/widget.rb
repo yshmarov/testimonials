@@ -88,7 +88,7 @@ module ReviewEngine
       def existing_video_url(existing)
         return unless existing.video_attached?
 
-        "#{ReviewEngine.config.mount_path.chomp('/')}/testimonials/#{existing.id}/video"
+        "#{ReviewEngine.config.mount_path.chomp('/')}/#{existing.id}/video"
       end
 
       # Every user-facing string in the widget, resolved through Rails I18n so

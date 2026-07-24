@@ -19,29 +19,29 @@ RSpec.describe 'dashboard', type: :request do
       get '/reviews'
       expect(response.body).to include('Wonderful tool')
 
-      get '/reviews/testimonials', params: { status: 'approved' }
+      get '/reviews', params: { status: 'approved' }
       expect(response.body).not_to include('Wonderful tool')
     end
 
     it 'searches text, name, and email' do
-      get '/reviews/testimonials', params: { q: 'wonder' }
+      get '/reviews', params: { q: 'wonder' }
       expect(response.body).to include('Wonderful tool')
 
-      get '/reviews/testimonials', params: { q: 'nothing-matches' }
+      get '/reviews', params: { q: 'nothing-matches' }
       expect(response.body).not_to include('Wonderful tool')
     end
 
     it 'approves, features, excerpts, and deletes' do
-      patch "/reviews/testimonials/#{testimonial.id}", params: { testimonial: { status: 'approved' } }
+      patch "/reviews/#{testimonial.id}", params: { testimonial: { status: 'approved' } }
       expect(testimonial.reload.status).to eq('approved')
 
-      patch "/reviews/testimonials/#{testimonial.id}", params: { testimonial: { featured: true } }
+      patch "/reviews/#{testimonial.id}", params: { testimonial: { featured: true } }
       expect(testimonial.reload.featured).to be(true)
 
-      patch "/reviews/testimonials/#{testimonial.id}", params: { testimonial: { excerpt: 'Wonderful' } }
+      patch "/reviews/#{testimonial.id}", params: { testimonial: { excerpt: 'Wonderful' } }
       expect(testimonial.reload.quote).to eq('Wonderful')
 
-      delete "/reviews/testimonials/#{testimonial.id}"
+      delete "/reviews/#{testimonial.id}"
       expect(ReviewEngine::Testimonial.count).to eq(0)
     end
 

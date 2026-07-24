@@ -112,7 +112,7 @@ module ReviewEngine
       @mount_path = '/reviews'
     end
 
-    def testimonials_endpoint = "#{mount_path.chomp('/')}/testimonials"
+    def testimonials_endpoint = mount_path.chomp('/')
     def nps_endpoint = "#{mount_path.chomp('/')}/nps"
     def events_endpoint = "#{mount_path.chomp('/')}/events"
 

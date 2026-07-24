@@ -25,7 +25,7 @@ RSpec.describe ReviewEngine::Widget do
 
   it 'carries endpoints, questions, and localized labels' do
     config = parsed_config(described_class.snippet(locale: :en, authenticated: true))
-    expect(config['endpoints']['testimonials']).to eq('/reviews/testimonials')
+    expect(config['endpoints']['testimonials']).to eq('/reviews')
     expect(config['endpoints']['nps']).to eq('/reviews/nps')
     expect(config['questions'].size).to eq(3)
     expect(config['authenticated']).to be(true)
