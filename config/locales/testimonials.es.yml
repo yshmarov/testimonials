@@ -55,6 +55,7 @@ es:
       widget: "Widget in-app"
       page: "Página de recogida"
       nps: "Seguimiento NPS"
+      collection_page: "Página pública de recogida"
     statuses:
       pending: "Pendiente"
       approved: "Aprobado"

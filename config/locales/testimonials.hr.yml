@@ -55,6 +55,7 @@ hr:
       widget: "Widget u aplikaciji"
       page: "Stranica za prikupljanje"
       nps: "NPS nastavak"
+      collection_page: "Javna stranica za prikupljanje"
     statuses:
       pending: "Na čekanju"
       approved: "Odobreno"

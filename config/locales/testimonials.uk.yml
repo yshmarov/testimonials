@@ -55,6 +55,7 @@ uk:
       widget: "Віджет у застосунку"
       page: "Сторінка збору"
       nps: "Після NPS"
+      collection_page: "Публічна сторінка збору"
     statuses:
       pending: "Очікує"
       approved: "Схвалено"

@@ -55,6 +55,7 @@ pl:
       widget: "Widżet w aplikacji"
       page: "Strona zbierania"
       nps: "Kontynuacja NPS"
+      collection_page: "Publiczna strona zbierania"
     statuses:
       pending: "Oczekujące"
       approved: "Zatwierdzone"

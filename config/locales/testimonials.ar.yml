@@ -55,6 +55,7 @@ ar:
       widget: "أداة داخل التطبيق"
       page: "صفحة الجمع"
       nps: "متابعة NPS"
+      collection_page: "صفحة الجمع العامة"
     statuses:
       pending: "قيد الانتظار"
       approved: "معتمد"

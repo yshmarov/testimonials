@@ -12,8 +12,10 @@ module Testimonials
     # <script src> request.
     skip_forgery_protection
 
+    # ETag-only freshness: the browser revalidates on every load (a cheap
+    # 304), so a gem update can never leave stale widget code running
+    # against updated markup. No time-based cache window on purpose.
     def show
-      expires_in 1.hour, public: true
       return unless stale?(etag: [Testimonials::VERSION, Widget.javascript])
 
       render plain: Widget.javascript, content_type: 'text/javascript'

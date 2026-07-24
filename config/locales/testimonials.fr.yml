@@ -55,6 +55,7 @@ fr:
       widget: "Widget in-app"
       page: "Page de collecte"
       nps: "Suite NPS"
+      collection_page: "Page de collecte publique"
     statuses:
       pending: "En attente"
       approved: "Approuvé"

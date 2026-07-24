@@ -55,6 +55,7 @@ th:
       widget: "วิดเจ็ตในแอป"
       page: "หน้ารวบรวม"
       nps: "ติดตามผล NPS"
+      collection_page: "หน้ารวบรวมสาธารณะ"
     statuses:
       pending: "รอดำเนินการ"
       approved: "อนุมัติแล้ว"

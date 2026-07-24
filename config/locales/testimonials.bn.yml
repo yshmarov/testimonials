@@ -55,6 +55,7 @@ bn:
       widget: "অ্যাপের ভেতরের উইজেট"
       page: "সংগ্রহ পাতা"
       nps: "NPS ফলো-আপ"
+      collection_page: "পাবলিক সংগ্রহ পাতা"
     statuses:
       pending: "অপেক্ষমাণ"
       approved: "অনুমোদিত"

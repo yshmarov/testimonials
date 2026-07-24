@@ -102,8 +102,9 @@
       <% end %>
       <%# The shareable collection page — drop this link into an email or DM. %>
       <% if Testimonials.config.public_collection %>
-        <a class="share-link" href="<%= collection_url %>" target="_blank" rel="noopener">
-          🔗 <%= collection_url %>
+        <a class="button share-link" href="<%= collection_url %>" target="_blank" rel="noopener"
+           title="<%= collection_url %>">
+          🔗 <%= t('testimonials.dashboard.collection_page', default: 'Public collection page') %>
         </a>
       <% end %>
     </div>

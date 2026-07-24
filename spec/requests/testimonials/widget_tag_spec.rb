@@ -17,7 +17,7 @@ RSpec.describe 'widget tag and prompt flow', type: :request do
     expect(response).to have_http_status(:ok)
     expect(response.media_type).to eq('text/javascript')
     expect(response.body).to include('testimonials widget')
-    expect(response.headers['Cache-Control']).to include('public')
+    expect(response.headers['ETag']).to be_present
   end
 
   it 'renders nothing when disabled' do

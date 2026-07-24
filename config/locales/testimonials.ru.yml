@@ -55,6 +55,7 @@ ru:
       widget: "Виджет в приложении"
       page: "Страница сбора"
       nps: "После NPS"
+      collection_page: "Публичная страница сбора"
     statuses:
       pending: "Ожидает"
       approved: "Одобрено"
