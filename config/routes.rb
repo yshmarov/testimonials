@@ -4,6 +4,7 @@ Testimonials::Engine.routes.draw do
   # Everything with a fixed name goes first; the flat testimonial routes at
   # the bottom own "/:id".
   get 'widget.js', to: 'widgets#show', as: :widget
+  get 'dashboard.js', to: 'widgets#dashboard', as: :dashboard_script
   get 'new', to: 'collection#show', as: :collection
   resources :events, only: :create
   resource :nps, only: :create, controller: 'nps'

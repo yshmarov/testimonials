@@ -12,7 +12,7 @@
 
 <form class="filters" method="get">
   <input type="hidden" name="status" value="<%= @status %>">
-  <select name="kind" onchange="this.form.submit()">
+  <select name="kind" data-autosubmit="true">
     <option value=""><%= t('testimonials.dashboard.all_kinds', default: 'All kinds') %></option>
     <% Testimonials::Testimonial::KINDS.each do |kind| %>
       <option value="<%= kind %>" <%= 'selected' if kind == @kind %>>

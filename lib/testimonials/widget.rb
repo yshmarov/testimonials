@@ -11,6 +11,7 @@ module Testimonials
   # host that *does* run a pipeline never ingests it either.
   module Widget
     SOURCE = File.expand_path('widget.js', __dir__)
+    DASHBOARD_SOURCE = File.expand_path('dashboard.js', __dir__)
 
     # Right-to-left scripts, so the form renders mirrored for those locales.
     # Matched on the language subtag, so region variants ("ar-EG") count too.
@@ -19,6 +20,10 @@ module Testimonials
     class << self
       def javascript
         @javascript ||= File.read(SOURCE)
+      end
+
+      def dashboard_javascript
+        @dashboard_javascript ||= File.read(DASHBOARD_SOURCE)
       end
 
       # The two <script> tags the helper renders.

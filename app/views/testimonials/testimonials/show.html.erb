@@ -91,5 +91,5 @@
   <%= button_to t('testimonials.dashboard.delete', default: 'Delete'),
                 testimonial_path(@testimonial),
                 method: :delete, class: 'danger',
-                form: { onsubmit: "return confirm('#{t('testimonials.dashboard.delete_confirm', default: 'Delete this testimonial?')}')" } %>
+                form: { data: { confirm: t('testimonials.dashboard.delete_confirm', default: 'Delete this testimonial?') } } %>
 </div>

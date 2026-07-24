@@ -12,8 +12,26 @@ RSpec.describe 'dashboard', type: :request do
     expect(response).to have_http_status(:forbidden)
   end
 
+  it 'serves the dashboard helper script (CSP-safe, no inline handlers)' do
+    get '/testimonials/dashboard.js'
+    expect(response).to have_http_status(:ok)
+    expect(response.media_type).to eq('text/javascript')
+    expect(response.body).to include('data-confirm')
+  end
+
   context 'as an admin' do
     before { as_admin! }
+
+    it 'loads the helper script and uses no inline JS handlers' do
+      get '/testimonials'
+      expect(response.body).to include('src="/testimonials/dashboard.js"')
+      expect(response.body).not_to include('onchange=')
+      expect(response.body).to include('data-autosubmit')
+
+      get "/testimonials/#{testimonial.id}"
+      expect(response.body).not_to include('onsubmit=')
+      expect(response.body).to include('data-confirm')
+    end
 
     it 'lists testimonials by status tab' do
       get '/testimonials'

@@ -20,5 +20,11 @@ module Testimonials
 
       render plain: Widget.javascript, content_type: 'text/javascript'
     end
+
+    def dashboard
+      return unless stale?(etag: [Testimonials::VERSION, Widget.dashboard_javascript])
+
+      render plain: Widget.dashboard_javascript, content_type: 'text/javascript'
+    end
   end
 end

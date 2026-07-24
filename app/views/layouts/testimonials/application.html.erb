@@ -4,6 +4,9 @@
   <title><%= t('testimonials.dashboard.title', default: 'Testimonials') %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
+  <%# Same-origin script instead of inline handlers, so delete confirms and
+      the auto-submitting filter work under strict script-src CSPs. %>
+  <%= javascript_include_tag dashboard_script_path, defer: true, nonce: true %>
   <style>
     :root {
       color-scheme: light dark;
