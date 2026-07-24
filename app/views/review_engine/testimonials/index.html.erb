@@ -72,12 +72,19 @@
             <td class="muted" title="<%= testimonial.created_at %>">
               <%= time_ago_in_words(testimonial.created_at) %>
             </td>
-            <td>
+            <td class="row-actions">
+              <%# Inline status triage; feature/excerpt/delete live on the show page. %>
               <% unless testimonial.approved? %>
-                <%= button_to t('review_engine.dashboard.approve', default: 'Approve'),
+                <%= button_to t('review_engine.dashboard.move_to_approved', default: 'Approve'),
                               testimonial_path(testimonial),
                               method: :patch, params: { testimonial: { status: 'approved' } },
                               class: 'small primary' %>
+              <% end %>
+              <% unless testimonial.archived? %>
+                <%= button_to t('review_engine.dashboard.move_to_archived', default: 'Archive'),
+                              testimonial_path(testimonial),
+                              method: :patch, params: { testimonial: { status: 'archived' } },
+                              class: 'small' %>
               <% end %>
             </td>
           </tr>

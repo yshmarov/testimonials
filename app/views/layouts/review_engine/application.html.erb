@@ -26,6 +26,7 @@
     a:hover { text-decoration: underline; }
     .container { max-width: 1020px; margin: 0 auto; padding: 24px 16px 64px; }
     h1 { font-size: 22px; margin: 0 0 16px; }
+    h1.title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .nav { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
     .nav a { padding: 6px 16px; border: 1px solid var(--border); border-radius: 999px;
              background: var(--surface); color: var(--muted); font-weight: 600; }
@@ -65,6 +66,9 @@
     .pager { margin-top: 16px; display: flex; gap: 16px; }
     .actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
     .actions form { display: inline; }
+    td.row-actions { white-space: nowrap; text-align: right; }
+    td.row-actions form { display: inline-block; }
+    td.row-actions form + form { margin-left: 6px; }
     button, .button { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
                       background: var(--surface); color: var(--text); font: inherit; }
     button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }

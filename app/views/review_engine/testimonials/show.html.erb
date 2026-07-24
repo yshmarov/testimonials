@@ -3,7 +3,7 @@
   / #<%= @testimonial.id %>
 </div>
 
-<h1>
+<h1 class="title-row">
   <span class="badge status-<%= @testimonial.status %>">
     <%= t("review_engine.statuses.#{@testimonial.status}", default: @testimonial.status.humanize) %>
   </span>
