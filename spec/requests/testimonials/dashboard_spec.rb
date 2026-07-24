@@ -24,7 +24,7 @@ RSpec.describe 'dashboard', type: :request do
 
     it 'loads the helper script and uses no inline JS handlers' do
       get '/testimonials'
-      expect(response.body).to include('src="/testimonials/dashboard.js"')
+      expect(response.body).to include('src="/testimonials/dashboard.js?v=')
       expect(response.body).not_to include('onchange=')
       expect(response.body).to include('data-autosubmit')
 

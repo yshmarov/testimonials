@@ -6,7 +6,8 @@
   <%= csrf_meta_tags %>
   <%# Same-origin script instead of inline handlers, so delete confirms and
       the auto-submitting filter work under strict script-src CSPs. %>
-  <%= javascript_include_tag dashboard_script_path, defer: true, nonce: true %>
+  <%= javascript_include_tag "#{dashboard_script_path}?v=#{Testimonials::Widget.dashboard_fingerprint}",
+                             defer: true, nonce: true %>
   <style>
     :root {
       color-scheme: light dark;

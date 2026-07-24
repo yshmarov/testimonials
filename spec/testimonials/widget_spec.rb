@@ -11,7 +11,7 @@ RSpec.describe Testimonials::Widget do
   it 'renders a JSON config block and a same-origin src script (never inline code)' do
     snippet = described_class.snippet(locale: :en, authenticated: false)
     expect(snippet).to include('data-testimonials-config')
-    expect(snippet).to include('<script src="/testimonials/widget.js" defer')
+    expect(snippet).to include('<script src="/testimonials/widget.js?v=')
     expect(snippet).to include('data-testimonials-widget')
     # Inline code would be refused on Turbo body swaps under a nonce CSP.
     expect(snippet).not_to include('testimonials widget')

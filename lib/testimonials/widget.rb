@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'digest'
 
 module Testimonials
   # Serves the self-contained browser widget. The JavaScript is plain ES (no
@@ -26,6 +27,17 @@ module Testimonials
         @dashboard_javascript ||= File.read(DASHBOARD_SOURCE)
       end
 
+      # Content fingerprints for cache-busting script URLs: a changed file is
+      # a changed URL, so no browser can ever run stale widget code — Safari
+      # has been caught ignoring must-revalidate on same-URL scripts.
+      def fingerprint
+        @fingerprint ||= Digest::MD5.hexdigest(javascript)
+      end
+
+      def dashboard_fingerprint
+        @dashboard_fingerprint ||= Digest::MD5.hexdigest(dashboard_javascript)
+      end
+
       # The two <script> tags the helper renders.
       #
       # The config rides in a `type="application/json"` block: it is *data*,
@@ -42,7 +54,7 @@ module Testimonials
       def snippet(locale:, authenticated:, auto_open: nil, mode: 'widget', existing: nil, nonce: nil)
         json = config_json(locale:, authenticated:, auto_open:, mode:, existing:)
         nonce_attr = nonce ? %( nonce="#{nonce}") : ''
-        src = "#{Testimonials.config.mount_path.chomp('/')}/widget.js"
+        src = "#{Testimonials.config.mount_path.chomp('/')}/widget.js?v=#{fingerprint}"
 
         %(<script type="application/json" data-testimonials-config>#{json}</script>) +
           %(<script src="#{src}" defer#{nonce_attr} data-testimonials-widget></script>)

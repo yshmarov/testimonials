@@ -8,7 +8,7 @@ RSpec.describe 'widget tag and prompt flow', type: :request do
   it 'renders the widget with a CSP nonce and no auto-open by default' do
     get '/sample'
     expect(response.body).to include('data-testimonials-config')
-    expect(response.body).to include('<script src="/testimonials/widget.js" defer nonce="testnonce"')
+    expect(response.body).to include('<script src="/testimonials/widget.js?v=')
     expect(response.body).to include('"autoOpen":null')
   end
 

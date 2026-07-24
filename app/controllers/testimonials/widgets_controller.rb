@@ -12,19 +12,25 @@ module Testimonials
     # <script src> request.
     skip_forgery_protection
 
-    # ETag-only freshness: the browser revalidates on every load (a cheap
-    # 304), so a gem update can never leave stale widget code running
-    # against updated markup. No time-based cache window on purpose.
+    # The script URLs carry a content fingerprint (?v=<md5>), so stale code
+    # is structurally impossible: new code means a new URL. The canonical
+    # fingerprinted URL is immutable and gets long-lived caching; anything
+    # else only ETag-revalidates.
     def show
-      return unless stale?(etag: [Testimonials::VERSION, Widget.javascript])
-
-      render plain: Widget.javascript, content_type: 'text/javascript'
+      serve(Widget.javascript, Widget.fingerprint)
     end
 
     def dashboard
-      return unless stale?(etag: [Testimonials::VERSION, Widget.dashboard_javascript])
+      serve(Widget.dashboard_javascript, Widget.dashboard_fingerprint)
+    end
 
-      render plain: Widget.dashboard_javascript, content_type: 'text/javascript'
+    private
+
+    def serve(source, fingerprint)
+      expires_in 1.year, public: true if params[:v] == fingerprint
+      return unless stale?(etag: [Testimonials::VERSION, fingerprint])
+
+      render plain: source, content_type: 'text/javascript'
     end
   end
 end
