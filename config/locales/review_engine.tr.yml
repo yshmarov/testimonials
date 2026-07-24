@@ -16,6 +16,7 @@ tr:
     message: "Görüşünüz"
     message_placeholder: "Bir arkadaşınıza %{app} hakkında ne söylerdiniz?"
     record_video: "Video kaydet"
+    record_video_hint: "Kısa bir video, bir sayfa metinden fazlasını anlatır."
     name: "Adınız"
     email: "E-postanız"
     title_company: "Unvan, şirket"

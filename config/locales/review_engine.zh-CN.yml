@@ -16,6 +16,7 @@ zh-CN:
     message: "您的评价"
     message_placeholder: "您会如何向朋友介绍 %{app}？"
     record_video: "录制视频"
+    record_video_hint: "一段简短的视频胜过一页文字。"
     name: "您的姓名"
     email: "您的邮箱"
     title_company: "职位、公司"

@@ -16,6 +16,7 @@ en:
     message: "Your testimonial"
     message_placeholder: "What would you tell a friend about %{app}?"
     record_video: "Record a video"
+    record_video_hint: "A short video says more than a page of text."
     name: "Your name"
     email: "Your email"
     title_company: "Title, company"

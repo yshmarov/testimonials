@@ -16,6 +16,7 @@ ja:
     message: "お客様の声"
     message_placeholder: "%{app}について友人に何と伝えますか？"
     record_video: "動画を撮影"
+    record_video_hint: "短い動画は文章一枚より多くを伝えます。"
     name: "お名前"
     email: "メールアドレス"
     title_company: "役職・会社名"

@@ -16,6 +16,7 @@ ro:
     message: "Testimonialul dvs."
     message_placeholder: "Ce i-ați spune unui prieten despre %{app}?"
     record_video: "Înregistrați un videoclip"
+    record_video_hint: "Un videoclip scurt spune mai mult decât o pagină de text."
     name: "Numele dvs."
     email: "Emailul dvs."
     title_company: "Funcție, companie"

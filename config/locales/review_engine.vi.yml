@@ -16,6 +16,7 @@ vi:
     message: "Cảm nhận của bạn"
     message_placeholder: "Bạn sẽ nói gì với một người bạn về %{app}?"
     record_video: "Quay video"
+    record_video_hint: "Một video ngắn nói lên nhiều hơn một trang chữ."
     name: "Tên của bạn"
     email: "Email của bạn"
     title_company: "Chức danh, công ty"

@@ -16,6 +16,7 @@ id:
     message: "Testimoni Anda"
     message_placeholder: "Apa yang akan Anda katakan kepada teman tentang %{app}?"
     record_video: "Rekam video"
+    record_video_hint: "Video singkat berbicara lebih banyak daripada satu halaman teks."
     name: "Nama Anda"
     email: "Email Anda"
     title_company: "Jabatan, perusahaan"

@@ -16,6 +16,7 @@ ar:
     message: "شهادتك"
     message_placeholder: "ماذا ستقول لصديق عن %{app}؟"
     record_video: "تسجيل فيديو"
+    record_video_hint: "فيديو قصير يقول أكثر من صفحة نص."
     name: "اسمك"
     email: "بريدك الإلكتروني"
     title_company: "المنصب، الشركة"

@@ -16,6 +16,7 @@ ko:
     message: "고객 후기"
     message_placeholder: "친구에게 %{app}에 대해 뭐라고 말씀하시겠어요?"
     record_video: "동영상 녹화"
+    record_video_hint: "짧은 동영상이 한 페이지의 글보다 많은 것을 전합니다."
     name: "이름"
     email: "이메일"
     title_company: "직함, 회사"

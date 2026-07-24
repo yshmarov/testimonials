@@ -16,6 +16,7 @@ ur:
     message: "آپ کی رائے"
     message_placeholder: "آپ کسی دوست کو %{app} کے بارے میں کیا بتائیں گے؟"
     record_video: "ویڈیو ریکارڈ کریں"
+    record_video_hint: "ایک مختصر ویڈیو ایک صفحہ تحریر سے زیادہ کہتی ہے۔"
     name: "آپ کا نام"
     email: "آپ کا ای میل"
     title_company: "عہدہ، کمپنی"

@@ -16,6 +16,7 @@ bn:
     message: "আপনার মতামত"
     message_placeholder: "%{app} সম্পর্কে বন্ধুকে কী বলবেন?"
     record_video: "ভিডিও রেকর্ড করুন"
+    record_video_hint: "একটি ছোট ভিডিও এক পাতা লেখার চেয়ে বেশি কিছু বলে।"
     name: "আপনার নাম"
     email: "আপনার ইমেইল"
     title_company: "পদবি, কোম্পানি"

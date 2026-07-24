@@ -16,6 +16,7 @@ hi:
     message: "आपकी प्रतिक्रिया"
     message_placeholder: "आप किसी मित्र को %{app} के बारे में क्या बताएंगे?"
     record_video: "वीडियो रिकॉर्ड करें"
+    record_video_hint: "एक छोटा वीडियो एक पन्ने के टेक्स्ट से ज़्यादा कहता है।"
     name: "आपका नाम"
     email: "आपका ईमेल"
     title_company: "पद, कंपनी"

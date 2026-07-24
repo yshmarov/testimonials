@@ -16,6 +16,7 @@ el:
     message: "Η μαρτυρία σας"
     message_placeholder: "Τι θα λέγατε σε έναν φίλο για το %{app};"
     record_video: "Εγγραφή βίντεο"
+    record_video_hint: "Ένα σύντομο βίντεο λέει περισσότερα από μια σελίδα κειμένου."
     name: "Το όνομά σας"
     email: "Το email σας"
     title_company: "Θέση, εταιρεία"

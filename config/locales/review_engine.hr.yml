@@ -16,6 +16,7 @@ hr:
     message: "Vaš osvrt"
     message_placeholder: "Što biste rekli prijatelju o %{app}?"
     record_video: "Snimite video"
+    record_video_hint: "Kratki video govori više od stranice teksta."
     name: "Vaše ime"
     email: "Vaš e-mail"
     title_company: "Pozicija, tvrtka"

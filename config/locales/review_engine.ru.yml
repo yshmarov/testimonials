@@ -16,6 +16,7 @@ ru:
     message: "Ваш отзыв"
     message_placeholder: "Что бы вы рассказали другу о %{app}?"
     record_video: "Записать видео"
+    record_video_hint: "Короткое видео скажет больше, чем страница текста."
     name: "Ваше имя"
     email: "Ваша почта"
     title_company: "Должность, компания"

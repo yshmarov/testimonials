@@ -16,6 +16,7 @@ uk:
     message: "Ваш відгук"
     message_placeholder: "Що б ви розповіли другові про %{app}?"
     record_video: "Записати відео"
+    record_video_hint: "Коротке відео скаже більше, ніж сторінка тексту."
     name: "Ваше ім'я"
     email: "Ваша електронна пошта"
     title_company: "Посада, компанія"

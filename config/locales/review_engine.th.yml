@@ -16,6 +16,7 @@ th:
     message: "คำรับรองของคุณ"
     message_placeholder: "คุณจะบอกเพื่อนเกี่ยวกับ %{app} ว่าอย่างไร?"
     record_video: "อัดวิดีโอ"
+    record_video_hint: "วิดีโอสั้น ๆ บอกได้มากกว่าข้อความหนึ่งหน้า"
     name: "ชื่อของคุณ"
     email: "อีเมลของคุณ"
     title_company: "ตำแหน่ง, บริษัท"

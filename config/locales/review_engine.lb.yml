@@ -16,6 +16,7 @@ lb:
     message: "Ären Temoignage"
     message_placeholder: "Wat géift Dir engem Frënd iwwer %{app} soen?"
     record_video: "E Video ophuelen"
+    record_video_hint: "E kuerze Video seet méi wéi eng Säit Text."
     name: "Ären Numm"
     email: "Är E-Mail"
     title_company: "Positioun, Firma"

@@ -16,6 +16,7 @@ pl:
     message: "Twoja opinia"
     message_placeholder: "Co powiedziałbyś znajomemu o %{app}?"
     record_video: "Nagraj wideo"
+    record_video_hint: "Krótkie wideo mówi więcej niż strona tekstu."
     name: "Twoje imię"
     email: "Twój e-mail"
     title_company: "Stanowisko, firma"

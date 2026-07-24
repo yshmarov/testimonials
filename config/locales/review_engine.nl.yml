@@ -16,6 +16,7 @@ nl:
     message: "Jouw testimonial"
     message_placeholder: "Wat zou je een vriend over %{app} vertellen?"
     record_video: "Video opnemen"
+    record_video_hint: "Een korte video zegt meer dan een pagina tekst."
     name: "Je naam"
     email: "Je e-mail"
     title_company: "Functie, bedrijf"

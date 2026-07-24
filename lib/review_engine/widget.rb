@@ -91,6 +91,7 @@ module ReviewEngine
           message: t(:message, 'Your testimonial'),
           messagePlaceholder: t(:message_placeholder, 'What would you tell a friend about %{app}?', app: app),
           recordVideo: t(:record_video, 'Record a video'),
+          recordVideoHint: t(:record_video_hint, 'A short video says more than a page of text.'),
           name: t(:name, 'Your name'),
           email: t(:email, 'Your email'),
           titleCompany: t(:title_company, 'Title, company'),

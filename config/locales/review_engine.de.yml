@@ -16,6 +16,7 @@ de:
     message: "Ihr Erfahrungsbericht"
     message_placeholder: "Was würden Sie einem Freund über %{app} erzählen?"
     record_video: "Video aufnehmen"
+    record_video_hint: "Ein kurzes Video sagt mehr als eine Seite Text."
     name: "Ihr Name"
     email: "Ihre E-Mail"
     title_company: "Position, Firma"

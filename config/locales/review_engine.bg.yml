@@ -16,6 +16,7 @@ bg:
     message: "Вашият отзив"
     message_placeholder: "Какво бихте казали на приятел за %{app}?"
     record_video: "Запишете видео"
+    record_video_hint: "Кратко видео казва повече от страница текст."
     name: "Вашето име"
     email: "Вашият имейл"
     title_company: "Длъжност, фирма"
