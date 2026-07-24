@@ -55,7 +55,7 @@ en:
       widget: "In-app widget"
       page: "Collection page"
       nps: "NPS follow-up"
-      collection_page: "Public collection page"
+      collection_page: "Ask for testimonials"
     statuses:
       pending: "Pending"
       approved: "Approved"

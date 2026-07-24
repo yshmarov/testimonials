@@ -55,7 +55,7 @@ tr:
       widget: "Uygulama içi bileşen"
       page: "Toplama sayfası"
       nps: "NPS takibi"
-      collection_page: "Herkese açık toplama sayfası"
+      collection_page: "Görüş isteyin"
     statuses:
       pending: "Beklemede"
       approved: "Onaylandı"

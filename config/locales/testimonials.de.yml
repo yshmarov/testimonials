@@ -55,7 +55,7 @@ de:
       widget: "In-App-Widget"
       page: "Sammelseite"
       nps: "NPS-Nachfrage"
-      collection_page: "Öffentliche Sammelseite"
+      collection_page: "Um Erfahrungsberichte bitten"
     statuses:
       pending: "Ausstehend"
       approved: "Freigegeben"

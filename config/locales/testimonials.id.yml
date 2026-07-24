@@ -55,7 +55,7 @@ id:
       widget: "Widget dalam aplikasi"
       page: "Halaman pengumpulan"
       nps: "Tindak lanjut NPS"
-      collection_page: "Halaman pengumpulan publik"
+      collection_page: "Minta testimoni"
     statuses:
       pending: "Menunggu"
       approved: "Disetujui"

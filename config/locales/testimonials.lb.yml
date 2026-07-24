@@ -55,7 +55,7 @@ lb:
       widget: "In-App-Widget"
       page: "Sammelsäit"
       nps: "NPS-Suivi"
-      collection_page: "Ëffentlech Sammelsäit"
+      collection_page: "Frot no Temoignagen"
     statuses:
       pending: "Am Waardestand"
       approved: "Guttgeheescht"

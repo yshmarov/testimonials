@@ -55,7 +55,7 @@ nl:
       widget: "In-app widget"
       page: "Verzamelpagina"
       nps: "NPS-opvolging"
-      collection_page: "Openbare verzamelpagina"
+      collection_page: "Vraag om testimonials"
     statuses:
       pending: "In afwachting"
       approved: "Goedgekeurd"

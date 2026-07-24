@@ -55,7 +55,7 @@ ko:
       widget: "앱 내 위젯"
       page: "수집 페이지"
       nps: "NPS 후속"
-      collection_page: "공개 수집 페이지"
+      collection_page: "후기 요청하기"
     statuses:
       pending: "대기 중"
       approved: "승인됨"

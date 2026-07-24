@@ -55,7 +55,7 @@ vi:
       widget: "Widget trong ứng dụng"
       page: "Trang thu thập"
       nps: "Tiếp nối NPS"
-      collection_page: "Trang thu thập công khai"
+      collection_page: "Xin cảm nhận"
     statuses:
       pending: "Đang chờ"
       approved: "Đã duyệt"

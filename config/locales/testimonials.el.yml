@@ -55,7 +55,7 @@ el:
       widget: "Widget εντός εφαρμογής"
       page: "Σελίδα συλλογής"
       nps: "Συνέχεια NPS"
-      collection_page: "Δημόσια σελίδα συλλογής"
+      collection_page: "Ζητήστε μαρτυρίες"
     statuses:
       pending: "Σε εκκρεμότητα"
       approved: "Εγκεκριμένο"

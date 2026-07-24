@@ -55,7 +55,7 @@ zh-CN:
       widget: "应用内组件"
       page: "收集页面"
       nps: "NPS 跟进"
-      collection_page: "公开收集页面"
+      collection_page: "征集用户评价"
     statuses:
       pending: "待处理"
       approved: "已批准"

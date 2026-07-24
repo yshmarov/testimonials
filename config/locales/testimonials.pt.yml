@@ -55,7 +55,7 @@ pt:
       widget: "Widget no app"
       page: "Página de coleta"
       nps: "Acompanhamento NPS"
-      collection_page: "Página pública de coleta"
+      collection_page: "Pedir depoimentos"
     statuses:
       pending: "Pendente"
       approved: "Aprovado"

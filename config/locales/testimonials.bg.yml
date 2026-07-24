@@ -55,7 +55,7 @@ bg:
       widget: "Уиджет в приложението"
       page: "Страница за събиране"
       nps: "Продължение след NPS"
-      collection_page: "Публична страница за събиране"
+      collection_page: "Поискайте отзиви"
     statuses:
       pending: "Чакащи"
       approved: "Одобрени"

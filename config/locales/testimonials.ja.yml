@@ -55,7 +55,7 @@ ja:
       widget: "アプリ内ウィジェット"
       page: "収集ページ"
       nps: "NPSフォローアップ"
-      collection_page: "公開収集ページ"
+      collection_page: "お客様の声を募集"
     statuses:
       pending: "保留中"
       approved: "承認済み"

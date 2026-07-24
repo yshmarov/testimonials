@@ -55,7 +55,7 @@ hi:
       widget: "इन-ऐप विजेट"
       page: "संग्रह पृष्ठ"
       nps: "NPS फ़ॉलो-अप"
-      collection_page: "सार्वजनिक संग्रह पृष्ठ"
+      collection_page: "प्रशंसापत्र माँगें"
     statuses:
       pending: "लंबित"
       approved: "स्वीकृत"
