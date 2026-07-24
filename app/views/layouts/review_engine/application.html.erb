@@ -26,8 +26,13 @@
     a:hover { text-decoration: underline; }
     .container { max-width: 1020px; margin: 0 auto; padding: 24px 16px 64px; }
     h1 { font-size: 22px; margin: 0 0 16px; }
-    .nav { display: flex; gap: 16px; margin-bottom: 16px; font-weight: 600; }
-    .nav a.active { color: var(--text); }
+    .nav { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .nav a { padding: 6px 16px; border: 1px solid var(--border); border-radius: 999px;
+             background: var(--surface); color: var(--muted); font-weight: 600; }
+    .nav a:hover { text-decoration: none; color: var(--text); }
+    .nav a.active { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+    .nav a.active:hover { color: var(--accent-text); }
+    .share-link { margin-left: auto; font-size: 13px; font-weight: 400; }
     .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-wrap: wrap; }
     .tabs a { padding: 8px 14px; border-radius: 8px 8px 0 0; color: var(--muted); }
     .tabs a.active { color: var(--text); font-weight: 600; border: 1px solid var(--border);
@@ -90,6 +95,12 @@
       <% if ReviewEngine.config.nps %>
         <%= link_to t('review_engine.dashboard.nps', default: 'NPS'), nps_responses_path,
                     class: ('active' if controller_name == 'nps_responses') %>
+      <% end %>
+      <%# The shareable collection page — drop this link into an email or DM. %>
+      <% if ReviewEngine.config.public_collection %>
+        <a class="share-link" href="<%= collection_url %>" target="_blank" rel="noopener">
+          🔗 <%= collection_url %>
+        </a>
       <% end %>
     </div>
     <%= yield %>
