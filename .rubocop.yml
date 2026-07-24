@@ -3,7 +3,7 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
   Exclude:
-    - "spec/dummy/**/*"
+    - "test/dummy/**/*"
     - "bin/**/*"
     - "vendor/**/*"
     - "tmp/**/*"

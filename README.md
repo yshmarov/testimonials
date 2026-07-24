@@ -166,7 +166,7 @@ Gated by `config.authorize_admin` (development-only until you set it).
 ## Testing
 
 ```bash
-bundle exec rspec
+bundle exec rake test
 bundle exec rubocop
 ```
 

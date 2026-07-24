@@ -16,6 +16,8 @@ module Dummy
     config.root = File.expand_path("..", __dir__)
     config.load_defaults 7.1
     config.eager_load = false
+    # The schema is defined inline by test_helper; there is no db/schema.rb.
+    config.active_record.maintain_test_schema = false
     config.secret_key_base = "testimonials-dummy-secret"
     config.i18n.available_locales = %i[en fr]
     config.i18n.default_locale = :en

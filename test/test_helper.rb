@@ -2,9 +2,9 @@
 
 ENV['RAILS_ENV'] ||= 'test'
 
-require_relative 'spec_helper'
 require_relative 'dummy/config/environment'
-require 'rspec/rails'
+require 'rails/test_help'
+require 'rack/test'
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Schema.define do
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define do
   add_index :testimonials_prompt_events, %i[author_id kind]
   add_index :testimonials_prompt_events, %i[visitor_token kind]
 
-  # Active Storage tables, so video and avatar attachments work in specs.
+  # Active Storage tables, so video and avatar attachments work in tests.
   create_table :active_storage_blobs, force: true do |t|
     t.string :key, null: false
     t.string :filename, null: false
@@ -85,24 +85,35 @@ ActiveRecord::Schema.define do
   end
 end
 
-RSpec.configure do |config|
-  config.use_transactional_fixtures = true
-  config.infer_spec_type_from_file_location!
+module ActiveSupport
+  class TestCase
+    self.use_transactional_tests = true
 
-  # Start every example from a fresh config, so a stub in one example can never
-  # leak into another under random order.
-  config.around do |example|
-    Testimonials.instance_variable_set(:@config, Testimonials::Configuration.new)
-    example.run
-    Testimonials.instance_variable_set(:@config, nil)
+    # Start every test from a fresh config, so a tweak in one test can never
+    # leak into another. The rate limiter counts per IP in Rails.cache, so
+    # clear that too.
+    setup do
+      Testimonials.instance_variable_set(:@config, Testimonials::Configuration.new)
+      Rails.cache.clear
+    end
+
+    teardown do
+      Testimonials.instance_variable_set(:@config, nil)
+    end
+
+    private
+
+    # Most dashboard tests need an admin; the default gate is development-only.
+    def as_admin!
+      Testimonials.config.authorize_admin = ->(_request) { true }
+    end
+
+    def fake_user(id: 42, name: 'Ada Lovelace', email: 'ada@example.com')
+      Struct.new(:id, :name, :email).new(id, name, email)
+    end
+
+    def fake_video(name: 'testimonial.webm', content: 'fake video bytes', type: 'video/webm')
+      Rack::Test::UploadedFile.new(StringIO.new(content), type, original_filename: name)
+    end
   end
-
-  # The rate limiter counts per IP in Rails.cache; without a reset, create
-  # requests from earlier examples would trip the limit for later ones.
-  config.before { Rails.cache.clear }
-end
-
-# Most request specs need an admin; the default gate is development-only.
-def as_admin!
-  Testimonials.config.authorize_admin = ->(_request) { true }
 end

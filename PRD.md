@@ -178,7 +178,7 @@ Brand monitoring, case studies, multi-product/spaces, email invitation campaigns
 
 ## 10. Status (2026-07-24)
 
-Everything in §3–§6 is built, spec'd (160 examples, CI matrix Rails 7.1–8.1 ×
+Everything in §3–§6 is built, tested (Minitest, CI matrix Rails 7.1–8.1 ×
 Ruby 3.2–3.4), and verified in ethicsportal.eu — including hard-won lessons
 now baked in: the widget and dashboard JS ship as same-origin scripts (inline
 + nonce breaks under Turbo body swaps), ETag-only caching (a time-based cache
@@ -216,5 +216,5 @@ Left before announcing v0.1.0:
   in the dashboard links into the host's own user admin.
 - **Tokenized collection links** (revocable/scoped campaigns).
 - **prompt_events pruning** helper/recipe (the ledger grows unbounded).
-- **System/browser specs** (manual QA currently covers this, and has caught
-  what request specs could not).
+- **System/browser tests** (manual QA currently covers this, and has caught
+  what integration tests could not).
