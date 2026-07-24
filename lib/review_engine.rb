@@ -3,6 +3,7 @@
 require 'review_engine/version'
 require 'review_engine/configuration'
 require 'review_engine/widget'
+require 'review_engine/prompt_helper'
 require 'review_engine/engine'
 
 # Testimonials, reviews and NPS for Rails. An iOS-style in-app widget collects
