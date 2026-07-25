@@ -23,7 +23,8 @@
       <% end %>
       <% if testimonial.video_attached? %>
         <video controls preload="metadata"
-               src="<%= testimonials.testimonial_video_path(testimonial) %>#t=0.1"></video>
+               poster="<%= testimonials.testimonial_poster_path(testimonial) if testimonial.poster_attached? %>"
+               src="<%= testimonials.testimonial_video_path(testimonial) %>"></video>
       <% end %>
       <% if testimonial.quote.present? %>
         <blockquote class="wall-quote">“<%= testimonial.quote %>”</blockquote>

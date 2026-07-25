@@ -55,7 +55,10 @@ module Testimonials
       if testimonial.save
         # Purge only after a valid save, so a failed update can't strand a
         # review with its video already gone.
-        testimonial.video_file.purge if remove_video? && testimonial.video_attached?
+        if remove_video? && testimonial.video_attached?
+          testimonial.video_file.purge
+          testimonial.poster.purge if testimonial.poster_attached?
+        end
         record_submission
         notify_host(testimonial)
         head :created
@@ -154,7 +157,25 @@ module Testimonials
       return error_label(:error_save) unless file.content_type.to_s.start_with?('video/', 'audio/')
 
       testimonial.video_file.attach(file)
+      attach_poster(testimonial)
       nil
+    end
+
+    # The poster rides with a new video upload. It's best-effort — a missing
+    # or malformed poster never blocks the testimonial. Attaching replaces any
+    # previous poster; a new video with no usable poster (e.g. an uploaded
+    # file, which we can't frame-grab) drops the stale one so it can't show a
+    # thumbnail from the wrong video.
+    def attach_poster(testimonial)
+      file = params.dig(:testimonial, :poster)
+      usable = file.present? && file.content_type.to_s.start_with?('image/') &&
+               file.size <= Testimonials.config.max_avatar_size
+
+      if usable
+        testimonial.poster.attach(file)
+      elsif testimonial.poster_attached?
+        testimonial.poster.purge
+      end
     end
 
     def attach_avatar(testimonial)

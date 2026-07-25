@@ -33,7 +33,8 @@ module Testimonials
           featured: testimonial.featured?,
           created_at: testimonial.created_at.iso8601,
           avatar_url: (testimonial_avatar_url(testimonial) if testimonial.avatar_attached?),
-          video_url: (testimonial_video_url(testimonial) if testimonial.video_attached?)
+          video_url: (testimonial_video_url(testimonial) if testimonial.video_attached?),
+          poster_url: (testimonial_poster_url(testimonial) if testimonial.poster_attached?)
         }
       end
     end

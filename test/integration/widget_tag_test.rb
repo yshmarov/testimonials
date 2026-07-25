@@ -77,7 +77,8 @@ class WidgetTagTest < ActionDispatch::IntegrationTest
 
     get '/sample'
     assert_includes response.body,
-                    '"existing":{"rating":4,"body":"My old review","consent":true,"videoUrl":null}'
+                    '"existing":{"rating":4,"body":"My old review","consent":true,' \
+                    '"videoUrl":null,"posterUrl":null}'
   end
 
   test 'existing is null for users without a review' do

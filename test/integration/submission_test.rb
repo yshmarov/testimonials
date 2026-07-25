@@ -116,6 +116,29 @@ class SubmissionTest < ActionDispatch::IntegrationTest
     assert_includes response.headers['Location'], 'disposition=inline'
   end
 
+  test 'stores a poster alongside a recorded video and serves it' do
+    Testimonials.config.current_user = ->(_request) { fake_user }
+    poster = Rack::Test::UploadedFile.new(StringIO.new('img'), 'image/jpeg', original_filename: 'poster.jpg')
+    post '/testimonials', params: { testimonial: { video_file: fake_video, poster: poster } }
+    testimonial = Testimonials::Testimonial.last
+
+    assert testimonial.poster_attached?
+    get "/testimonials/#{testimonial.id}/poster"
+    assert_response :redirect
+  end
+
+  test 'purges the poster when the video is removed' do
+    Testimonials.config.current_user = ->(_request) { fake_user }
+    poster = Rack::Test::UploadedFile.new(StringIO.new('img'), 'image/jpeg', original_filename: 'poster.jpg')
+    post '/testimonials', params: { testimonial: { video_file: fake_video, poster: poster } }
+    testimonial = Testimonials::Testimonial.last
+    assert testimonial.poster_attached?
+
+    post '/testimonials', params: { testimonial: { body: 'Words only now', remove_video: '1' } }
+    testimonial.reload
+    refute testimonial.poster_attached?
+  end
+
   test 'lets the author fetch their own video through the media route' do
     Testimonials.config.current_user = ->(_request) { fake_user }
     post '/testimonials', params: { testimonial: { video_file: fake_video } }

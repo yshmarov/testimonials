@@ -60,6 +60,7 @@ class WidgetTest < ActiveSupport::TestCase
                                                     author_id: '42', consent_given: true)
     snippet = Testimonials::Widget.snippet(locale: :en, authenticated: true, existing: testimonial)
     existing = parsed_config(snippet)['existing']
-    assert_equal({ 'rating' => 4, 'body' => 'Mine', 'consent' => true, 'videoUrl' => nil }, existing)
+    assert_equal({ 'rating' => 4, 'body' => 'Mine', 'consent' => true,
+                   'videoUrl' => nil, 'posterUrl' => nil }, existing)
   end
 end

@@ -11,6 +11,7 @@ module Testimonials
 
     if defined?(::ActiveStorage)
       has_one_attached :video_file
+      has_one_attached :poster # a still frame for the video, captured at record time
       has_one_attached :avatar
     end
 
@@ -35,6 +36,10 @@ module Testimonials
 
     def video_attached?
       respond_to?(:video_file) && video_file.attached?
+    end
+
+    def poster_attached?
+      respond_to?(:poster) && poster.attached?
     end
 
     def avatar_attached?

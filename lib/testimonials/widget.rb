@@ -86,7 +86,8 @@ module Testimonials
             rating: existing.rating,
             body: existing.body,
             consent: existing.consent_given ? true : false,
-            videoUrl: existing_video_url(existing)
+            videoUrl: existing_video_url(existing),
+            posterUrl: existing_poster_url(existing)
           },
           video: {
             enabled: config.video_enabled?,
@@ -110,6 +111,12 @@ module Testimonials
         return unless existing.video_attached?
 
         "#{Testimonials.config.mount_path.chomp('/')}/#{existing.id}/video"
+      end
+
+      def existing_poster_url(existing)
+        return unless existing.poster_attached?
+
+        "#{Testimonials.config.mount_path.chomp('/')}/#{existing.id}/poster"
       end
 
       # Every user-facing string in the widget, resolved through Rails I18n so

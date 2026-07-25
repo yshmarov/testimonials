@@ -17,6 +17,12 @@ module Testimonials
       redirect_to main_app.rails_blob_path(@testimonial.video_file, disposition: disposition)
     end
 
+    def poster
+      head :not_found and return unless @testimonial.poster_attached?
+
+      redirect_to main_app.rails_blob_path(@testimonial.poster, disposition: disposition)
+    end
+
     def avatar
       head :not_found and return unless @testimonial.avatar_attached?
 

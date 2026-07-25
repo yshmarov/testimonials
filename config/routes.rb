@@ -21,6 +21,7 @@ Testimonials::Engine.routes.draw do
 
   # Media by testimonial id, gated (admin, author, or public_api + publishable).
   get ':id/video', to: 'media#video', as: :testimonial_video, constraints: { id: /\d+/ }
+  get ':id/poster', to: 'media#poster', as: :testimonial_poster, constraints: { id: /\d+/ }
   get ':id/avatar', to: 'media#avatar', as: :testimonial_avatar, constraints: { id: /\d+/ }
 
   # Flat, human URLs: the mount path IS the resource. /testimonials is the

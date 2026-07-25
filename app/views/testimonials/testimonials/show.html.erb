@@ -17,10 +17,11 @@
 
 <div class="card pad" style="margin-bottom: 16px;">
   <% if @testimonial.video_attached? %>
-    <%# No #t=0.1 fragment: MediaRecorder webm has no seek index, and
-        Firefox honors media fragments literally — the pending seek stalls
-        playback right after play. preload="metadata" paints the frame. %>
+    <%# The stored poster shows a real frame with no decoding — Safari won't
+        paint a fragmented-MP4 frame on its own, so preload/fragment tricks
+        leave it black. %>
     <video class="playback" controls preload="metadata"
+           poster="<%= testimonial_poster_path(@testimonial) if @testimonial.poster_attached? %>"
            src="<%= testimonial_video_path(@testimonial) %>"></video>
     <p class="muted">
       <%= link_to "⬇ #{t('testimonials.dashboard.download_video', default: 'Download video')}",

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2
+
+- Video poster frames: a still is captured from the camera at record time and
+  shown via `<video poster>`, so recorded videos display a real thumbnail
+  instead of a black box in every browser (Safari won't paint a
+  fragmented-MP4 frame from the file itself). Served at `/:id/poster`,
+  exposed as `poster_url` in the API.
+
 ## 0.4.0
 
 - Consent is now an explicit public/private choice instead of a single

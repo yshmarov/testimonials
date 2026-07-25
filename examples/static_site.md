@@ -27,7 +27,7 @@ const stats = await (await fetch("https://app.example.com/testimonials/api/stats
   {testimonials.map((t) => (
     <figure>
       {t.rating && <div>{"★".repeat(t.rating)}</div>}
-      {t.video_url && <video controls preload="metadata" src={t.video_url + "#t=0.1"}></video>}
+      {t.video_url && <video controls preload="metadata" poster={t.poster_url} src={t.video_url}></video>}
       {t.quote && <blockquote>“{t.quote}”</blockquote>}
       <figcaption>
         {t.avatar_url && <img src={t.avatar_url} alt="" width="36" height="36" />}
