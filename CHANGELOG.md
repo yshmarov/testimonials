@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+- The widget dialog goes full-screen on mobile (no bottom sheet, no animations):
+  inputs render at 16px to prevent iOS focus-zoom, the action row gains
+  safe-area padding, and the dialog's scroll is contained (no page rubber-banding).
+
 ## 0.1.1
 
 - Repository renamed to [yshmarov/testimonials](https://github.com/yshmarov/testimonials);
