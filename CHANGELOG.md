@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.2
+## 0.4.1
 
 - Video poster frames: a still is captured from the camera at record time and
   shown via `<video poster>`, so recorded videos display a real thumbnail
