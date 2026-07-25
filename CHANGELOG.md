@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.4
+
+- Validation and submit errors are announced to screen readers: every
+  `.tml-error` container is a `role="alert"` region from creation, and text
+  is inserted only after the region is exposed.
+- Page scroll is locked behind the open widget dialog and restored on close;
+  a Turbo body swap that removes the overlay releases the lock too. The
+  inline collection-page form is unaffected.
+
 ## 0.1.3
 
 - Video playback no longer pauses itself moments after play in Firefox: the
