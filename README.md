@@ -1,7 +1,7 @@
 # testimonials
 
 [![Gem Version](https://img.shields.io/gem/v/testimonials)](https://rubygems.org/gems/testimonials)
-[![CI](https://github.com/yshmarov/testimonials-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/yshmarov/testimonials-engine/actions/workflows/ci.yml)
+[![CI](https://github.com/yshmarov/testimonials/actions/workflows/ci.yml/badge.svg)](https://github.com/yshmarov/testimonials/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](MIT-LICENSE)
 
 Testimonials, reviews and NPS for Rails. Self-hosted alternative to

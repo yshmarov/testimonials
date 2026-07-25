@@ -3,7 +3,7 @@
 #
 # One-time setup on rubygems.org (gem owner):
 #   Gem page → Ownership → Trusted publishers → GitHub Actions →
-#   repository: yshmarov/testimonials-engine, workflow: release.yml
+#   repository: yshmarov/testimonials, workflow: release.yml
 #
 # Release flow after that:
 #   git tag v0.x.y && git push origin v0.x.y

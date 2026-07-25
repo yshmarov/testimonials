@@ -3,7 +3,7 @@
 **One-liner:** Collect, curate, and expose customer testimonials — text and video — plus NPS, from inside your Rails app. Self-hosted alternative to Testimonial.to / Senja. Zero UI dependencies. Headless display: the gem stores and serves data; you render it wherever you want.
 
 - Gem name: `testimonials` (renamed from `review_engine` pre-release; name confirmed free on rubygems)
-- Repo: [yshmarov/testimonials-engine](https://github.com/yshmarov/testimonials-engine)
+- Repo: [yshmarov/testimonials](https://github.com/yshmarov/testimonials)
 - Status: **v0.1.0 built and verified in a real host app (2026-07-24); this document describes the gem as shipped.** Deferred ideas live in §12.
 
 ## 1. Problem & positioning
@@ -218,7 +218,7 @@ Left before announcing v0.1.0:
 - **Video transcripts & subtitles** — a `captions` (WebVTT) attachment +
   `<track>` in the players + `captions_url` in the API; transcription itself
   stays a host-side `on_submit` recipe (see
-  [issue #2](https://github.com/yshmarov/testimonials-engine/issues/2)).
+  [issue #2](https://github.com/yshmarov/testimonials/issues/2)).
 - **prompt_events pruning** helper/recipe (the ledger grows unbounded).
 - **System/browser tests** (manual QA currently covers this, and has caught
   what integration tests could not).

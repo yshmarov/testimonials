@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     models or an optional JSON API, and you render them with your own markup.
     Framework-agnostic: no CSS or JS framework required.
   DESC
-  spec.homepage = 'https://github.com/yshmarov/testimonials-engine'
+  spec.homepage = 'https://github.com/yshmarov/testimonials'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.2'
 
