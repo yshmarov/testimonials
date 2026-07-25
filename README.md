@@ -151,7 +151,7 @@ title/company and photo. Disable with `config.public_collection = false`.
 
 ## The read API
 
-- `GET /testimonials/api/testimonials` — approved + consented records only;
+- `GET /testimonials/api` — approved + consented records only;
   filters: `featured=1`, `min_rating=4`, `kind=video`, `limit=12`.
 - `GET /testimonials/api/stats` — `count`, `average_rating`, `ratings_count`,
   `nps_score`.

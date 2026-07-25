@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- **Breaking (API paths):** the read API's collection moved from
+  `<mount>/api/testimonials` to `<mount>/api` — so it reads clean under any
+  mount instead of echoing the resource name (e.g. `/testimonials/api`
+  rather than `/testimonials/api/testimonials`). `<mount>/api/stats` is
+  unchanged. Update any hardcoded API URLs. (Off by default: only affects
+  apps that set `config.public_api = true` or call the API as an admin.)
+
 ## 0.1.5
 
 - Docs: show how to wire `current_user` with Rails 8's built-in authentication

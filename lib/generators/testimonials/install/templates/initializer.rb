@@ -55,7 +55,7 @@ Testimonials.configure do |config|
   # outside the app. Set false to disable.
   # config.public_collection = true
 
-  # Unauthenticated read access to GET /testimonials/api/testimonials and
+  # Unauthenticated read access to GET /testimonials/api and
   # /testimonials/api/stats (approved + consented records only). Off = admins only.
   # config.public_api = false
 

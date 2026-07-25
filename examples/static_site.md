@@ -8,7 +8,7 @@ plain HTML on Cloudflare — anything) renders. Turn on the public API:
 config.public_api = true
 ```
 
-`GET https://app.example.com/testimonials/api/testimonials` now serves approved +
+`GET https://app.example.com/testimonials/api` now serves approved +
 consented records to anyone (CORS `*`), and `/testimonials/api/stats` serves the
 badge numbers. Emails are never included.
 
@@ -16,7 +16,7 @@ badge numbers. Emails are never included.
 
 ```astro
 ---
-const res = await fetch("https://app.example.com/testimonials/api/testimonials?limit=12");
+const res = await fetch("https://app.example.com/testimonials/api?limit=12");
 const { testimonials } = await res.json();
 const stats = await (await fetch("https://app.example.com/testimonials/api/stats")).json();
 ---

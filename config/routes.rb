@@ -10,9 +10,11 @@ Testimonials::Engine.routes.draw do
   resource :nps, only: :create, controller: 'nps'
   resources :nps_responses, only: :index
 
-  # Read-only JSON for rendering testimonials anywhere.
+  # Read-only JSON for rendering testimonials anywhere. The API root *is* the
+  # collection, so it reads clean under any mount: GET "<mount>/api" for the
+  # list, "<mount>/api/stats" for the aggregate — no "…/api/testimonials" echo.
   namespace :api do
-    resources :testimonials, only: :index
+    root to: 'testimonials#index'
     get 'stats', to: 'stats#show'
   end
 
