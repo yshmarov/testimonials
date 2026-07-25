@@ -15,7 +15,14 @@ Testimonials.configure do |config|
 
   # Attribute submissions to a user (optional). Return an object responding
   # to #id, or nil. Receives the request.
+  # Devise / Warden:
   # config.current_user = ->(request) { request.env["warden"]&.user }
+  #
+  # Rails 8 built-in auth (bin/rails generate authentication):
+  # config.current_user = lambda do |request|
+  #   token = request.cookies["session_token"]
+  #   Session.find_signed(token)&.user if token
+  # end
 
   # Attribution stored with a signed-in user's submission.
   # config.user_display = ->(user) { { name: user.name, email: user.email } }

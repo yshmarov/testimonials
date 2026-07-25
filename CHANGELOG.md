@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+- Docs: show how to wire `current_user` with Rails 8's built-in authentication
+  (`bin/rails generate authentication`), alongside the existing Devise/Warden
+  example — in the README and the generated initializer.
+
 ## 0.1.4
 
 - Validation and submit errors are announced to screen readers: every
