@@ -17,9 +17,11 @@
 
 <div class="card pad" style="margin-bottom: 16px;">
   <% if @testimonial.video_attached? %>
-    <%# #t=0.1 makes the browser paint that frame as the thumbnail. %>
+    <%# No #t=0.1 fragment: MediaRecorder webm has no seek index, and
+        Firefox honors media fragments literally — the pending seek stalls
+        playback right after play. preload="metadata" paints the frame. %>
     <video class="playback" controls preload="metadata"
-           src="<%= testimonial_video_path(@testimonial) %>#t=0.1"></video>
+           src="<%= testimonial_video_path(@testimonial) %>"></video>
     <p class="muted">
       <%= link_to "⬇ #{t('testimonials.dashboard.download_video', default: 'Download video')}",
                   testimonial_video_path(@testimonial, download: 1) %>

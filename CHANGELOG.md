@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.3
+
+- Video playback no longer pauses itself moments after play in Firefox: the
+  `#t=0.1` poster-frame fragment made Firefox seek a MediaRecorder webm that
+  has no seek index, stalling the stream. The fragment is gone (widget and
+  dashboard); `preload="metadata"` still paints the first frame in Chrome
+  and Firefox.
+
 ## 0.1.2
 
 - The widget dialog goes full-screen on mobile (no bottom sheet, no animations):
