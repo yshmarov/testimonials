@@ -74,7 +74,11 @@ module Testimonials
           autoOpen: auto_open&.to_s,
           mode: mode.to_s,
           questions: Testimonials.questions,
-          consent: Testimonials.consent_text,
+          consent: {
+            prompt: t(:consent_prompt, 'Where can we use your testimonial?'),
+            public: Testimonials.consent_text,
+            private: Testimonials.consent_text_private
+          },
           # The signed-in user's current review, if any: the widget opens it
           # pre-filled for editing instead of starting a second one — rating,
           # text, consent state, and a playable URL for an attached video.

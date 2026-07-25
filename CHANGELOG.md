@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0
+
+- Consent is now an explicit public/private choice instead of a single
+  checkbox: "You can use my testimonial publicly…" vs "…only privately in
+  your marketing and sales." Public maps to the existing `consent_given`
+  (served by the read API); private is stored, admin-visible, and never
+  public. No migration. Both choices snapshot their exact wording.
+  Localized in all 26 languages. (Locale key `testimonials.consent` was
+  replaced by `consent_prompt` / `consent_public` / `consent_private`; if you
+  overrode it, update your keys. `config.consent_text` now overrides the
+  public line.)
+
 ## 0.3.0
 
 - Reverted 0.2.0's API path change: the read API collection is back at

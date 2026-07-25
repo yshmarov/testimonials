@@ -29,9 +29,9 @@ copy-paste examples included.
 - **NPS built in.** 0–10 with a comment; promoters (9–10) are immediately
   offered the testimonial form, detractors flow into `on_detractor` (pairs
   well with [feedback_engine](https://github.com/yshmarov/feedback-engine)).
-- **Consent is first-class.** A consent checkbox with a stored text snapshot;
-  the API only ever serves approved **and** consented records, and never
-  emails.
+- **Consent is first-class.** Customers choose public or private use in their
+  own words, with a stored text snapshot; the read API only ever serves
+  approved records marked for **public** use, and never emails.
 - **26 languages**, including localized best-practice guiding questions.
 
 ## How it works

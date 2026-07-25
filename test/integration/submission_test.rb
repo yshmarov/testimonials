@@ -20,6 +20,19 @@ class SubmissionTest < ActionDispatch::IntegrationTest
     assert_equal 'en', testimonial.locale
   end
 
+  test 'private-use consent is stored, snapshotted, and kept out of the public API' do
+    post '/testimonials', params: {
+      testimonial: { body: 'Internal only', rating: 5, consent_given: '0', name: 'Grace' }
+    }
+
+    assert_response :created
+    testimonial = Testimonials::Testimonial.last
+    assert_not testimonial.consent_given
+    assert_equal Testimonials.consent_text_private, testimonial.consent_text
+    testimonial.update!(status: 'approved')
+    assert_not_includes Testimonials::Testimonial.publishable, testimonial
+  end
+
   test 'attributes signed-in users server-side, ignoring client contact fields' do
     Testimonials.config.current_user = ->(_request) { fake_user }
 

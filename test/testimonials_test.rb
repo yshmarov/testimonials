@@ -39,8 +39,14 @@ class TestimonialsTest < ActiveSupport::TestCase
     assert_equal 'SupeRails', Testimonials.app_name
   end
 
-  test 'consent_text has a localized default' do
-    assert_includes Testimonials.consent_text, 'permission'
+  test 'consent_text has a localized default and a private variant' do
+    assert_includes Testimonials.consent_text, 'publicly'
+    assert_includes Testimonials.consent_text_private, 'privately'
+  end
+
+  test 'consent_text_for picks public or private by the choice' do
+    assert_equal Testimonials.consent_text, Testimonials.consent_text_for(true)
+    assert_equal Testimonials.consent_text_private, Testimonials.consent_text_for(false)
   end
 
   test 'consent_text prefers the configured text' do

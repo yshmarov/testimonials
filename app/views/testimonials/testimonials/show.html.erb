@@ -68,7 +68,8 @@
       <% if @testimonial.consent_given? %>
         ✓ <span class="muted"><%= @testimonial.consent_text %></span>
       <% else %>
-        — <span class="muted"><%= t('testimonials.dashboard.no_consent', default: 'No publication consent. Not served by the API.') %></span>
+        🔒 <span class="muted"><%= @testimonial.consent_text.presence ||
+              t('testimonials.dashboard.no_consent', default: 'Private use only. Not served by the read API.') %></span>
       <% end %>
     </dd>
     <dt><%= t('testimonials.dashboard.source', default: 'Source') %></dt>

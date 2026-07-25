@@ -49,11 +49,23 @@ module Testimonials
       Array(list).map { |q| q.to_s.gsub('%{app}', app_name) }
     end
 
+    # The public-use consent line, stored verbatim when a customer allows
+    # their testimonial to be shown publicly. Override with config.consent_text.
     def consent_text
       config.consent_text.presence ||
-        I18n.t('testimonials.consent',
-               default: 'I give permission to use this testimonial across social channels ' \
-                        'and other marketing efforts.')
+        I18n.t('testimonials.consent_public',
+               default: 'You can use my testimonial publicly in your marketing and sales.')
+    end
+
+    # The private-use line, stored when a customer allows only internal use.
+    def consent_text_private
+      I18n.t('testimonials.consent_private',
+             default: 'You can only use my testimonial privately in your marketing and sales.')
+    end
+
+    # The exact line the customer agreed to, given their public/private choice.
+    def consent_text_for(public_use)
+      public_use ? consent_text : consent_text_private
     end
 
     private

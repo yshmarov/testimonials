@@ -101,7 +101,7 @@ module Testimonials
       end
       testimonial.kind = wants_video?(testimonial) ? 'video' : 'text'
       testimonial.source = 'widget' unless Testimonial::SOURCES.include?(testimonial.source)
-      testimonial.consent_text = testimonial.consent_given? ? Testimonials.consent_text : nil
+      testimonial.consent_text = Testimonials.consent_text_for(testimonial.consent_given?)
       testimonial.locale = I18n.locale.to_s
       testimonial.user_agent = request.user_agent
       attribute_author(testimonial)

@@ -46,9 +46,10 @@ Testimonials.configure do |config|
   # config.reprompt_after = 90.days
   # config.max_prompts = 3
 
-  # Consent line stored verbatim with each submission. nil = localized default:
-  # "I give permission to use this testimonial across social channels and
-  # other marketing efforts."
+  # The public-use consent line, stored verbatim when a customer picks
+  # "use publicly". nil = localized default ("You can use my testimonial
+  # publicly in your marketing and sales."). The private-use line is
+  # localized only (testimonials.consent_private).
   # config.consent_text = "..."
 
   # The standalone collection page at /testimonials/new — share it with customers
