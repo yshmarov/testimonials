@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.2
+
+- Uploaded videos now get a poster frame too (grabbed from the file
+  client-side), so Safari shows a preview instead of a black frame before
+  play — previously only recorded videos captured a poster. Best-effort;
+  legacy videos with no stored poster are unaffected (re-upload to add one).
+
 ## 0.4.1
 
 - Video poster frames: a still is captured from the camera at record time and
