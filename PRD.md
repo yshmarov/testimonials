@@ -215,6 +215,10 @@ Left before announcing v0.1.0:
 - **Admin → host-user link**: a `config.user_path` lambda so the author name
   in the dashboard links into the host's own user admin.
 - **Tokenized collection links** (revocable/scoped campaigns).
+- **Video transcripts & subtitles** — a `captions` (WebVTT) attachment +
+  `<track>` in the players + `captions_url` in the API; transcription itself
+  stays a host-side `on_submit` recipe (see
+  [issue #2](https://github.com/yshmarov/testimonials-engine/issues/2)).
 - **prompt_events pruning** helper/recipe (the ledger grows unbounded).
 - **System/browser tests** (manual QA currently covers this, and has caught
   what integration tests could not).
