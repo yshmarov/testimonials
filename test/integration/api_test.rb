@@ -11,17 +11,17 @@ class ApiTest < ActionDispatch::IntegrationTest
   end
 
   test 'is admin-only by default' do
-    get '/testimonials/api'
+    get '/testimonials/api/testimonials'
     assert_response :forbidden
 
     as_admin!
-    get '/testimonials/api'
+    get '/testimonials/api/testimonials'
     assert_response :ok
   end
 
   test 'serves only publishable records, without contact details' do
     Testimonials.config.public_api = true
-    get '/testimonials/api'
+    get '/testimonials/api/testimonials'
 
     testimonials = response.parsed_body['testimonials']
     assert_equal(['Publishable'], testimonials.map { |t| t['body'] })
@@ -32,7 +32,7 @@ class ApiTest < ActionDispatch::IntegrationTest
 
   test 'opens CORS when public' do
     Testimonials.config.public_api = true
-    get '/testimonials/api'
+    get '/testimonials/api/testimonials'
     assert_equal '*', response.headers['Access-Control-Allow-Origin']
   end
 
@@ -40,10 +40,10 @@ class ApiTest < ActionDispatch::IntegrationTest
     Testimonials.config.public_api = true
     Testimonials::Testimonial.first.update!(featured: true)
 
-    get '/testimonials/api', params: { featured: '1', min_rating: 4 }
+    get '/testimonials/api/testimonials', params: { featured: '1', min_rating: 4 }
     assert_equal 1, response.parsed_body['testimonials'].size
 
-    get '/testimonials/api', params: { min_rating: 5 }
+    get '/testimonials/api/testimonials', params: { min_rating: 5 }
     assert_equal 1, response.parsed_body['testimonials'].size
   end
 

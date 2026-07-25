@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0
+
+- Reverted 0.2.0's API path change: the read API collection is back at
+  `<mount>/api/testimonials` (plain REST — the collection is a noun). The
+  bare `<mount>/api` from 0.2.0 read as the API root rather than a
+  collection, and was asymmetric with `<mount>/api/stats`. If the
+  same-named echo under a `/testimonials` mount bothers you, mount the
+  engine at a shorter path (e.g. `/reviews`).
+
 ## 0.2.0
 
 - **Breaking (API paths):** the read API's collection moved from
