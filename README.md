@@ -1,19 +1,51 @@
 # testimonials
 
 [![Gem Version](https://img.shields.io/gem/v/testimonials)](https://rubygems.org/gems/testimonials)
+[![Downloads](https://img.shields.io/gem/dt/testimonials)](https://rubygems.org/gems/testimonials)
 [![CI](https://github.com/yshmarov/testimonials/actions/workflows/ci.yml/badge.svg)](https://github.com/yshmarov/testimonials/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](MIT-LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/yshmarov/testimonials?style=social)](https://github.com/yshmarov/testimonials/stargazers)
 
-Testimonials, reviews and NPS for Rails. Self-hosted alternative to
-Testimonial.to / Senja / Delighted.
+**Testimonials, reviews and NPS for Rails.** Self-hosted alternative to
+Testimonial.to / Senja / Delighted — text and **video**, collected inside your
+own app, stored in your own database.
+
+![The testimonials widget: star prompt, full form, and video review step](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/hero.jpg)
 
 `testimonials` collects customer testimonials — text and **video** — from
 inside your app with an iOS-style "Enjoying this app?" prompt, from a
 shareable public page, and from NPS promoters routed straight into the
 testimonial ask. Everything lands in your own database with a minimal
-dashboard to approve, feature, and pick each one’s best line. Display is **headless**: render
+dashboard to approve, feature, and pick each one's best line. Display is **headless**: render
 approved testimonials with your own markup via the models or a JSON API —
 copy-paste examples included.
+
+```bash
+bundle add testimonials
+bin/rails generate testimonials:install
+bin/rails db:migrate
+```
+
+Add `<%= testimonials_tag %>` to your layout. That's the whole install.
+
+> [!TIP]
+> **If this replaces a subscription for you, please [⭐ star the repo](https://github.com/yshmarov/testimonials).**
+> Stars are the only signal I get about what to build next — and they're what
+> puts a self-hosted option in front of the next person about to pay monthly for one.
+
+## Why self-host it
+
+|                                                | `testimonials`                       | A third-party embed              |
+| ---------------------------------------------- | ------------------------------------ | -------------------------------- |
+| Cost                                           | Free, MIT                            | Monthly subscription             |
+| Where testimonials live                        | Your database                        | The vendor's                     |
+| Attribution to *your* user records             | Server-side, from the session        | Whatever the visitor types       |
+| Prompting at in-app success moments            | One method call in a controller      | Not reachable from your backend  |
+| Page weight                                    | One `<script>`, no framework, no CDN | Third-party bundle + requests    |
+| Consent record                                 | Stored text snapshot, in your rows   | Vendor's terms                   |
+| Multi-tenant (per Organization / Product)      | Built in, one resolver               | Usually a plan upgrade           |
+| Rendering                                      | Your markup, your CSS                | Their widget, their branding     |
+| If the vendor disappears                       | Nothing happens                      | You lose the wall of love        |
 
 - **Zero UI dependencies.** The widget is plain JavaScript and styles itself.
   No Tailwind, no Stimulus, no importmap, no build step. Works with Turbo
@@ -33,6 +65,22 @@ copy-paste examples included.
   own words, with a stored text snapshot; the read API only ever serves
   approved records marked for **public** use, and never emails.
 - **26 languages**, including localized best-practice guiding questions.
+
+## The whole flow
+
+From an unobtrusive nudge to a video testimonial sitting in your dashboard —
+six screens, no third-party script.
+
+| 1. A small star card appears at a success moment                                                                      | 2. Tapping a star expands the full form                                                                            |
+| --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| ![The star prompt card](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/01-prompt.png)   | ![The expanded testimonial form](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/02-form.png) |
+| Nothing renders until it's eligible. "Not now" is always one tap away.                                                 | Guiding questions fight blank-page paralysis. Video is offered, never required.                                     |
+| **3. Camera check before recording**                                                                                  | **4. Review it before sending**                                                                                    |
+| ![The camera check step](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/03-camera-check.jpg) | ![Reviewing the recorded video](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/04-video-review.jpg) |
+| A countdown and a preview, so nobody is caught mid-blink.                                                              | Record again as many times as they like. The blob stays in the browser until Send.                                    |
+| **5. Attached, written, consented**                                                                                   | **6. It lands in your dashboard as `pending`**                                                                     |
+| ![The form with a video attached](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/05-video-attached.png) | ![The triage dashboard](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/dashboard-index.png) |
+| Consent is an explicit choice in the customer's own words.                                                             | Nothing is public until you approve it.                                                                             |
 
 ## How it works
 
@@ -173,9 +221,16 @@ The dashboard shows your NPS score and every response at
 ## Dashboard
 
 Browse at the mount path: pending → approved → archived tabs, search,
-quick-approve, inline video playback, feature toggle, and a “Best line” picker —
+quick-approve, inline video playback, feature toggle, and a "Best line" picker —
 the customer's words are never editable, but you choose the pull-quote.
 Gated by `config.authorize_admin` (development-only until you set it).
+
+<img src="https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/dashboard-show.jpg" alt="A single testimonial in the dashboard: video playback, best-line picker, attribution metadata, and approve/archive/feature/delete actions" width="620">
+
+Every submission keeps its provenance — who sent it, the exact consent text
+they agreed to, which page they were on, locale, browser, timestamp. The
+**Best line** field is the only thing you write: the customer's words stay
+verbatim, you just choose which sentence your landing page pulls out.
 
 ## Multi-tenancy
 
@@ -218,6 +273,26 @@ nullable. Run `bin/rails generate testimonials:tenant && bin/rails db:migrate`
 (a fresh install already includes it). Existing rows keep a `nil` tenant — the
 global collection — so nothing changes until you set `config.tenant`.
 
+## Rendering what you collect
+
+The gem ships **no display UI** on purpose. [`examples/`](examples/) has
+copy-paste starting points:
+
+| Example | What it renders |
+| --- | --- |
+| [`wall_of_love.html.erb`](examples/wall_of_love.html.erb) | A responsive grid of text + video testimonials |
+| [`testimonial_card.html.erb`](examples/testimonial_card.html.erb) | A single quote card for a landing/pricing page |
+| [`badge.html.erb`](examples/badge.html.erb) | The "★ 4.9 from 87 reviews" chip |
+| [`json_ld.html.erb`](examples/json_ld.html.erb) | schema.org markup for Google rich snippets |
+| [`static_site.md`](examples/static_site.md) | Rendering on a separate marketing site (Astro & friends) |
+
+## Who's using it
+
+- [PaidCollabs](https://paidcollabs.com) — the screenshots above
+
+Shipping it? [Open a PR](https://github.com/yshmarov/testimonials/pulls) and
+add yourself.
+
 ## Testing
 
 ```bash
@@ -225,6 +300,17 @@ bundle exec rake test
 bundle exec rubocop
 ```
 
+Bug reports and pull requests are welcome. The fastest way to help is to
+install it in a real app and
+[tell me where it hurt](https://github.com/yshmarov/testimonials/issues).
+
+## Also by the same author
+
+- [feedback_engine](https://github.com/yshmarov/feedback-engine) — in-app bug
+  reports and feature requests. Pairs with this gem's NPS detractor hook.
+- [SupeRails](https://superails.com) — Rails screencasts.
+
 ## License
 
-MIT.
+MIT. If it saved you a subscription, a
+[⭐](https://github.com/yshmarov/testimonials) is a fair trade.
