@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1
+
+- The widget's injected stylesheet now refreshes when its content changes
+  instead of once-and-never-again — so a shipped widget update takes effect on
+  the next Turbo visit instead of needing a full page reload (Turbo keeps
+  `<head>` across visits, which could otherwise pin old CSS while fresh
+  widget.js runs). Backported from livechat 0.4.5.
+
 ## 0.5.0
 
 - **Multi-tenancy.** Scope testimonials to a tenant — each Organization (or
