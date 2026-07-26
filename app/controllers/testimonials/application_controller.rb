@@ -16,6 +16,15 @@ module Testimonials
       current_author.respond_to?(:id) ? current_author.id : nil
     end
 
+    # The tenant for this request (nil = the single global collection). Every
+    # read and write in the engine scopes to it, so a resolved-tenant admin
+    # only ever sees and writes their own tenant's records.
+    def current_tenant
+      return @current_tenant if defined?(@current_tenant)
+
+      @current_tenant = Testimonials.tenant(request)
+    end
+
     def require_enabled
       head :forbidden unless Testimonials.enabled?(request)
     end

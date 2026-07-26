@@ -27,6 +27,19 @@ Testimonials.configure do |config|
   # Attribution stored with a signed-in user's submission.
   # config.user_display = ->(user) { { name: user.name, email: user.email } }
 
+  # Multi-tenancy (optional). Scope testimonials, NPS, the dashboard and the
+  # read API to a tenant — each Organization/Product/Store its own collection.
+  # Return an opaque key (nil = one global collection, the default). A
+  # GlobalID is the recommended key and matches the `has_testimonials` model
+  # concern; an id, subdomain or slug work too. The gem never needs to know
+  # what your tenant is. An admin then sees only their tenant's dashboard.
+  # config.tenant = ->(request) { Current.organization&.to_gid&.to_s }
+  #
+  # Then, optionally, `has_testimonials` for `organization.testimonials`:
+  #   class Organization < ApplicationRecord
+  #     has_testimonials
+  #   end
+
   # Guiding prompts shown above the message field (not form fields).
   # Default nil = the gem's built-in localized questions. Override with
   # literal strings, or a lambda for host-side i18n. [] hides the section.

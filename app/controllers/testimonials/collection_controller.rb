@@ -11,8 +11,11 @@ module Testimonials
       head :not_found and return unless Testimonials.config.public_collection
       head :forbidden and return unless Testimonials.enabled?(request)
 
-      # A signed-in visitor edits their existing review instead of adding one.
-      @existing = current_author_id && Testimonial.where(author_id: current_author_id.to_s).newest_first.first
+      # A signed-in visitor edits their existing review (in this tenant)
+      # instead of adding one.
+      @existing = current_author_id &&
+                  Testimonial.for_tenant(current_tenant)
+                             .where(author_id: current_author_id.to_s).newest_first.first
     end
   end
 end

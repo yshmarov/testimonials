@@ -12,5 +12,13 @@ module Testimonials
         include Testimonials::PromptHelper
       end
     end
+
+    # Make the optional `has_testimonials` model macro available on every
+    # Active Record model, without requiring the host to include anything.
+    initializer 'testimonials.model' do
+      ActiveSupport.on_load(:active_record) do
+        extend Testimonials::HasTestimonials
+      end
+    end
   end
 end

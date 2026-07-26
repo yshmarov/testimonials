@@ -5,6 +5,7 @@ module Testimonials
   class NpsResponse < ApplicationRecord
     validates :score, presence: true, inclusion: { in: 0..10 }
 
+    scope :for_tenant, ->(tenant) { where(tenant: tenant.presence) }
     scope :newest_first, -> { order(id: :desc) }
 
     def promoter? = score >= 9

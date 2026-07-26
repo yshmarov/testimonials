@@ -23,9 +23,9 @@ module Testimonials
       @status = Testimonial::STATUSES.include?(params[:status]) ? params[:status] : 'pending'
       @kind = Testimonial::KINDS.include?(params[:kind]) ? params[:kind] : nil
       @query = params[:q].to_s.strip.presence
-      @counts = Testimonial.group(:status).count
+      @counts = tenant_scope.group(:status).count
 
-      scope = Testimonial.where(status: @status)
+      scope = tenant_scope.where(status: @status)
       scope = scope.where(kind: @kind) if @kind
       scope = search(scope) if @query
       @page = [params[:page].to_i, 1].max
@@ -70,7 +70,13 @@ module Testimonials
     private
 
     def set_testimonial
-      @testimonial = Testimonial.find(params[:id])
+      @testimonial = tenant_scope.find(params[:id])
+    end
+
+    # Every dashboard query starts here, so an admin can only ever load,
+    # triage, or delete records in their own tenant — a cross-tenant id 404s.
+    def tenant_scope
+      Testimonial.for_tenant(current_tenant)
     end
 
     def admin_params
@@ -106,15 +112,18 @@ module Testimonials
       testimonial.source = 'widget' unless Testimonial::SOURCES.include?(testimonial.source)
       testimonial.consent_text = Testimonials.consent_text_for(testimonial.consent_given?)
       testimonial.locale = I18n.locale.to_s
+      testimonial.tenant = current_tenant
       testimonial.user_agent = request.user_agent
       attribute_author(testimonial)
       testimonial
     end
 
+    # One review per signed-in user, *per tenant*: the same person can leave a
+    # separate review in each tenant, but only one within any single tenant.
     def existing_testimonial
       return if current_author_id.blank?
 
-      Testimonial.where(author_id: current_author_id.to_s).newest_first.first
+      tenant_scope.where(author_id: current_author_id.to_s).newest_first.first
     end
 
     # A fresh upload makes it a video review; on an edit without a new
@@ -190,7 +199,7 @@ module Testimonials
     end
 
     def record_submission
-      PromptEvent.record!(kind: 'testimonial', action: 'submitted',
+      PromptEvent.record!(kind: 'testimonial', action: 'submitted', tenant: current_tenant,
                           author_id: current_author_id, visitor_token: ensure_visitor_token)
     end
 

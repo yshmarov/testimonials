@@ -37,8 +37,10 @@ module Testimonials
       params[:download].present? ? 'attachment' : 'inline'
     end
 
+    # Scoped to the tenant, so a cross-tenant id can never reach another
+    # tenant's media — it simply isn't found.
     def set_testimonial
-      @testimonial = Testimonial.find(params[:id])
+      @testimonial = Testimonial.for_tenant(current_tenant).find(params[:id])
     end
 
     def authorize_media

@@ -177,6 +177,47 @@ quick-approve, inline video playback, feature toggle, and a “Best line” pick
 the customer's words are never editable, but you choose the pull-quote.
 Gated by `config.authorize_admin` (development-only until you set it).
 
+## Multi-tenancy
+
+Scope testimonials to a tenant — each Organization (or Product, Course, Store)
+with its own collection, dashboard, widget, and read API — with one resolver:
+
+```ruby
+config.tenant = ->(request) { Current.organization&.to_gid&.to_s }
+```
+
+Return an **opaque key** — a GlobalID, an id, a subdomain, a slug. The gem
+never takes a foreign key into your models and never needs to know what an
+Organization is; it just stamps the key on each submission and scopes every
+read (dashboard, `/api/testimonials`, `/api/stats`, NPS, the public collection
+page) to it. `nil` (the default) is a single global collection — single-tenant
+apps need none of this and keep working unchanged.
+
+Authorization composes: your `authorize_admin` says *who* is an admin, the
+`tenant` resolver says *which* tenant they're in, so an org admin sees only
+their own tenant's dashboard and API. "One review per user" becomes one per
+user **per tenant**.
+
+Optional model sugar — a veneer over the string key, not a new coupling:
+
+```ruby
+class Organization < ApplicationRecord
+  has_testimonials                     # keyed by to_gid.to_s (match config.tenant)
+end
+
+organization.testimonials.approved     # a normal Active Record relation
+organization.testimonials_nps          # NPS responses for this tenant
+```
+
+Apps that skip the concern still get full multi-tenancy from the resolver
+alone. Key by something other than GlobalID? Pass a matching resolver to both:
+`has_testimonials(key: ->(o){ o.subdomain })` and the same in `config.tenant`.
+
+**Upgrading an existing install:** the `tenant` column is additive and
+nullable. Run `bin/rails generate testimonials:tenant && bin/rails db:migrate`
+(a fresh install already includes it). Existing rows keep a `nil` tenant — the
+global collection — so nothing changes until you set `config.tenant`.
+
 ## Testing
 
 ```bash

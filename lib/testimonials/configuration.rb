@@ -21,6 +21,15 @@ module Testimonials
     # responding to #id, or nil. Receives the request.
     attr_accessor :current_user
 
+    # Resolve the current tenant (optional, for multi-tenant apps). Return an
+    # opaque key — a GlobalID, an id, a subdomain, a slug — or nil. Receives
+    # the request; shaped exactly like current_user/authorize_admin. nil (the
+    # default) is a single, global collection: today's behavior, unchanged.
+    # Testimonials, NPS, the dashboard and the read API all scope to whatever
+    # this returns. The recommended key is a GlobalID (`record.to_gid.to_s`),
+    # which also matches the `has_testimonials` model concern.
+    attr_accessor :tenant
+
     # Turn a resolved user into the attribution stored with a submission.
     # Return a hash with :name, :email, and optionally :title_company.
     # Receives whatever #current_user returned.
@@ -90,6 +99,7 @@ module Testimonials
       @enabled = ->(_request) { true }
       @authorize_admin = ->(_request) { Rails.env.development? }
       @current_user = ->(_request) {}
+      @tenant = ->(_request) {}
       @user_display = lambda { |user|
         { name: user.try(:name), email: user.try(:email) }
       }

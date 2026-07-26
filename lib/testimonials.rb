@@ -4,6 +4,7 @@ require 'testimonials/version'
 require 'testimonials/configuration'
 require 'testimonials/widget'
 require 'testimonials/prompt_helper'
+require 'testimonials/has_testimonials'
 require 'testimonials/engine'
 
 # Testimonials, reviews and NPS for Rails. An iOS-style in-app widget collects
@@ -38,6 +39,26 @@ module Testimonials
       config.app_name.presence || rails_app_name
     end
 
+    # The tenant key for this request, or nil for the single global collection.
+    # Normalized to a string so `where(tenant:)` is consistent whether the
+    # resolver returns a GlobalID, an integer id, or a slug. Blank resolves to
+    # nil — an app that only sometimes has a tenant falls back to global.
+    def tenant(request)
+      config.tenant.call(request).presence&.to_s
+    end
+
+    # Testimonials belonging to a host record, keyed by its GlobalID — the
+    # documented tenant convention. Sugar for `Testimonial.for_tenant(...)`;
+    # the `has_testimonials` model concern is built on this.
+    def for(record)
+      Testimonial.for_tenant(tenant_key_for(record))
+    end
+
+    # The NPS responses belonging to a host record, same keying as `.for`.
+    def nps_for(record)
+      NpsResponse.for_tenant(tenant_key_for(record))
+    end
+
     # The guiding questions for the current locale, with %{app} filled in.
     # I18n leaves the token alone when no interpolation values are passed,
     # so a plain gsub covers built-in, literal, and lambda-provided strings
@@ -69,6 +90,14 @@ module Testimonials
     end
 
     private
+
+    # A host record's tenant key: its GlobalID string. Kept in one place so
+    # `.for`, `.nps_for` and the `has_testimonials` concern agree — and so a
+    # host wiring `config.tenant = ->(r){ Current.org.to_gid.to_s }` lines up
+    # with `organization.testimonials`.
+    def tenant_key_for(record)
+      record.respond_to?(:to_gid) ? record.to_gid.to_s : record.to_s
+    end
 
     # The application's module name, verbatim ("EthicsPortal", "SupeRails") —
     # no inflection games. Set config.app_name for anything fancier.

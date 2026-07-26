@@ -25,10 +25,12 @@ ActiveRecord::Schema.define do
     t.string :page_url
     t.string :user_agent
     t.string :locale
+    t.string :tenant
     t.timestamps
   end
   add_index :testimonials_testimonials, :status
-  add_index :testimonials_testimonials, %i[status consent_given]
+  add_index :testimonials_testimonials, %i[tenant status]
+  add_index :testimonials_testimonials, %i[tenant status consent_given]
 
   create_table :testimonials_nps_responses, force: true do |t|
     t.integer :score, null: false
@@ -39,19 +41,21 @@ ActiveRecord::Schema.define do
     t.string :page_url
     t.string :user_agent
     t.string :locale
+    t.string :tenant
     t.timestamps
   end
-  add_index :testimonials_nps_responses, :score
+  add_index :testimonials_nps_responses, %i[tenant score]
 
   create_table :testimonials_prompt_events, force: true do |t|
     t.string :kind, null: false
     t.string :action, null: false
     t.string :author_id
     t.string :visitor_token
+    t.string :tenant
     t.timestamps
   end
-  add_index :testimonials_prompt_events, %i[author_id kind]
-  add_index :testimonials_prompt_events, %i[visitor_token kind]
+  add_index :testimonials_prompt_events, %i[tenant author_id kind]
+  add_index :testimonials_prompt_events, %i[tenant visitor_token kind]
 
   # Active Storage tables, so video and avatar attachments work in tests.
   create_table :active_storage_blobs, force: true do |t|

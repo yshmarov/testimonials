@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.5.0
+
+- **Multi-tenancy.** Scope testimonials to a tenant — each Organization (or
+  Product, Course, Store) with its own collection, dashboard, widget, and read
+  API — via one resolver: `config.tenant = ->(request) {
+  Current.organization&.to_gid&.to_s }`. The key is an opaque string (GlobalID,
+  id, subdomain, slug); the gem takes no foreign key into your models, exactly
+  like author attribution. Every write is stamped and every read — dashboard,
+  `/api/testimonials`, `/api/stats`, NPS, the public collection page, media —
+  is scoped to the resolved tenant. Authorization composes: `authorize_admin`
+  says who's an admin, `tenant` says which tenant, so an org admin sees only
+  their own. "One review per user" becomes one per user *per tenant*, and a
+  cross-tenant id 404s instead of leaking.
+- Optional `has_testimonials` model concern (veneer over the string key, no
+  new coupling): `organization.testimonials.approved`,
+  `organization.testimonials_nps` — plus `Testimonials.for(record)` /
+  `.nps_for(record)`.
+- **Single-tenant apps are unchanged** — `config.tenant` defaults to nil, one
+  global collection. Upgrading: the `tenant` column is additive and nullable;
+  run `bin/rails generate testimonials:tenant && bin/rails db:migrate` (fresh
+  installs already include it). Existing rows keep a nil tenant.
+
 ## 0.4.2
 
 - Uploaded videos now get a poster frame too (grabbed from the file

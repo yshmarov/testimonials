@@ -52,14 +52,17 @@ module Testimonials
       @testimonials_author = Testimonials.config.current_user.call(request)
     end
 
-    # One review per signed-in user: this is the record the widget opens
-    # pre-filled, and the one the create endpoint updates in place.
+    # One review per signed-in user (per tenant): this is the record the widget
+    # opens pre-filled, and the one the create endpoint updates in place.
     def testimonials_existing_testimonial
       return @testimonials_existing_testimonial if defined?(@testimonials_existing_testimonial)
 
       author = testimonials_author
       @testimonials_existing_testimonial =
-        author.respond_to?(:id) ? Testimonial.where(author_id: author.id.to_s).newest_first.first : nil
+        if author.respond_to?(:id)
+          Testimonial.for_tenant(Testimonials.tenant(request))
+                     .where(author_id: author.id.to_s).newest_first.first
+        end
     end
 
     # A prompt requested via testimonial_prompt! rides the flash, so it survives
@@ -73,6 +76,7 @@ module Testimonials
       author = testimonials_author
       return unless Testimonials::PromptEvent.eligible?(
         kind: kind,
+        tenant: Testimonials.tenant(request),
         author_id: author.respond_to?(:id) ? author.id : nil,
         visitor_token: cookies[:testimonials_vid]
       )

@@ -20,20 +20,22 @@ module Testimonials
     validates :action, inclusion: { in: ACTIONS }
 
     class << self
-      def record!(kind:, action:, author_id: nil, visitor_token: nil)
+      def record!(kind:, action:, author_id: nil, visitor_token: nil, tenant: nil)
         return if author_id.blank? && visitor_token.blank?
 
-        create!(kind: kind.to_s, action: action.to_s,
+        create!(kind: kind.to_s, action: action.to_s, tenant: tenant.presence,
                 author_id: author_id.presence, visitor_token: visitor_token.presence)
       end
 
-      def eligible?(kind:, author_id: nil, visitor_token: nil)
+      # Throttling is per-tenant: a user prompted in one tenant is still
+      # eligible in another, so each collection can ask independently.
+      def eligible?(kind:, author_id: nil, visitor_token: nil, tenant: nil)
         kind = kind.to_s
         return false unless KINDS.include?(kind)
         # No identity, no history: a brand-new visitor is always eligible.
         return true if author_id.blank? && visitor_token.blank?
 
-        history = subject(author_id, visitor_token).where(kind: kind)
+        history = subject(author_id, visitor_token, tenant).where(kind: kind)
         config = Testimonials.config
 
         return false if submitted_recently?(history, kind, config)
@@ -45,8 +47,9 @@ module Testimonials
 
       private
 
-      def subject(author_id, visitor_token)
-        author_id.present? ? where(author_id: author_id.to_s) : where(visitor_token: visitor_token)
+      def subject(author_id, visitor_token, tenant = nil)
+        scope = where(tenant: tenant.presence)
+        author_id.present? ? scope.where(author_id: author_id.to_s) : scope.where(visitor_token: visitor_token)
       end
 
       def submitted_recently?(history, kind, config)

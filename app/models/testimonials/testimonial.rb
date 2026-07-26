@@ -21,6 +21,11 @@ module Testimonials
     validates :body, presence: true, if: -> { kind == 'text' }
     validates :rating, inclusion: { in: 1..5 }, allow_nil: true
 
+    # Multi-tenancy: everything is scoped to an opaque tenant key (nil = the
+    # single global collection). Loose-coupled like author_id — a string, no
+    # FK into the host's tables. See Testimonials.config.tenant.
+    scope :for_tenant, ->(tenant) { where(tenant: tenant.presence) }
+
     scope :newest_first, -> { order(id: :desc) }
     scope :approved, -> { where(status: 'approved') }
     # What the read API serves: approved by an admin AND consented by the

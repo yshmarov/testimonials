@@ -6,7 +6,7 @@ module Testimonials
       MAX_LIMIT = 100
 
       def index
-        scope = Testimonial.publishable.featured_first
+        scope = Testimonial.for_tenant(current_tenant).publishable.featured_first
         scope = scope.where(featured: true) if params[:featured].present?
         scope = scope.where(kind: params[:kind]) if Testimonial::KINDS.include?(params[:kind])
         scope = scope.where(rating: params[:min_rating].to_i..) if params[:min_rating].present?

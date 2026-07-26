@@ -17,7 +17,7 @@ module Testimonials
       head :unprocessable_entity and return unless PromptEvent::KINDS.include?(kind) &&
                                                    CLIENT_ACTIONS.include?(action)
 
-      PromptEvent.record!(kind: kind, action: action,
+      PromptEvent.record!(kind: kind, action: action, tenant: current_tenant,
                           author_id: current_author_id, visitor_token: ensure_visitor_token)
       head :no_content
     end

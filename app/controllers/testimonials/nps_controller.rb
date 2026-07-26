@@ -12,11 +12,12 @@ module Testimonials
     def create
       nps = NpsResponse.new(nps_params)
       nps.locale = I18n.locale.to_s
+      nps.tenant = current_tenant
       nps.user_agent = request.user_agent
       attribute_author(nps)
 
       if nps.save
-        PromptEvent.record!(kind: 'nps', action: 'submitted',
+        PromptEvent.record!(kind: 'nps', action: 'submitted', tenant: current_tenant,
                             author_id: current_author_id, visitor_token: ensure_visitor_token)
         notify_host(nps)
         notify_detractor(nps) if nps.detractor?
@@ -51,6 +52,7 @@ module Testimonials
     def offer_testimonial?(nps)
       nps.promoter? && PromptEvent.eligible?(
         kind: 'testimonial',
+        tenant: current_tenant,
         author_id: current_author_id,
         visitor_token: cookies[:testimonials_vid]
       )
