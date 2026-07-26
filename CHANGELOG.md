@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.2
+
+- A just-recorded or just-uploaded video now shows a playable preview on the
+  form (with its captured poster), matching the review step and the
+  edit-existing case — previously "Use this video" left only a "Video
+  attached" chip with no preview until the review was saved and reopened.
+
 ## 0.5.1
 
 - The widget's injected stylesheet now refreshes when its content changes
