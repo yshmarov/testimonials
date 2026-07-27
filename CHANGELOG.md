@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.6.0
+
+- **The full-screen mobile dialog now survives the on-screen keyboard.** On
+  phones the dialog is a fixed, full-height (`100dvh`) element, but iOS Safari
+  raises the keyboard without resizing it — so the composer and Submit/Cancel
+  row slid behind the keyboard. While the dialog is open the widget now tracks
+  `window.visualViewport` and pins the overlay (and the dialog filling it) to
+  the visible viewport, so the action row sits just above the keyboard. Gated on
+  the `max-width:480px` mobile media query, so desktop is untouched; browsers
+  without `visualViewport` no-op and keep the previous behavior. Shared change
+  across the gem family.
+- The "🎥 Video attached | Remove" row under a video preview is replaced with a
+  discreet round ✕ button in the top-right corner of the preview (the standard
+  "remove attachment" affordance) — clearly a delete control, but no longer a
+  full-width, easy-to-mis-tap target. Applies to both a just-recorded/uploaded
+  clip and an existing video being edited; remove behavior is unchanged.
+
 ## 0.5.2
 
 - A just-recorded or just-uploaded video now shows a playable preview on the
