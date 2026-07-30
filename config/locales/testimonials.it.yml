@@ -64,7 +64,7 @@ it:
       approved: "Approvato"
       archived: "Archiviato"
     dashboard:
-      title: "Testimonianze"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "Tutti i tipi"
       search: "Cerca"

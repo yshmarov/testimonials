@@ -64,7 +64,7 @@ el:
       approved: "Εγκεκριμένο"
       archived: "Αρχειοθετημένο"
     dashboard:
-      title: "Μαρτυρίες"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "Όλα τα είδη"
       search: "Αναζήτηση"

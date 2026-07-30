@@ -64,7 +64,7 @@ hr:
       approved: "Odobreno"
       archived: "Arhivirano"
     dashboard:
-      title: "Osvrti"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "Sve vrste"
       search: "Traži"

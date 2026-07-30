@@ -64,7 +64,7 @@ ja:
       approved: "承認済み"
       archived: "アーカイブ済み"
     dashboard:
-      title: "お客様の声"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "すべての種類"
       search: "検索"

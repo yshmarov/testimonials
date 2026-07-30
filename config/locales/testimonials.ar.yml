@@ -64,7 +64,7 @@ ar:
       approved: "معتمد"
       archived: "مؤرشف"
     dashboard:
-      title: "الشهادات"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "كل الأنواع"
       search: "بحث"

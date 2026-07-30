@@ -33,6 +33,8 @@ class LocalesTest < ActiveSupport::TestCase
       questions = data.values.first['testimonials']['questions']
       assert_equal 3, questions.size, "#{file} must ship three guiding questions"
       assert_includes questions.join, '%{app}', "#{file} questions must mention the app"
+      assert_equal 'Testimonials', data.values.first['testimonials']['dashboard']['title'],
+                   "#{file} must keep the admin title branded"
     end
   end
 end

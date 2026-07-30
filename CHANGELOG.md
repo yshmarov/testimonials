@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.1
+
+- Renamed the default admin dashboard title to `Testimonials` across shipped
+  locales while keeping it overridable through `testimonials.dashboard.title`.
+
 ## 0.7.0
 
 - New `config.storage_service`: store uploads (video, its poster frame, guest

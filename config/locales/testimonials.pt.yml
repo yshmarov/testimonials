@@ -64,7 +64,7 @@ pt:
       approved: "Aprovado"
       archived: "Arquivado"
     dashboard:
-      title: "Depoimentos"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "Todos os tipos"
       search: "Buscar"

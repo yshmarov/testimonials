@@ -64,7 +64,7 @@ bn:
       approved: "অনুমোদিত"
       archived: "আর্কাইভ করা"
     dashboard:
-      title: "প্রশংসাপত্র"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "সব ধরন"
       search: "খুঁজুন"

@@ -64,7 +64,7 @@ ko:
       approved: "승인됨"
       archived: "보관됨"
     dashboard:
-      title: "고객 후기"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "모든 유형"
       search: "검색"

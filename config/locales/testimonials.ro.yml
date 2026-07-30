@@ -64,7 +64,7 @@ ro:
       approved: "Aprobat"
       archived: "Arhivat"
     dashboard:
-      title: "Testimoniale"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "Toate tipurile"
       search: "Căutare"

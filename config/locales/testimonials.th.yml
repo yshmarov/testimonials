@@ -64,7 +64,7 @@ th:
       approved: "อนุมัติแล้ว"
       archived: "เก็บถาวรแล้ว"
     dashboard:
-      title: "คำรับรอง"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "ทุกประเภท"
       search: "ค้นหา"

@@ -64,7 +64,7 @@ pl:
       approved: "Zatwierdzone"
       archived: "Zarchiwizowane"
     dashboard:
-      title: "Opinie"
+      title: "Testimonials"
       nps: "NPS"
       all_kinds: "Wszystkie rodzaje"
       search: "Szukaj"
