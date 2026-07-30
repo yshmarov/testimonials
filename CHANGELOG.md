@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- New `config.storage_service`: store uploads (video, its poster frame, guest
+  avatars) on a named Active Storage service from the host's
+  `config/storage.yml` instead of the environment default. Point it at a
+  dedicated bucket or folder — or a service entry carrying provider options
+  like Cloudinary's `folder:`/`tags:` — to keep testimonial media separate
+  from the rest of the media library. `nil` (the default) keeps today's
+  behavior.
+
 ## 0.6.0
 
 - **The full-screen mobile dialog now survives the on-screen keyboard.** On

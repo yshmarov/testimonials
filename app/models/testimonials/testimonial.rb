@@ -10,9 +10,13 @@ module Testimonials
     SOURCES = %w[widget page nps].freeze
 
     if defined?(::ActiveStorage)
-      has_one_attached :video_file
-      has_one_attached :poster # a still frame for the video, captured at record time
-      has_one_attached :avatar
+      # Read at class load, which happens after the host's initializers, so
+      # a storage_service set in config/initializers/testimonials.rb is
+      # visible here. nil falls through to the environment's default service.
+      storage = Testimonials.config.storage_service
+      has_one_attached :video_file, service: storage
+      has_one_attached :poster, service: storage # a still frame for the video, captured at record time
+      has_one_attached :avatar, service: storage
     end
 
     validates :kind, inclusion: { in: KINDS }

@@ -132,6 +132,7 @@ Everything is optional — a fresh install works with zero config. In
 | `max_video_size` | `50.megabytes` | Enforced server-side |
 | `avatars` | `true` | Headshot upload for guests on the public page |
 | `max_avatar_size` | `5.megabytes` | Enforced server-side |
+| `storage_service` | app default | Active Storage service for uploads (a `storage.yml` key) |
 | `reprompt_after` | `90.days` | Cooldown after a dismissal |
 | `max_prompts` | `3` | Lifetime auto-prompt cap per user |
 | `public_collection` | `true` | The shareable `/testimonials/new` page |
