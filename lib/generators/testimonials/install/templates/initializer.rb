@@ -55,6 +55,12 @@ Testimonials.configure do |config|
   # config.avatars = true
   # config.max_avatar_size = 5.megabytes
 
+  # Store uploads (video, poster frame, avatars) on a specific Active Storage
+  # service from config/storage.yml — e.g. a dedicated bucket or folder that
+  # keeps testimonial media apart from the rest of your library. Default:
+  # your environment's default service.
+  # config.storage_service = :testimonials
+
   # Auto-prompt throttling. Explicit opens (user clicked your link) bypass it.
   # config.reprompt_after = 90.days
   # config.max_prompts = 3

@@ -52,6 +52,12 @@ module Testimonials
     attr_accessor :avatars
     attr_accessor :max_avatar_size
 
+    # The Active Storage service that stores uploads — video, its poster
+    # frame, guest avatars — as a service name from the host's
+    # config/storage.yml (e.g. a dedicated bucket or folder). nil, the
+    # default, uses the environment's default service.
+    attr_accessor :storage_service
+
     # Auto-prompt throttling. A user who dismissed the widget is not
     # auto-prompted again within `reprompt_after`; a user auto-prompted
     # `max_prompts` times without submitting is never auto-prompted again;
@@ -109,6 +115,7 @@ module Testimonials
       @max_video_size = 50 * 1024 * 1024
       @avatars = true
       @max_avatar_size = 5 * 1024 * 1024
+      @storage_service = nil
       @reprompt_after = 90 * 24 * 60 * 60
       @max_prompts = 3
       @consent_text = nil
