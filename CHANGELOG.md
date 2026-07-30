@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.7.0
 
 - New `config.storage_service`: store uploads (video, its poster frame, guest
   avatars) on a named Active Storage service from the host's
