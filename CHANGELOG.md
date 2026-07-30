@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.1
+## 0.7.2
 
 - Added `mount_testimonials at: "/testimonials"` as the install-time route
   helper. It keeps `config.mount_path` synchronized with the mounted engine
@@ -8,6 +8,9 @@
 - Extracted the dashboard stylesheet into a same-origin, fingerprinted
   `/dashboard.css` endpoint and added CSP meta tags to the engine layouts.
   The public widget remains pipeline-free and controller-served.
+
+## 0.7.1
+
 - Renamed the default admin dashboard title to `Testimonials` across shipped
   locales while keeping it overridable through `testimonials.dashboard.title`.
 
