@@ -62,4 +62,14 @@ class TestimonialsTest < ActiveSupport::TestCase
     Testimonials.config.authorize_admin = ->(_r) { true }
     assert Testimonials.admin?(request)
   end
+
+  test 'mount_testimonials keeps config.mount_path in sync with the route' do
+    routes = ActionDispatch::Routing::RouteSet.new
+
+    routes.draw do
+      mount_testimonials at: '/reviews'
+    end
+
+    assert_equal '/reviews', Testimonials.config.mount_path
+  end
 end

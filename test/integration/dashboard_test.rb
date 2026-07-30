@@ -12,17 +12,25 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
-  test 'serves the dashboard helper script (CSP-safe, no inline handlers)' do
+  test 'serves the dashboard helper script and stylesheet as same-origin static assets' do
     get '/testimonials/dashboard.js'
     assert_response :ok
     assert_equal 'text/javascript', response.media_type
     assert_includes response.body, 'data-confirm'
+
+    get '/testimonials/dashboard.css'
+    assert_response :ok
+    assert_equal 'text/css', response.media_type
+    assert_includes response.body, '.nav'
   end
 
-  test 'loads the helper script and uses no inline JS handlers' do
+  test 'loads dashboard assets, CSP metadata, and no inline dashboard style or JS handlers' do
     as_admin!
     get '/testimonials'
+    assert_includes response.body, 'name="csp-nonce"'
+    assert_includes response.body, 'href="/testimonials/dashboard.css?v='
     assert_includes response.body, 'src="/testimonials/dashboard.js?v='
+    refute_includes response.body, '<style>'
     refute_includes response.body, 'onchange='
     assert_includes response.body, 'data-autosubmit'
 

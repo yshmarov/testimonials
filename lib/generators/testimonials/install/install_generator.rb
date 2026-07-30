@@ -22,7 +22,7 @@ module Testimonials
       end
 
       def mount_engine
-        route %(mount Testimonials::Engine => "/testimonials")
+        route %(mount_testimonials at: "/testimonials")
       end
 
       def post_install

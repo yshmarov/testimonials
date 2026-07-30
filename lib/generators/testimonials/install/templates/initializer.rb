@@ -92,6 +92,7 @@ Testimonials.configure do |config|
   # Per-IP throttle for public endpoints (Rails 7.2+; ignored on 7.1).
   # config.rate_limit = { to: 5, within: 1.minute }
 
-  # Keep in sync with the `mount` in config/routes.rb.
+  # Default mount path used by `mount_testimonials`.
+  # Override only if you mount the engine manually.
   # config.mount_path = "/testimonials"
 end

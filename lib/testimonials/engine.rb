@@ -20,5 +20,14 @@ module Testimonials
         extend Testimonials::HasTestimonials
       end
     end
+
+    initializer 'testimonials.routing' do
+      ActionDispatch::Routing::Mapper.include(Module.new do
+        def mount_testimonials(at: Testimonials.config.mount_path, **options)
+          Testimonials.config.mount_path = at
+          mount Testimonials::Engine, at:, **options
+        end
+      end)
+    end
   end
 end

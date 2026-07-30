@@ -5,6 +5,7 @@ Testimonials::Engine.routes.draw do
   # the bottom own "/:id".
   get 'widget.js', to: 'widgets#show', as: :widget
   get 'dashboard.js', to: 'widgets#dashboard', as: :dashboard_script
+  get 'dashboard.css', to: 'widgets#dashboard_stylesheet', as: :dashboard_stylesheet
   get 'new', to: 'collection#show', as: :collection
   resources :events, only: :create
   resource :nps, only: :create, controller: 'nps'

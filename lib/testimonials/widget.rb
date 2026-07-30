@@ -5,14 +5,14 @@ require 'digest'
 
 module Testimonials
   # Serves the self-contained browser widget. The JavaScript is plain ES (no
-  # framework, no build step) and styles itself inline, so it drops into any
-  # Rails app regardless of its CSS or JS setup. It is inlined into the page
-  # rather than served as a separate asset to avoid any dependency on the
-  # host's asset pipeline — and it lives under lib/ (not app/assets/) so a
-  # host that *does* run a pipeline never ingests it either.
+  # framework, no build step) and injects its own widget styles, so it drops
+  # into any Rails app regardless of its CSS or JS setup. The code is served by
+  # the engine instead of the host's asset pipeline, and it lives under lib/ so
+  # a host that does run a pipeline never ingests it either.
   module Widget
     SOURCE = File.expand_path('widget.js', __dir__)
     DASHBOARD_SOURCE = File.expand_path('dashboard.js', __dir__)
+    DASHBOARD_STYLESHEET_SOURCE = File.expand_path('dashboard.css', __dir__)
 
     # Right-to-left scripts, so the form renders mirrored for those locales.
     # Matched on the language subtag, so region variants ("ar-EG") count too.
@@ -27,6 +27,10 @@ module Testimonials
         @dashboard_javascript ||= File.read(DASHBOARD_SOURCE)
       end
 
+      def dashboard_stylesheet
+        @dashboard_stylesheet ||= File.read(DASHBOARD_STYLESHEET_SOURCE)
+      end
+
       # Content fingerprints for cache-busting script URLs: a changed file is
       # a changed URL, so no browser can ever run stale widget code — Safari
       # has been caught ignoring must-revalidate on same-URL scripts.
@@ -36,6 +40,10 @@ module Testimonials
 
       def dashboard_fingerprint
         @dashboard_fingerprint ||= Digest::MD5.hexdigest(dashboard_javascript)
+      end
+
+      def dashboard_stylesheet_fingerprint
+        @dashboard_stylesheet_fingerprint ||= Digest::MD5.hexdigest(dashboard_stylesheet)
       end
 
       # The two <script> tags the helper renders.
