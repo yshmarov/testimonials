@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.4
+
+- Added `config.admin_layout`, letting host apps render the testimonial and NPS
+  dashboards inside their own admin layout while keeping the standalone gem
+  layout as the default.
+
 ## 0.7.3
 
 - Redesigned the testimonial and NPS admin dashboards into two-column review

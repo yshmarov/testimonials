@@ -6,6 +6,10 @@ module Testimonials
 
     private
 
+    def testimonials_admin_layout
+      Testimonials.config.admin_layout
+    end
+
     def current_author
       return @current_author if defined?(@current_author)
 

@@ -12,6 +12,10 @@ Testimonials.configure do |config|
   # Who can triage testimonials at the mount path. Defaults to development
   # only — override before deploying.
   # config.authorize_admin = ->(request) { request.env["warden"]&.user&.admin? }
+  #
+  # Render the dashboard inside your app's admin layout. Default: the gem's
+  # standalone dashboard layout.
+  # config.admin_layout = "admin/application"
 
   # Attribute submissions to a user (optional). Return an object responding
   # to #id, or nil. Receives the request.

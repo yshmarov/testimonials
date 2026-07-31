@@ -4,7 +4,7 @@ module Testimonials
   class TestimonialsController < ApplicationController
     PER_PAGE = 50
 
-    layout 'testimonials/application', except: :create
+    layout :testimonials_admin_layout, except: :create
 
     # create is the public widget endpoint; everything else is the dashboard.
     before_action :require_enabled, only: :create

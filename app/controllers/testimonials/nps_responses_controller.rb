@@ -5,7 +5,7 @@ module Testimonials
   class NpsResponsesController < ApplicationController
     PER_PAGE = 50
 
-    layout 'testimonials/application'
+    layout :testimonials_admin_layout
 
     before_action :require_admin
     before_action :set_response, only: :show

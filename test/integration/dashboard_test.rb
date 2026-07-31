@@ -40,6 +40,17 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'data-confirm'
   end
 
+  test 'dashboard can render inside a host admin layout' do
+    as_admin!
+    Testimonials.config.admin_layout = 'host_admin'
+
+    get '/testimonials'
+
+    assert_response :ok
+    assert_includes response.body, 'data-host-admin-layout="testimonials"'
+    assert_includes response.body, 'Wonderful tool'
+  end
+
   test 'lists testimonials by status tab' do
     as_admin!
     get '/testimonials'
