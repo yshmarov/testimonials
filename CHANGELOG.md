@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.3
+
+- Redesigned the testimonial and NPS admin dashboards into two-column review
+  layouts with status filters, selected-record panes, and refreshed
+  before/after screenshots.
+- Kept standalone testimonial and NPS response show pages working
+  independently, including scrollable detail content on narrow screens.
+
 ## 0.7.2
 
 - Added `mount_testimonials at: "/testimonials"` as the install-time route
