@@ -32,6 +32,8 @@ module Testimonials
       @testimonials = scope.newest_first.offset((@page - 1) * PER_PAGE).limit(PER_PAGE + 1).to_a
       @more = @testimonials.size > PER_PAGE
       @testimonials = @testimonials.first(PER_PAGE)
+
+      @selected_testimonial = tenant_scope.find_by(id: params[:testimonial_id]) if params[:testimonial_id].present?
     end
 
     def show; end

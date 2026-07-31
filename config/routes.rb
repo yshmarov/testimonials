@@ -9,7 +9,7 @@ Testimonials::Engine.routes.draw do
   get 'new', to: 'collection#show', as: :collection
   resources :events, only: :create
   resource :nps, only: :create, controller: 'nps'
-  resources :nps_responses, only: :index
+  resources :nps_responses, only: %i[index show]
 
   # Read-only JSON for rendering testimonials anywhere. Plain REST: the
   # collection is a noun. Under a same-named mount this reads

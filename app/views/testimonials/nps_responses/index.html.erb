@@ -1,3 +1,5 @@
+<% content_for :body_class, 'tm-nps-index' %>
+
 <h1><%= t('testimonials.dashboard.nps', default: 'NPS') %></h1>
 
 <div class="stat-row">
@@ -19,49 +21,63 @@
   </div>
 </div>
 
-<div class="card">
-  <% if @responses.any? %>
-    <table>
-      <thead>
-        <tr>
-          <th><%= t('testimonials.dashboard.score', default: 'Score') %></th>
-          <th><%= t('testimonials.dashboard.comment', default: 'Comment') %></th>
-          <th><%= t('testimonials.dashboard.from', default: 'From') %></th>
-          <th><%= t('testimonials.dashboard.received', default: 'Received') %></th>
-        </tr>
-      </thead>
-      <tbody>
+<div class="dashboard-shell <%= 'has-selected' if @selected_response %>">
+  <aside class="dashboard-sidebar" aria-label="<%= t('testimonials.dashboard.nps_responses', default: 'NPS responses') %>">
+    <div class="record-list">
+      <% if @responses.any? %>
         <% @responses.each do |response| %>
-          <tr>
-            <td>
-              <span class="badge nps-<%= response.promoter? ? 'promoter' : (response.detractor? ? 'detractor' : 'passive') %>">
-                <%= response.score %>
+          <%= link_to nps_responses_path(page: @page, response_id: response.id),
+                      class: ['record-row nps-row', ('active' if @selected_response&.id == response.id)].compact do %>
+            <span class="record-main">
+              <span class="record-topline">
+                <span class="badge nps-<%= response.promoter? ? 'promoter' : (response.detractor? ? 'detractor' : 'passive') %>">
+                  <%= response.score %>
+                </span>
+                <span class="muted record-time" title="<%= response.created_at %>">
+                  <%= time_ago_in_words(response.created_at) %>
+                </span>
               </span>
-            </td>
-            <td class="message"><%= response.comment %></td>
-            <td>
-              <%= response.name.presence || (response.author_id.present? ? "##{response.author_id}" : nil) %>
-              <% if response.email.present? %>
-                <div class="muted"><%= response.email %></div>
-              <% end %>
-            </td>
-            <td class="muted" title="<%= response.created_at %>">
-              <%= time_ago_in_words(response.created_at) %>
-            </td>
-          </tr>
+              <span class="record-copy"><%= response.comment.presence || t('testimonials.dashboard.no_comment', default: 'No comment') %></span>
+              <span class="muted record-meta">
+                <span>#<%= response.id %></span>
+                <% if response.name.present? || response.author_id.present? %>
+                  <span><%= response.name.presence || "##{response.author_id}" %></span>
+                <% end %>
+                <% if response.email.present? %>
+                  <span><%= response.email %></span>
+                <% end %>
+              </span>
+            </span>
+          <% end %>
         <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <div class="empty"><%= t('testimonials.dashboard.empty', default: 'Nothing here yet.') %></div>
-  <% end %>
-</div>
+      <% else %>
+        <div class="empty"><%= t('testimonials.dashboard.empty', default: 'Nothing here yet.') %></div>
+      <% end %>
+    </div>
 
-<div class="pager">
-  <% if @page > 1 %>
-    <%= link_to t('testimonials.dashboard.newer', default: '← Newer'), nps_responses_path(page: @page - 1) %>
-  <% end %>
-  <% if @more %>
-    <%= link_to t('testimonials.dashboard.older', default: 'Older →'), nps_responses_path(page: @page + 1) %>
-  <% end %>
+    <div class="pager">
+      <% if @page > 1 %>
+        <%= link_to t('testimonials.dashboard.newer', default: '← Newer'), nps_responses_path(page: @page - 1) %>
+      <% end %>
+      <% if @more %>
+        <%= link_to t('testimonials.dashboard.older', default: 'Older →'), nps_responses_path(page: @page + 1) %>
+      <% end %>
+    </div>
+  </aside>
+
+  <main class="dashboard-detail" aria-label="<%= t('testimonials.dashboard.current_nps_response', default: 'Current NPS response') %>">
+    <% if @selected_response %>
+      <p class="mobile-back">
+        <%= link_to t('testimonials.dashboard.back_to_nps', default: '← All responses'),
+                    nps_responses_path(page: @page) %>
+      </p>
+      <%= render 'response_panel', response: @selected_response %>
+    <% else %>
+      <div class="empty-state">
+        <h2><%= t('testimonials.dashboard.select_response', default: 'Select a response') %></h2>
+        <p class="muted"><%= t('testimonials.dashboard.select_response_hint',
+                               default: 'Open a score from the list to review the comment and source details.') %></p>
+      </div>
+    <% end %>
+  </main>
 </div>
