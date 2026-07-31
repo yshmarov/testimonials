@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.5
+
+- Moved the selected testimonial status and rating into the main metadata card,
+  removing the extra detail-pane header from the admin review view.
+- Fixed the trusted publishing workflow by building and pushing the gem
+  directly with RubyGems OIDC credentials after the test suite passes.
+
 ## 0.7.4
 
 - Added `config.admin_layout`, letting host apps render the testimonial and NPS

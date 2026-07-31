@@ -69,6 +69,9 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, 'dashboard-shell has-selected'
     assert_includes response.body, 'record-row testimonial-row active'
+    assert_select '.testimonial-panel > .panel-head', false
+    assert_select '.testimonial-panel dl dt', text: 'Status'
+    assert_select '.testimonial-panel dl dt', text: 'Rating'
     assert_includes response.body, 'Wonderful tool'
     assert_includes response.body, 'Best line'
     assert_operator response.body.rindex('Ada'), :<, response.body.rindex('Wonderful tool')

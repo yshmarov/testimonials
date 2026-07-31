@@ -7,6 +7,10 @@
 #
 # Release flow after that:
 #   git tag v0.x.y && git push origin v0.x.y
+#
+# We configure the OIDC credentials and then build + push directly, rather than
+# using rubygems/release-gem (which can publish successfully and then fail while
+# running the surrounding release task).
 name: Release
 
 on:
@@ -29,4 +33,10 @@ jobs:
         with:
           ruby-version: "3.4"
           bundler-cache: true
-      - uses: rubygems/release-gem@v1
+      - name: Run tests before publishing
+        run: bundle exec rake test
+      - uses: rubygems/configure-rubygems-credentials@v2.1.0
+      - name: Build and push the gem
+        run: |
+          gem build testimonials.gemspec
+          gem push testimonials-*.gem

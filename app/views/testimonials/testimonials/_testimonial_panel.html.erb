@@ -1,22 +1,22 @@
 <section class="testimonial-panel">
-  <div class="panel-head">
-    <h1 class="title-row">
-      <span class="badge status-<%= testimonial.status %>">
-        <%= t("testimonials.statuses.#{testimonial.status}", default: testimonial.status.humanize) %>
-      </span>
-      <% if testimonial.featured? %>
-        <span class="badge status-approved">⭐ <%= t('testimonials.dashboard.featured', default: 'Featured') %></span>
-      <% end %>
-      <% if testimonial.rating %>
-        <span class="stars"><%= '★' * testimonial.rating %><span class="off"><%= '★' * (5 - testimonial.rating) %></span></span>
-      <% end %>
-      <span class="case-id">#<%= testimonial.id %></span>
-    </h1>
-  </div>
-
   <div class="detail-scroll">
     <div class="card pad">
       <dl>
+        <dt><%= t('testimonials.dashboard.testimonial', default: 'Testimonial') %></dt>
+        <dd><span class="case-id">#<%= testimonial.id %></span></dd>
+        <dt><%= t('testimonials.dashboard.status', default: 'Status') %></dt>
+        <dd>
+          <span class="badge status-<%= testimonial.status %>">
+            <%= t("testimonials.statuses.#{testimonial.status}", default: testimonial.status.humanize) %>
+          </span>
+          <% if testimonial.featured? %>
+            <span class="badge status-approved"><%= t('testimonials.dashboard.featured', default: 'Featured') %></span>
+          <% end %>
+        </dd>
+        <% if testimonial.rating %>
+          <dt><%= t('testimonials.dashboard.rating', default: 'Rating') %></dt>
+          <dd><span class="stars"><%= '★' * testimonial.rating %><span class="off"><%= '★' * (5 - testimonial.rating) %></span></span></dd>
+        <% end %>
         <dt><%= t('testimonials.dashboard.from', default: 'From') %></dt>
         <dd>
           <% if testimonial.avatar_attached? %>
