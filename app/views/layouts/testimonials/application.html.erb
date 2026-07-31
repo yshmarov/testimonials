@@ -12,7 +12,7 @@
   <%= javascript_include_tag "#{dashboard_script_path}?v=#{Testimonials::Widget.dashboard_fingerprint}",
                              'data-turbo-track': 'reload', defer: true, nonce: true %>
 </head>
-<body>
+<body class="<%= content_for?(:body_class) ? yield(:body_class) : '' %>">
   <div class="container">
     <div class="nav">
       <%= link_to t('testimonials.dashboard.title', default: 'Testimonials'), root_path,

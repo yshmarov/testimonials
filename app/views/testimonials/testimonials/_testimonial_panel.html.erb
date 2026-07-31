@@ -1,0 +1,111 @@
+<section class="testimonial-panel">
+  <div class="panel-head">
+    <h1 class="title-row">
+      <span class="badge status-<%= testimonial.status %>">
+        <%= t("testimonials.statuses.#{testimonial.status}", default: testimonial.status.humanize) %>
+      </span>
+      <% if testimonial.featured? %>
+        <span class="badge status-approved">⭐ <%= t('testimonials.dashboard.featured', default: 'Featured') %></span>
+      <% end %>
+      <% if testimonial.rating %>
+        <span class="stars"><%= '★' * testimonial.rating %><span class="off"><%= '★' * (5 - testimonial.rating) %></span></span>
+      <% end %>
+      <span class="case-id">#<%= testimonial.id %></span>
+    </h1>
+  </div>
+
+  <div class="detail-scroll">
+    <div class="card pad">
+      <dl>
+        <dt><%= t('testimonials.dashboard.from', default: 'From') %></dt>
+        <dd>
+          <% if testimonial.avatar_attached? %>
+            <img class="avatar" src="<%= testimonial_avatar_path(testimonial) %>" alt="">
+          <% end %>
+          <%= testimonial.display_name %>
+          <% if testimonial.title_company.present? %> — <%= testimonial.title_company %><% end %>
+        </dd>
+        <% if testimonial.email.present? %>
+          <dt><%= t('testimonials.dashboard.email', default: 'Email') %></dt>
+          <dd><%= testimonial.email %></dd>
+        <% end %>
+        <dt><%= t('testimonials.dashboard.consent', default: 'Consent') %></dt>
+        <dd>
+          <% if testimonial.consent_given? %>
+            ✓ <span class="muted"><%= testimonial.consent_text %></span>
+          <% else %>
+            🔒 <span class="muted"><%= testimonial.consent_text.presence ||
+                  t('testimonials.dashboard.no_consent', default: 'Private use only. Not served by the read API.') %></span>
+          <% end %>
+        </dd>
+        <dt><%= t('testimonials.dashboard.source', default: 'Source') %></dt>
+        <dd><%= t("testimonials.sources.#{testimonial.source}", default: testimonial.source.humanize) %></dd>
+        <% if testimonial.page_url.present? %>
+          <dt><%= t('testimonials.dashboard.page', default: 'Page') %></dt>
+          <dd><%= link_to testimonial.page_url, testimonial.page_url, target: '_blank', rel: 'noopener' %></dd>
+        <% end %>
+        <% if testimonial.locale.present? %>
+          <dt><%= t('testimonials.dashboard.locale', default: 'Locale') %></dt>
+          <dd><%= testimonial.locale %></dd>
+        <% end %>
+        <% if testimonial.user_agent.present? %>
+          <dt><%= t('testimonials.dashboard.browser', default: 'Browser') %></dt>
+          <dd class="muted"><%= testimonial.user_agent %></dd>
+        <% end %>
+        <dt><%= t('testimonials.dashboard.received', default: 'Received') %></dt>
+        <dd><%= testimonial.created_at %></dd>
+      </dl>
+    </div>
+
+    <div class="card pad">
+      <% if testimonial.video_attached? %>
+        <%# The stored poster shows a real frame with no decoding — Safari won't
+            paint a fragmented-MP4 frame on its own, so preload/fragment tricks
+            leave it black. %>
+        <video class="playback" controls preload="metadata"
+               poster="<%= testimonial_poster_path(testimonial) if testimonial.poster_attached? %>"
+               src="<%= testimonial_video_path(testimonial) %>"></video>
+        <p class="muted">
+          <%= link_to "⬇ #{t('testimonials.dashboard.download_video', default: 'Download video')}",
+                      testimonial_video_path(testimonial, download: 1) %>
+        </p>
+      <% end %>
+      <% if testimonial.body.present? %>
+        <p class="message"><%= testimonial.body %></p>
+      <% end %>
+
+      <%# The customer's words are never edited — but the admin picks the line
+          worth featuring. %>
+      <%= form_with model: testimonial, url: testimonial_path(testimonial), method: :patch,
+                    class: 'best-line-form', local: true do |form| %>
+        <label for="testimonial_best_line">
+          <%= t('testimonials.dashboard.best_line', default: 'Best line') %>
+        </label>
+        <p class="muted best-line-hint">
+          <%= t('testimonials.dashboard.best_line_hint',
+                default: 'The quote your site will show. Leave blank to use the full text. For videos, type the best thing they said.') %>
+        </p>
+        <%= form.text_area :best_line, rows: 2, id: 'testimonial_best_line' %>
+        <button class="small best-line-save">
+          <%= t('testimonials.dashboard.save_best_line', default: 'Save') %>
+        </button>
+      <% end %>
+    </div>
+
+    <div class="actions">
+      <% (Testimonials::Testimonial::STATUSES - [testimonial.status]).each do |status| %>
+        <%= button_to t("testimonials.dashboard.move_to_#{status}", default: "Mark #{status.humanize.downcase}"),
+                      testimonial_path(testimonial),
+                      method: :patch, params: { testimonial: { status: status } },
+                      class: ('primary' if status == 'approved') %>
+      <% end %>
+      <%= button_to (testimonial.featured? ? t('testimonials.dashboard.unfeature', default: 'Unfeature') : t('testimonials.dashboard.feature', default: 'Feature')),
+                    testimonial_path(testimonial),
+                    method: :patch, params: { testimonial: { featured: !testimonial.featured? } } %>
+      <%= button_to t('testimonials.dashboard.delete', default: 'Delete'),
+                    testimonial_path(testimonial),
+                    method: :delete, class: 'danger',
+                    form: { data: { confirm: t('testimonials.dashboard.delete_confirm', default: 'Delete this testimonial?') } } %>
+    </div>
+  </div>
+</section>

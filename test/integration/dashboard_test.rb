@@ -22,6 +22,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal 'text/css', response.media_type
     assert_includes response.body, '.nav'
+    assert_includes response.body, '.tm-show { min-height: 100vh; overflow: auto; }'
   end
 
   test 'loads dashboard assets, CSP metadata, and no inline dashboard style or JS handlers' do
@@ -43,9 +44,35 @@ class DashboardTest < ActionDispatch::IntegrationTest
     as_admin!
     get '/testimonials'
     assert_includes response.body, 'Wonderful tool'
+    assert_includes response.body, "testimonial_id=#{@testimonial.id}"
 
     get '/testimonials', params: { status: 'approved' }
     refute_includes response.body, 'Wonderful tool'
+  end
+
+  test 'index can render a selected testimonial beside the list' do
+    as_admin!
+
+    get '/testimonials', params: { testimonial_id: @testimonial.id }
+
+    assert_response :ok
+    assert_includes response.body, 'dashboard-shell has-selected'
+    assert_includes response.body, 'record-row testimonial-row active'
+    assert_includes response.body, 'Wonderful tool'
+    assert_includes response.body, 'Best line'
+    assert_operator response.body.rindex('Ada'), :<, response.body.rindex('Wonderful tool')
+    assert_operator response.body.rindex('Wonderful tool'), :<, response.body.rindex('Approve')
+  end
+
+  test 'shows one testimonial independently' do
+    as_admin!
+
+    get "/testimonials/#{@testimonial.id}"
+
+    assert_response :ok
+    assert_includes response.body, 'class="tm-show"'
+    assert_includes response.body, 'Wonderful tool'
+    assert_includes response.body, 'Best line'
   end
 
   test 'searches text, name, and email' do
@@ -77,7 +104,34 @@ class DashboardTest < ActionDispatch::IntegrationTest
     [10, 10, 0].each { |score| Testimonials::NpsResponse.create!(score: score, comment: "c#{score}") }
     get '/testimonials/nps_responses'
     assert_includes response.body, 'c10'
+    assert_includes response.body, 'response_id='
     # 2 promoters, 1 detractor of 3 → 67 - 33 = 33 (rounded)
     assert_includes response.body, '33'
+  end
+
+  test 'NPS index can render a selected response beside the list' do
+    as_admin!
+    nps_response = Testimonials::NpsResponse.create!(score: 10, comment: 'Superb', name: 'Ada')
+
+    get '/testimonials/nps_responses', params: { response_id: nps_response.id }
+
+    assert_response :ok
+    assert_includes response.body, 'dashboard-shell has-selected'
+    assert_includes response.body, 'record-row nps-row active'
+    assert_includes response.body, 'Superb'
+    assert_includes response.body, 'Ada'
+    assert_operator response.body.rindex('Ada'), :<, response.body.rindex('Superb')
+  end
+
+  test 'shows one NPS response independently' do
+    as_admin!
+    nps_response = Testimonials::NpsResponse.create!(score: 10, comment: 'Superb', name: 'Ada')
+
+    get "/testimonials/nps_responses/#{nps_response.id}"
+
+    assert_response :ok
+    assert_includes response.body, 'class="tm-show"'
+    assert_includes response.body, 'Superb'
+    assert_includes response.body, 'Ada'
   end
 end
