@@ -16,41 +16,6 @@
 
   <div class="detail-scroll">
     <div class="card pad">
-      <% if testimonial.video_attached? %>
-        <%# The stored poster shows a real frame with no decoding — Safari won't
-            paint a fragmented-MP4 frame on its own, so preload/fragment tricks
-            leave it black. %>
-        <video class="playback" controls preload="metadata"
-               poster="<%= testimonial_poster_path(testimonial) if testimonial.poster_attached? %>"
-               src="<%= testimonial_video_path(testimonial) %>"></video>
-        <p class="muted">
-          <%= link_to "⬇ #{t('testimonials.dashboard.download_video', default: 'Download video')}",
-                      testimonial_video_path(testimonial, download: 1) %>
-        </p>
-      <% end %>
-      <% if testimonial.body.present? %>
-        <p class="message"><%= testimonial.body %></p>
-      <% end %>
-
-      <%# The customer's words are never edited — but the admin picks the line
-          worth featuring. %>
-      <%= form_with model: testimonial, url: testimonial_path(testimonial), method: :patch,
-                    class: 'best-line-form', local: true do |form| %>
-        <label for="testimonial_best_line">
-          <%= t('testimonials.dashboard.best_line', default: 'Best line') %>
-        </label>
-        <p class="muted best-line-hint">
-          <%= t('testimonials.dashboard.best_line_hint',
-                default: 'The quote your site will show. Leave blank to use the full text. For videos, type the best thing they said.') %>
-        </p>
-        <%= form.text_area :best_line, rows: 2, id: 'testimonial_best_line' %>
-        <button class="small best-line-save">
-          <%= t('testimonials.dashboard.save_best_line', default: 'Save') %>
-        </button>
-      <% end %>
-    </div>
-
-    <div class="card pad">
       <dl>
         <dt><%= t('testimonials.dashboard.from', default: 'From') %></dt>
         <dd>
@@ -91,21 +56,56 @@
         <dd><%= testimonial.created_at %></dd>
       </dl>
     </div>
-  </div>
 
-  <div class="actions">
-    <% (Testimonials::Testimonial::STATUSES - [testimonial.status]).each do |status| %>
-      <%= button_to t("testimonials.dashboard.move_to_#{status}", default: "Mark #{status.humanize.downcase}"),
+    <div class="card pad">
+      <% if testimonial.video_attached? %>
+        <%# The stored poster shows a real frame with no decoding — Safari won't
+            paint a fragmented-MP4 frame on its own, so preload/fragment tricks
+            leave it black. %>
+        <video class="playback" controls preload="metadata"
+               poster="<%= testimonial_poster_path(testimonial) if testimonial.poster_attached? %>"
+               src="<%= testimonial_video_path(testimonial) %>"></video>
+        <p class="muted">
+          <%= link_to "⬇ #{t('testimonials.dashboard.download_video', default: 'Download video')}",
+                      testimonial_video_path(testimonial, download: 1) %>
+        </p>
+      <% end %>
+      <% if testimonial.body.present? %>
+        <p class="message"><%= testimonial.body %></p>
+      <% end %>
+
+      <%# The customer's words are never edited — but the admin picks the line
+          worth featuring. %>
+      <%= form_with model: testimonial, url: testimonial_path(testimonial), method: :patch,
+                    class: 'best-line-form', local: true do |form| %>
+        <label for="testimonial_best_line">
+          <%= t('testimonials.dashboard.best_line', default: 'Best line') %>
+        </label>
+        <p class="muted best-line-hint">
+          <%= t('testimonials.dashboard.best_line_hint',
+                default: 'The quote your site will show. Leave blank to use the full text. For videos, type the best thing they said.') %>
+        </p>
+        <%= form.text_area :best_line, rows: 2, id: 'testimonial_best_line' %>
+        <button class="small best-line-save">
+          <%= t('testimonials.dashboard.save_best_line', default: 'Save') %>
+        </button>
+      <% end %>
+    </div>
+
+    <div class="actions">
+      <% (Testimonials::Testimonial::STATUSES - [testimonial.status]).each do |status| %>
+        <%= button_to t("testimonials.dashboard.move_to_#{status}", default: "Mark #{status.humanize.downcase}"),
+                      testimonial_path(testimonial),
+                      method: :patch, params: { testimonial: { status: status } },
+                      class: ('primary' if status == 'approved') %>
+      <% end %>
+      <%= button_to (testimonial.featured? ? t('testimonials.dashboard.unfeature', default: 'Unfeature') : t('testimonials.dashboard.feature', default: 'Feature')),
                     testimonial_path(testimonial),
-                    method: :patch, params: { testimonial: { status: status } },
-                    class: ('primary' if status == 'approved') %>
-    <% end %>
-    <%= button_to (testimonial.featured? ? t('testimonials.dashboard.unfeature', default: 'Unfeature') : t('testimonials.dashboard.feature', default: 'Feature')),
-                  testimonial_path(testimonial),
-                  method: :patch, params: { testimonial: { featured: !testimonial.featured? } } %>
-    <%= button_to t('testimonials.dashboard.delete', default: 'Delete'),
-                  testimonial_path(testimonial),
-                  method: :delete, class: 'danger',
-                  form: { data: { confirm: t('testimonials.dashboard.delete_confirm', default: 'Delete this testimonial?') } } %>
+                    method: :patch, params: { testimonial: { featured: !testimonial.featured? } } %>
+      <%= button_to t('testimonials.dashboard.delete', default: 'Delete'),
+                    testimonial_path(testimonial),
+                    method: :delete, class: 'danger',
+                    form: { data: { confirm: t('testimonials.dashboard.delete_confirm', default: 'Delete this testimonial?') } } %>
+    </div>
   </div>
 </section>

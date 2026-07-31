@@ -60,6 +60,8 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'record-row testimonial-row active'
     assert_includes response.body, 'Wonderful tool'
     assert_includes response.body, 'Best line'
+    assert_operator response.body.rindex('Ada'), :<, response.body.rindex('Wonderful tool')
+    assert_operator response.body.rindex('Wonderful tool'), :<, response.body.rindex('Approve')
   end
 
   test 'shows one testimonial independently' do
@@ -118,6 +120,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'record-row nps-row active'
     assert_includes response.body, 'Superb'
     assert_includes response.body, 'Ada'
+    assert_operator response.body.rindex('Ada'), :<, response.body.rindex('Superb')
   end
 
   test 'shows one NPS response independently' do
