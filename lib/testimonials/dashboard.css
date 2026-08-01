@@ -5,6 +5,8 @@
   --pending: #d97706; --approved: #16a34a; --archived: #6b7280;
   --star: #f59e0b; --danger: #dc2626;
   --promoter: #16a34a; --passive: #d97706; --detractor: #dc2626;
+  /* The four bands an NPS number falls into: bad, ordinary, strong, rare. */
+  --nps-needs-work: #dc2626; --nps-good: #d97706; --nps-great: #16a34a; --nps-excellent: #0f766e;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -86,6 +88,51 @@ img.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
         border-radius: 12px; padding: 14px 16px; }
 .stat b { display: block; font-size: 26px; }
 .stat span { color: var(--muted); font-size: 13px; }
+
+/* NPS score card: the number, the band it falls in, and where it sits on the
+   −100..100 scale — so nobody has to google whether 50 is any good. */
+.stat-nps { flex: 2.4; min-width: 240px; }
+.stat-headline { display: flex; align-items: center; gap: 10px; }
+.stat-headline b { display: inline-block; }
+/* `.stat span` would otherwise mute the badge's own white text. */
+.stat .badge { color: #fff; font-size: 12px; }
+.badge.nps-band-needs-work { background: var(--nps-needs-work); }
+.badge.nps-band-good { background: var(--nps-good); }
+.badge.nps-band-great { background: var(--nps-great); }
+.badge.nps-band-excellent { background: var(--nps-excellent); }
+.nps-meter { direction: ltr; margin-top: 10px; }
+.nps-meter-track { position: relative; display: flex; height: 6px; border-radius: 999px; overflow: hidden; }
+.nps-seg { display: block; height: 100%; opacity: .45; }
+.nps-seg.nps-band-needs-work { flex: 100; background: var(--nps-needs-work); }
+.nps-seg.nps-band-good { flex: 30; background: var(--nps-good); }
+.nps-seg.nps-band-great { flex: 40; background: var(--nps-great); }
+.nps-seg.nps-band-excellent { flex: 30; background: var(--nps-excellent); }
+/* Hidden until dashboard.js reads data-nps-marker and positions it, so a
+   score of 50 never renders as if it were −100. */
+.nps-marker { display: none; position: absolute; top: -3px; width: 4px; height: 12px; margin-left: -2px;
+              border-radius: 2px; background: var(--text); box-shadow: 0 0 0 2px var(--surface); }
+.nps-marker.placed { display: block; }
+.nps-meter-ticks { position: relative; height: 14px; margin-top: 3px; color: var(--muted); font-size: 11px; }
+.nps-meter-ticks span { position: absolute; transform: translateX(-50%); }
+.nps-meter-ticks .tick-min { left: 0; transform: none; }
+.nps-meter-ticks .tick-zero { left: 50%; }
+.nps-meter-ticks .tick-good { left: 65%; }
+.nps-meter-ticks .tick-great { left: 85%; }
+.nps-meter-ticks .tick-max { left: 100%; transform: translateX(-100%); }
+.nps-sample { margin: 8px 0 0; font-size: 12px; }
+
+/* The formula and the benchmarks, tucked behind a disclosure. */
+.nps-guide { flex: 0 0 auto; margin-bottom: 14px; background: var(--surface);
+             border: 1px solid var(--border); border-radius: 12px; }
+.nps-guide summary { padding: 10px 16px; color: var(--muted); font-size: 13px; cursor: pointer; }
+.nps-guide summary:hover { color: var(--text); }
+.nps-guide[open] summary { border-bottom: 1px solid var(--border); }
+.nps-guide-body { padding: 12px 16px 14px; font-size: 13px; }
+.nps-guide-body p { margin: 0; max-width: 78ch; }
+.nps-bands { display: grid; grid-template-columns: max-content max-content 1fr; gap: 8px 14px;
+             margin: 12px 0; padding: 0; list-style: none; align-items: baseline; }
+.nps-bands li { display: contents; }
+.nps-bands b { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .best-line-form textarea { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 8px;
                          background: var(--surface); color: var(--text); font: inherit; resize: vertical; }
 .best-line-hint { margin: 2px 0 6px; }
@@ -183,5 +230,9 @@ img.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
   .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .stat { min-width: 0; padding: 10px 12px; }
   .stat b { font-size: 22px; }
+  .stat-nps { grid-column: 1 / -1; }
+  .nps-bands { grid-template-columns: max-content 1fr; }
+  .nps-bands b { grid-column: 2; }
+  .nps-bands li > .muted { grid-column: 1 / -1; }
   .share-link { flex: 1 0 100%; margin-left: 0; text-align: center; }
 }

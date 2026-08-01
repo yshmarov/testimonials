@@ -13,10 +13,59 @@
   <% end %>
 </div>
 
+<%# How the industry reads a score, so nobody has to go and google it. Range
+    labels are digits on purpose — no translation needed for "< 0". %>
+<% bands = [
+     { key: 'needs-work', range: '< 0',
+       name: t('testimonials.dashboard.nps_band_needs_work', default: 'Needs work'),
+       note: t('testimonials.dashboard.nps_guide_needs_work', default: 'More detractors than promoters.') },
+     { key: 'good', range: '0 – 29',
+       name: t('testimonials.dashboard.nps_band_good', default: 'Good'),
+       note: t('testimonials.dashboard.nps_guide_good', default: 'Where most companies land.') },
+     { key: 'great', range: '30 – 69',
+       name: t('testimonials.dashboard.nps_band_great', default: 'Great'),
+       note: t('testimonials.dashboard.nps_guide_great', default: 'Strong loyalty.') },
+     { key: 'excellent', range: '70 +',
+       name: t('testimonials.dashboard.nps_band_excellent', default: 'Excellent'),
+       note: t('testimonials.dashboard.nps_guide_excellent', default: 'World-class, and rare.') }
+   ] %>
+<% current = bands.find { |b| b[:key] == @band.to_s.tr('_', '-') } if @band %>
+<% if current
+     band_class = "badge nps-band-#{current[:key]}"
+     meter_label = "#{@score} — #{current[:name]} #{current[:note]}"
+   end %>
+
 <div class="stat-row">
-  <div class="stat">
-    <b><%= @score.nil? ? '—' : @score %></b>
+  <div class="stat stat-nps">
+    <div class="stat-headline">
+      <b><%= @score.nil? ? '—' : @score %></b>
+      <% if current %>
+        <span class="<%= band_class %>"><%= current[:name] %></span>
+      <% end %>
+    </div>
     <span><%= t('testimonials.dashboard.nps_score', default: 'NPS score') %></span>
+    <%# Where this score sits on the −100..100 scale, so the number reads as
+        good or bad at a glance. Kept LTR: it is a number line, not prose. %>
+    <% if current %>
+      <div class="nps-meter" role="img" aria-label="<%= meter_label %>">
+        <div class="nps-meter-track">
+          <i class="nps-seg nps-band-needs-work"></i><i class="nps-seg nps-band-good"></i>
+          <i class="nps-seg nps-band-great"></i><i class="nps-seg nps-band-excellent"></i>
+          <%# Position is data, not markup: dashboard.js places it, so a strict
+              style-src has no inline style to refuse. %>
+          <i class="nps-marker" data-nps-marker="<%= @score %>"></i>
+        </div>
+        <div class="nps-meter-ticks" aria-hidden="true">
+          <span class="tick-min">−100</span><span class="tick-zero">0</span>
+          <span class="tick-good">30</span><span class="tick-great">70</span>
+          <span class="tick-max">100</span>
+        </div>
+      </div>
+    <% end %>
+    <% if @total.positive? && @total < Testimonials::NpsResponse::THIN_SAMPLE %>
+      <p class="muted nps-sample"><%= t('testimonials.dashboard.nps_sample_note', count: @total,
+                                        default: 'Based on %{count} responses — too few to read much into.') %></p>
+    <% end %>
   </div>
   <div class="stat">
     <b><%= @promoters %></b>
@@ -31,6 +80,32 @@
     <span><%= t('testimonials.dashboard.detractors', default: 'Detractors (0–6)') %></span>
   </div>
 </div>
+
+<%# The formula and the benchmarks, closed by default — there when someone
+    wonders whether their number is any good, out of the way the rest of the time. %>
+<details class="nps-guide">
+  <summary><%= t('testimonials.dashboard.nps_guide', default: 'How is this calculated, and what is a good score?') %></summary>
+  <div class="nps-guide-body">
+    <p><%= t('testimonials.dashboard.nps_guide_formula',
+             default: 'NPS = the % of promoters minus the % of detractors. Passives count in the total but on ' \
+                      'neither side, so they pull the score toward zero. The result runs from −100 to +100 — ' \
+                      'a score, not a percentage.') %></p>
+    <ul class="nps-bands">
+      <% bands.each do |band| %>
+        <% badge_class = "badge nps-band-#{band[:key]}" %>
+        <li>
+          <span class="<%= badge_class %>"><%= band[:name] %></span>
+          <b><%= band[:range] %></b>
+          <span class="muted"><%= band[:note] %></span>
+        </li>
+      <% end %>
+    </ul>
+    <p class="muted"><%= t('testimonials.dashboard.nps_guide_caveat',
+                           default: 'Benchmarks move with the industry — software often sits near 40, airlines ' \
+                                    'and internet providers near 0. The trend over time tells you more than any ' \
+                                    'single number, and the comments tell you more than the score.') %></p>
+  </div>
+</details>
 
 <div class="dashboard-shell <%= 'has-selected' if @selected_response %>">
   <aside class="dashboard-sidebar" aria-label="<%= t('testimonials.dashboard.nps_responses', default: 'NPS responses') %>">

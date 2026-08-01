@@ -13,6 +13,7 @@ module Testimonials
     def index
       scope = NpsResponse.for_tenant(current_tenant)
       @score = NpsResponse.score(scope)
+      @band = NpsResponse.band(@score)
       @total = scope.count
       @promoters = scope.where(score: 9..10).count
       @passives = scope.where(score: 7..8).count

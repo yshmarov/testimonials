@@ -26,4 +26,16 @@ class NpsResponseTest < ActiveSupport::TestCase
     # 2 promoters, 1 passive, 1 detractor of 4: 50 - 25 = 25
     assert_equal 25, Testimonials::NpsResponse.score
   end
+
+  test 'bands a score against the industry benchmarks' do
+    assert_nil Testimonials::NpsResponse.band(nil)
+    assert_equal :needs_work, Testimonials::NpsResponse.band(-100)
+    assert_equal :needs_work, Testimonials::NpsResponse.band(-1)
+    assert_equal :good, Testimonials::NpsResponse.band(0)
+    assert_equal :good, Testimonials::NpsResponse.band(29)
+    assert_equal :great, Testimonials::NpsResponse.band(30)
+    assert_equal :great, Testimonials::NpsResponse.band(69)
+    assert_equal :excellent, Testimonials::NpsResponse.band(70)
+    assert_equal :excellent, Testimonials::NpsResponse.band(100)
+  end
 end

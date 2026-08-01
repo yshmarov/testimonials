@@ -242,6 +242,12 @@ throttle would allow it. Detractors (0–6) trigger `on_detractor`, which pairs
 well with [ideasbugs](https://github.com/yshmarov/ideasbugs). Your score and
 every response live at `/testimonials/nps_responses`.
 
+The score is `% promoters − % detractors`, from −100 to +100, and the dashboard
+reads it against the usual benchmarks so nobody has to go and google them:
+below 0 needs work, 0–29 is good, 30–69 is great, 70 and up is world-class. A
+scale under the number shows where you sit, and under 30 responses the card
+says the sample is too thin to read much into.
+
 `/testimonials/nps/new` is the same question on its own page — the link for an
 email campaign, where there is no app session to prompt inside of. A promoter
 who scores 9–10 gets the testimonial form right there on the page.

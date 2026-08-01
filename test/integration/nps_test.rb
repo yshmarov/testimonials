@@ -38,6 +38,35 @@ class NpsTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'the dashboard reads the score against the benchmarks' do
+    as_admin!
+    [10, 10, 10, 5].each { |s| Testimonials::NpsResponse.create!(score: s) }
+
+    get '/testimonials/nps_responses'
+
+    assert_response :ok
+    # 3 promoters, 1 detractor of 4: 75 - 25 = 50, which is "Great".
+    assert_includes response.body, 'nps-band-great">Great'
+    assert_includes response.body, 'data-nps-marker="50"'
+    # Four responses is too thin a sample to read anything into.
+    assert_includes response.body, 'Based on 4 responses'
+    # The formula and the bands are on the page, so nobody has to go and google.
+    assert_includes response.body, 'How is this calculated'
+    assert_includes response.body, 'World-class, and rare.'
+  end
+
+  test 'the dashboard shows no band or marker before any responses arrive' do
+    as_admin!
+
+    get '/testimonials/nps_responses'
+
+    assert_response :ok
+    refute_includes response.body, 'data-nps-marker'
+    refute_includes response.body, 'Based on 0 responses'
+    # The guide stands on its own without a score to read.
+    assert_includes response.body, 'How is this calculated'
+  end
+
   test 'is off when config.nps is false' do
     Testimonials.config.nps = false
     post '/testimonials/nps', params: { nps: { score: 10 } }

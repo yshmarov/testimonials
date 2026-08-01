@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.8
+
+- The NPS dashboard now says what the score means. The card carries the band
+  the number falls into (needs work / good / great / excellent), a scale
+  showing where it sits between −100 and +100, and a note when fewer than 30
+  responses make the number too thin to read. A collapsed "How is this
+  calculated, and what is a good score?" panel spells out the formula, the four
+  bands, and the caveats — industry, trend, comments. Translated into all 26
+  locales.
+- The marker's position rides on a `data-nps-marker` attribute that
+  `dashboard.js` reads, so the page still ships no inline styles for a strict
+  `style-src` to refuse.
+
 ## 0.7.7
 
 - Shrank the gem from 1.0 MB back to ~90 KB by dropping the bundled 1.1 MB demo
