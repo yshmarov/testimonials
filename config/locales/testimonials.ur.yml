@@ -50,6 +50,8 @@ ur:
     page:
       title: "%{app} کے ساتھ اپنا تجربہ شیئر کریں"
       subtitle: "آپ کے الفاظ دوسروں کو فیصلہ کرنے میں مدد دیتے ہیں — شکریہ!"
+      nps_title: "%{app} کو بہتر بنانے میں ہماری مدد کریں"
+      nps_subtitle: "ایک مختصر سوال — دس سیکنڈ لگیں گے۔"
     kinds:
       text: "متن"
       video: "ویڈیو"
@@ -57,8 +59,6 @@ ur:
       widget: "ایپ کے اندر ویجیٹ"
       page: "جمع کرنے کا صفحہ"
       nps: "NPS فالو اپ"
-      collection_page: "تعریفی کلمات طلب کریں"
-      download_video: "ویڈیو ڈاؤن لوڈ کریں"
     statuses:
       pending: "زیر التوا"
       approved: "منظور شدہ"
@@ -66,6 +66,9 @@ ur:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "NPS اسکور کی درخواست کریں"
+      collection_page: "تعریفی کلمات طلب کریں"
+      download_video: "ویڈیو ڈاؤن لوڈ کریں"
       all_kinds: "تمام اقسام"
       search: "تلاش"
       search_placeholder: "متن، نام، ای میل تلاش کریں…"

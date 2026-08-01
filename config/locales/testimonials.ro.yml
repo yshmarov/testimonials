@@ -50,6 +50,8 @@ ro:
     page:
       title: "Împărtășiți-vă experiența cu %{app}"
       subtitle: "Cuvintele dvs. îi ajută pe alții să decidă — mulțumim!"
+      nps_title: "Ajutați-ne să îmbunătățim %{app}"
+      nps_subtitle: "O întrebare rapidă — durează zece secunde."
     kinds:
       text: "Text"
       video: "Video"
@@ -57,8 +59,6 @@ ro:
       widget: "Widget în aplicație"
       page: "Pagină de colectare"
       nps: "Continuare NPS"
-      collection_page: "Cere testimoniale"
-      download_video: "Descarcă videoclipul"
     statuses:
       pending: "În așteptare"
       approved: "Aprobat"
@@ -66,6 +66,9 @@ ro:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Cere scoruri NPS"
+      collection_page: "Cere testimoniale"
+      download_video: "Descarcă videoclipul"
       all_kinds: "Toate tipurile"
       search: "Căutare"
       search_placeholder: "Căutați text, nume, email…"

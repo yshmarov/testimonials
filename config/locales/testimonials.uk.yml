@@ -50,6 +50,8 @@ uk:
     page:
       title: "Поділіться своїм досвідом із %{app}"
       subtitle: "Ваші слова допомагають іншим зважитися — дякуємо!"
+      nps_title: "Допоможіть нам покращити %{app}"
+      nps_subtitle: "Одне коротке питання — займе десять секунд."
     kinds:
       text: "Текст"
       video: "Відео"
@@ -57,8 +59,6 @@ uk:
       widget: "Віджет у застосунку"
       page: "Сторінка збору"
       nps: "Після NPS"
-      collection_page: "Попросити відгуки"
-      download_video: "Завантажити відео"
     statuses:
       pending: "Очікує"
       approved: "Схвалено"
@@ -66,6 +66,9 @@ uk:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Запитати оцінки NPS"
+      collection_page: "Попросити відгуки"
+      download_video: "Завантажити відео"
       all_kinds: "Усі типи"
       search: "Пошук"
       search_placeholder: "Шукати текст, ім'я, пошту…"

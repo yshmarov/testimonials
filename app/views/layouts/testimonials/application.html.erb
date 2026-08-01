@@ -21,13 +21,8 @@
         <%= link_to t('testimonials.dashboard.nps', default: 'NPS'), nps_responses_path,
                     class: ('active' if controller_name == 'nps_responses') %>
       <% end %>
-      <%# The shareable collection page — drop this link into an email or DM. %>
-      <% if Testimonials.config.public_collection %>
-        <a class="button share-link" href="<%= collection_url %>" target="_blank" rel="noopener"
-           title="<%= collection_url %>">
-          🔗 <%= t('testimonials.dashboard.collection_page', default: 'Ask for testimonials') %>
-        </a>
-      <% end %>
+      <%# The shareable links live on the index pages themselves, next to the
+          heading — a host admin_layout replaces this nav, not those. %>
     </div>
     <%= yield %>
   </div>

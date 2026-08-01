@@ -7,6 +7,7 @@ Testimonials::Engine.routes.draw do
   get 'dashboard.js', to: 'widgets#dashboard', as: :dashboard_script
   get 'dashboard.css', to: 'widgets#dashboard_stylesheet', as: :dashboard_stylesheet
   get 'new', to: 'collection#show', as: :collection
+  get 'nps/new', to: 'collection#nps', as: :nps_collection
   resources :events, only: :create
   resource :nps, only: :create, controller: 'nps'
   resources :nps_responses, only: %i[index show]

@@ -50,6 +50,8 @@ lb:
     page:
       title: "Deelt Är Erfarung mat %{app}"
       subtitle: "Är Wierder hëllefen aneren ze entscheeden — merci!"
+      nps_title: "Hëlleft ons %{app} ze verbesseren"
+      nps_subtitle: "Eng kuerz Fro — dauert zéng Sekonnen."
     kinds:
       text: "Text"
       video: "Video"
@@ -57,8 +59,6 @@ lb:
       widget: "In-App-Widget"
       page: "Sammelsäit"
       nps: "NPS-Suivi"
-      collection_page: "Frot no Temoignagen"
-      download_video: "Video eroflueden"
     statuses:
       pending: "Am Waardestand"
       approved: "Guttgeheescht"
@@ -66,6 +66,9 @@ lb:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "No NPS-Bewäertunge froen"
+      collection_page: "Frot no Temoignagen"
+      download_video: "Video eroflueden"
       all_kinds: "All Zorten"
       search: "Sichen"
       search_placeholder: "Text, Numm, E-Mail sichen…"

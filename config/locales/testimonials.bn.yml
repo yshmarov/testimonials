@@ -50,6 +50,8 @@ bn:
     page:
       title: "%{app} নিয়ে আপনার অভিজ্ঞতা শেয়ার করুন"
       subtitle: "আপনার কথা অন্যদের সিদ্ধান্ত নিতে সাহায্য করে — ধন্যবাদ!"
+      nps_title: "%{app} উন্নত করতে আমাদের সাহায্য করুন"
+      nps_subtitle: "একটি ছোট প্রশ্ন — দশ সেকেন্ড লাগবে।"
     kinds:
       text: "লেখা"
       video: "ভিডিও"
@@ -57,8 +59,6 @@ bn:
       widget: "অ্যাপের ভেতরের উইজেট"
       page: "সংগ্রহ পাতা"
       nps: "NPS ফলো-আপ"
-      collection_page: "প্রশংসাপত্র চান"
-      download_video: "ভিডিও ডাউনলোড করুন"
     statuses:
       pending: "অপেক্ষমাণ"
       approved: "অনুমোদিত"
@@ -66,6 +66,9 @@ bn:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "NPS স্কোর চান"
+      collection_page: "প্রশংসাপত্র চান"
+      download_video: "ভিডিও ডাউনলোড করুন"
       all_kinds: "সব ধরন"
       search: "খুঁজুন"
       search_placeholder: "লেখা, নাম, ইমেইল খুঁজুন…"

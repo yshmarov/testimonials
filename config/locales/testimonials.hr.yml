@@ -50,6 +50,8 @@ hr:
     page:
       title: "Podijelite svoje iskustvo s %{app}"
       subtitle: "Vaše riječi pomažu drugima da se odluče — hvala!"
+      nps_title: "Pomozite nam poboljšati %{app}"
+      nps_subtitle: "Jedno kratko pitanje — traje deset sekundi."
     kinds:
       text: "Tekst"
       video: "Video"
@@ -57,8 +59,6 @@ hr:
       widget: "Widget u aplikaciji"
       page: "Stranica za prikupljanje"
       nps: "NPS nastavak"
-      collection_page: "Zatražite osvrte"
-      download_video: "Preuzmi video"
     statuses:
       pending: "Na čekanju"
       approved: "Odobreno"
@@ -66,6 +66,9 @@ hr:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Zatraži NPS ocjene"
+      collection_page: "Zatražite osvrte"
+      download_video: "Preuzmi video"
       all_kinds: "Sve vrste"
       search: "Traži"
       search_placeholder: "Pretraži tekst, ime, e-mail…"

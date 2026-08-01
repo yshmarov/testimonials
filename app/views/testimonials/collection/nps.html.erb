@@ -1,0 +1,14 @@
+<% content_for :title, t('testimonials.page.nps_title', app: Testimonials.app_name,
+                                                          default: "Help us improve #{Testimonials.app_name}") %>
+
+<h1><%= yield(:title) %></h1>
+<p class="subtitle"><%= t('testimonials.page.nps_subtitle', default: 'One quick question — it takes ten seconds.') %></p>
+
+<div data-testimonials-inline></div>
+
+<%= Testimonials::Widget.snippet(
+      locale: I18n.locale,
+      authenticated: Testimonials.config.current_user.call(request).present?,
+      mode: 'nps_page',
+      nonce: (content_security_policy_nonce if respond_to?(:content_security_policy_nonce))
+    ).html_safe %>

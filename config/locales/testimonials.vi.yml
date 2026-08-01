@@ -50,6 +50,8 @@ vi:
     page:
       title: "Chia sẻ trải nghiệm của bạn với %{app}"
       subtitle: "Lời của bạn giúp người khác quyết định — cảm ơn bạn!"
+      nps_title: "Giúp chúng tôi cải thiện %{app}"
+      nps_subtitle: "Một câu hỏi nhanh — chỉ mất mười giây."
     kinds:
       text: "Văn bản"
       video: "Video"
@@ -57,8 +59,6 @@ vi:
       widget: "Widget trong ứng dụng"
       page: "Trang thu thập"
       nps: "Tiếp nối NPS"
-      collection_page: "Xin cảm nhận"
-      download_video: "Tải video xuống"
     statuses:
       pending: "Đang chờ"
       approved: "Đã duyệt"
@@ -66,6 +66,9 @@ vi:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Yêu cầu điểm NPS"
+      collection_page: "Xin cảm nhận"
+      download_video: "Tải video xuống"
       all_kinds: "Tất cả các loại"
       search: "Tìm kiếm"
       search_placeholder: "Tìm văn bản, tên, email…"

@@ -20,6 +20,10 @@ a:hover { text-decoration: underline; }
 .container { max-width: 1020px; margin: 0 auto; padding: 24px 16px 64px; }
 h1 { font-size: 22px; margin: 0 0 16px; }
 h1.title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+/* Index heading row: title on the left, the shareable public link on the right. */
+.page-head { display: flex; align-items: center; justify-content: space-between;
+             gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.page-head h1 { margin: 0; }
 .nav { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
 .nav a { padding: 6px 16px; border: 1px solid var(--border); border-radius: 999px;
          background: var(--surface); color: var(--muted); font-weight: 600; }
@@ -99,9 +103,9 @@ img.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
 .tm-index, .tm-nps-index { overflow: hidden; }
 .tm-index .container, .tm-nps-index .container { max-width: 1280px; display: flex; flex-direction: column; padding-bottom: 16px; }
 .tm-index .nav, .tm-nps-index .nav,
-.tm-index .container > h1, .tm-nps-index .container > h1,
+.tm-index .container > .page-head, .tm-nps-index .container > .page-head,
 .tm-nps-index .stat-row { flex: 0 0 auto; }
-.tm-index .container > h1, .tm-nps-index .container > h1 { margin-bottom: 14px; }
+.tm-index .container > .page-head, .tm-nps-index .container > .page-head { margin-bottom: 14px; }
 .tm-nps-index .stat-row { margin-bottom: 14px; }
 .dashboard-shell { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(330px, 430px) 1fr;
                    gap: 16px; }

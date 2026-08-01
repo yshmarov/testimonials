@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= t('testimonials.page.title', app: Testimonials.app_name, default: "Share your experience with #{Testimonials.app_name}") %></title>
+  <%# Each page sets its own <title> via content_for; the testimonial page keeps the default. %>
+  <title><%= content_for?(:title) ? yield(:title) : t('testimonials.page.title', app: Testimonials.app_name, default: "Share your experience with #{Testimonials.app_name}") %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>

@@ -50,6 +50,8 @@ fr:
     page:
       title: "Partagez votre expérience avec %{app}"
       subtitle: "Vos mots aident les autres à se décider — merci !"
+      nps_title: "Aidez-nous à améliorer %{app}"
+      nps_subtitle: "Une question rapide — dix secondes suffisent."
     kinds:
       text: "Texte"
       video: "Vidéo"
@@ -57,8 +59,6 @@ fr:
       widget: "Widget in-app"
       page: "Page de collecte"
       nps: "Suite NPS"
-      collection_page: "Demander des témoignages"
-      download_video: "Télécharger la vidéo"
     statuses:
       pending: "En attente"
       approved: "Approuvé"
@@ -66,6 +66,9 @@ fr:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Demander des scores NPS"
+      collection_page: "Demander des témoignages"
+      download_video: "Télécharger la vidéo"
       all_kinds: "Tous les types"
       search: "Rechercher"
       search_placeholder: "Rechercher texte, nom, e-mail…"

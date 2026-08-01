@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.7.6
+
+- Added a standalone public NPS page at `/testimonials/nps/new`, the shareable
+  counterpart to `/testimonials/new` — the link for an email campaign, where
+  there is no app session to prompt inside of. A promoter who scores 9–10 gets
+  the testimonial form inline on the same page. Needs `config.public_collection`
+  and `config.nps`.
+- Moved the shareable-link buttons out of the dashboard nav and onto the
+  testimonial and NPS index pages, so each index links to its own public page
+  and the links survive a host `config.admin_layout`.
+- Dropped the dismiss controls that could not work on the public pages (the
+  dialog ×, "Not now", and a Cancel button that did nothing); on the NPS page
+  Cancel now returns to the 0–10 scale instead.
+- Fixed `dashboard.collection_page` and `dashboard.download_video`, which were
+  nested under `sources:` in every locale file while the views looked them up
+  under `dashboard:` — all 26 languages silently fell back to English.
+- Added `bin/rails testimonials:seed_demo` and `Testimonials::Seeds`, idempotent
+  demo data with a real attached video, NPS responses, and prompt history.
+
 ## 0.7.5
 
 - Moved the selected testimonial status and rating into the main metadata card,

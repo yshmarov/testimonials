@@ -50,6 +50,8 @@ tr:
     page:
       title: "%{app} deneyiminizi paylaşın"
       subtitle: "Sözleriniz başkalarının karar vermesine yardımcı olur — teşekkürler!"
+      nps_title: "%{app} deneyimini iyileştirmemize yardım edin"
+      nps_subtitle: "Tek bir kısa soru — on saniye sürer."
     kinds:
       text: "Metin"
       video: "Video"
@@ -57,8 +59,6 @@ tr:
       widget: "Uygulama içi bileşen"
       page: "Toplama sayfası"
       nps: "NPS takibi"
-      collection_page: "Görüş isteyin"
-      download_video: "Videoyu indir"
     statuses:
       pending: "Beklemede"
       approved: "Onaylandı"
@@ -66,6 +66,9 @@ tr:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "NPS puanı isteyin"
+      collection_page: "Görüş isteyin"
+      download_video: "Videoyu indir"
       all_kinds: "Tüm türler"
       search: "Ara"
       search_placeholder: "Metin, ad, e-posta ara…"

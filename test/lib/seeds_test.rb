@@ -12,7 +12,10 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal first[:prompt_events].map(&:id), second[:prompt_events].map(&:id)
     assert_equal 4, Testimonials::Testimonial.where("author_id LIKE 'testimonials-demo:%'").count
     assert_equal 3, Testimonials::NpsResponse.where("author_id LIKE 'testimonials-demo:nps-%'").count
-    assert_equal 3, Testimonials::PromptEvent.where("visitor_token LIKE 'testimonials-demo-%' OR author_id LIKE 'testimonials-demo:%'").count
+    demo_events = Testimonials::PromptEvent.where(
+      "visitor_token LIKE 'testimonials-demo-%' OR author_id LIKE 'testimonials-demo:%'"
+    )
+    assert_equal 3, demo_events.count
     assert_equal %w[approved archived pending], first[:testimonials].map(&:status).uniq.sort
     assert_equal 0, Testimonials::NpsResponse.score
   end

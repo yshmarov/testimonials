@@ -50,6 +50,8 @@ ru:
     page:
       title: "Поделитесь своим опытом с %{app}"
       subtitle: "Ваши слова помогают другим решиться — спасибо!"
+      nps_title: "Помогите нам улучшить %{app}"
+      nps_subtitle: "Один короткий вопрос — займёт десять секунд."
     kinds:
       text: "Текст"
       video: "Видео"
@@ -57,8 +59,6 @@ ru:
       widget: "Виджет в приложении"
       page: "Страница сбора"
       nps: "После NPS"
-      collection_page: "Попросить отзывы"
-      download_video: "Скачать видео"
     statuses:
       pending: "Ожидает"
       approved: "Одобрено"
@@ -66,6 +66,9 @@ ru:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Запросить оценки NPS"
+      collection_page: "Попросить отзывы"
+      download_video: "Скачать видео"
       all_kinds: "Все типы"
       search: "Поиск"
       search_placeholder: "Искать текст, имя, почту…"

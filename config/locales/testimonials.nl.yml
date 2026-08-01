@@ -50,6 +50,8 @@ nl:
     page:
       title: "Deel je ervaring met %{app}"
       subtitle: "Jouw woorden helpen anderen beslissen — bedankt!"
+      nps_title: "Help ons %{app} te verbeteren"
+      nps_subtitle: "Eén korte vraag — het kost tien seconden."
     kinds:
       text: "Tekst"
       video: "Video"
@@ -57,8 +59,6 @@ nl:
       widget: "In-app widget"
       page: "Verzamelpagina"
       nps: "NPS-opvolging"
-      collection_page: "Vraag om testimonials"
-      download_video: "Video downloaden"
     statuses:
       pending: "In afwachting"
       approved: "Goedgekeurd"
@@ -66,6 +66,9 @@ nl:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Om NPS-scores vragen"
+      collection_page: "Vraag om testimonials"
+      download_video: "Video downloaden"
       all_kinds: "Alle soorten"
       search: "Zoeken"
       search_placeholder: "Zoek tekst, naam, e-mail…"

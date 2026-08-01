@@ -1,6 +1,16 @@
 <% content_for :body_class, 'tm-index' %>
 
-<h1><%= t('testimonials.dashboard.title', default: 'Testimonials') %></h1>
+<div class="page-head">
+  <h1><%= t('testimonials.dashboard.title', default: 'Testimonials') %></h1>
+  <%# The shareable public form — drop this link into an email or DM. It lives
+      on the page, not in the nav, so it survives a host's admin_layout. %>
+  <% if Testimonials.config.public_collection %>
+    <a class="button share-link" href="<%= collection_url %>" target="_blank" rel="noopener"
+       title="<%= collection_url %>">
+      🔗 <%= t('testimonials.dashboard.collection_page', default: 'Ask for testimonials') %>
+    </a>
+  <% end %>
+</div>
 
 <div class="dashboard-shell <%= 'has-selected' if @selected_testimonial %>">
   <aside class="dashboard-sidebar" aria-label="<%= t('testimonials.dashboard.testimonials', default: 'Testimonials') %>">

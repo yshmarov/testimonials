@@ -50,6 +50,8 @@ id:
     page:
       title: "Bagikan pengalaman Anda dengan %{app}"
       subtitle: "Kata-kata Anda membantu orang lain memutuskan — terima kasih!"
+      nps_title: "Bantu kami menyempurnakan %{app}"
+      nps_subtitle: "Satu pertanyaan singkat — hanya sepuluh detik."
     kinds:
       text: "Teks"
       video: "Video"
@@ -57,8 +59,6 @@ id:
       widget: "Widget dalam aplikasi"
       page: "Halaman pengumpulan"
       nps: "Tindak lanjut NPS"
-      collection_page: "Minta testimoni"
-      download_video: "Unduh video"
     statuses:
       pending: "Menunggu"
       approved: "Disetujui"
@@ -66,6 +66,9 @@ id:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Minta skor NPS"
+      collection_page: "Minta testimoni"
+      download_video: "Unduh video"
       all_kinds: "Semua jenis"
       search: "Cari"
       search_placeholder: "Cari teks, nama, email…"

@@ -50,6 +50,8 @@ ko:
     page:
       title: "%{app} 사용 경험을 공유해 주세요"
       subtitle: "당신의 이야기가 다른 사람의 결정을 돕습니다 — 감사합니다!"
+      nps_title: "%{app} 개선에 도움을 주세요"
+      nps_subtitle: "질문 하나 — 10초면 끝납니다."
     kinds:
       text: "텍스트"
       video: "동영상"
@@ -57,8 +59,6 @@ ko:
       widget: "앱 내 위젯"
       page: "수집 페이지"
       nps: "NPS 후속"
-      collection_page: "후기 요청하기"
-      download_video: "동영상 다운로드"
     statuses:
       pending: "대기 중"
       approved: "승인됨"
@@ -66,6 +66,9 @@ ko:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "NPS 점수 요청하기"
+      collection_page: "후기 요청하기"
+      download_video: "동영상 다운로드"
       all_kinds: "모든 유형"
       search: "검색"
       search_placeholder: "텍스트, 이름, 이메일 검색…"

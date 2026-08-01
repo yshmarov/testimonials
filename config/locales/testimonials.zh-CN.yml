@@ -50,6 +50,8 @@ zh-CN:
     page:
       title: "分享您使用 %{app} 的体验"
       subtitle: "您的评价能帮助他人做出选择——谢谢！"
+      nps_title: "帮助我们改进 %{app}"
+      nps_subtitle: "只有一个问题 — 十秒即可完成。"
     kinds:
       text: "文字"
       video: "视频"
@@ -57,8 +59,6 @@ zh-CN:
       widget: "应用内组件"
       page: "收集页面"
       nps: "NPS 跟进"
-      collection_page: "征集用户评价"
-      download_video: "下载视频"
     statuses:
       pending: "待处理"
       approved: "已批准"
@@ -66,6 +66,9 @@ zh-CN:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "邀请填写 NPS"
+      collection_page: "征集用户评价"
+      download_video: "下载视频"
       all_kinds: "所有类型"
       search: "搜索"
       search_placeholder: "搜索文字、姓名、邮箱…"

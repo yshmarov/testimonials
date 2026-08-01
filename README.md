@@ -56,7 +56,7 @@ Ruby >= 3.2 · Rails >= 7.1 · Active Storage only if you want video/avatar uplo
 | **Widget**      | iOS-style star prompt → rating, guiding questions, text, video, consent  |
 | **Video**       | Recorded in-browser (MediaRecorder) with a review step, or uploaded      |
 | **NPS**         | 0–10 + comment. Promoters routed into the testimonial ask                |
-| **Public page** | `/testimonials/new` — a shareable link for customers outside the app     |
+| **Public pages** | `/testimonials/new` and `/testimonials/nps/new` — shareable links       |
 | **Dashboard**   | Pending → approved → archived, search, feature toggle, best-line picker  |
 | **Display**     | Headless. Your markup, via the models or a JSON API                      |
 | **Deps**        | None. Plain JS — no Tailwind, no Stimulus, no importmap, no build step   |
@@ -145,7 +145,7 @@ Everything is optional — a fresh install works with zero config. In
 | `storage_service` | app default | Active Storage service for uploads (a `storage.yml` key) |
 | `reprompt_after` | `90.days` | Cooldown after a dismissal |
 | `max_prompts` | `3` | Lifetime auto-prompt cap per user |
-| `public_collection` | `true` | The shareable `/testimonials/new` page |
+| `public_collection` | `true` | The shareable `/testimonials/new` and `/testimonials/nps/new` pages |
 | `public_api` | `false` | Serve the read API without auth (CORS `*`) |
 | `nps` | `true` | The 0–10 NPS flow |
 | `nps_reprompt_after` | `90.days` | Cooldown between NPS asks |
@@ -241,11 +241,21 @@ throttle would allow it. Detractors (0–6) trigger `on_detractor`, which pairs
 well with [ideasbugs](https://github.com/yshmarov/ideasbugs). Your score and
 every response live at `/testimonials/nps_responses`.
 
-## The public collection page
+`/testimonials/nps/new` is the same question on its own page — the link for an
+email campaign, where there is no app session to prompt inside of. A promoter
+who scores 9–10 gets the testimonial form right there on the page.
 
-`/testimonials/new` is a standalone, self-styled page for customers outside the
-app — drop the link into an email or DM. Guests leave name, email, optional
-title/company and photo. Disable with `config.public_collection = false`.
+## The public pages
+
+Two standalone, self-styled pages for people outside the app — drop either link
+into an email or DM:
+
+| | |
+| --- | --- |
+| `/testimonials/new` | Leave a testimonial: name, email, optional title/company and photo |
+| `/testimonials/nps/new` | Score 0–10 with an optional comment (needs `config.nps`) |
+
+Disable both with `config.public_collection = false`.
 
 ## Multi-tenancy
 

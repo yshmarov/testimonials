@@ -1,6 +1,17 @@
 <% content_for :body_class, 'tm-nps-index' %>
 
-<h1><%= t('testimonials.dashboard.nps', default: 'NPS') %></h1>
+<div class="page-head">
+  <h1><%= t('testimonials.dashboard.nps', default: 'NPS') %></h1>
+  <%# The shareable NPS page, same idea as the testimonial one. This dashboard
+      still reads history when config.nps is off, but that page 404s — so the
+      link needs both switches. %>
+  <% if Testimonials.config.public_collection && Testimonials.config.nps %>
+    <a class="button share-link" href="<%= nps_collection_url %>" target="_blank" rel="noopener"
+       title="<%= nps_collection_url %>">
+      🔗 <%= t('testimonials.dashboard.nps_page', default: 'Ask for NPS scores') %>
+    </a>
+  <% end %>
+</div>
 
 <div class="stat-row">
   <div class="stat">

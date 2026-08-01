@@ -50,6 +50,8 @@ ja:
     page:
       title: "%{app}の体験を共有してください"
       subtitle: "あなたの言葉が他の方の判断を助けます — ありがとうございます！"
+      nps_title: "%{app} の改善にご協力ください"
+      nps_subtitle: "質問はひとつだけ — 10秒で終わります。"
     kinds:
       text: "テキスト"
       video: "動画"
@@ -57,8 +59,6 @@ ja:
       widget: "アプリ内ウィジェット"
       page: "収集ページ"
       nps: "NPSフォローアップ"
-      collection_page: "お客様の声を募集"
-      download_video: "動画をダウンロード"
     statuses:
       pending: "保留中"
       approved: "承認済み"
@@ -66,6 +66,9 @@ ja:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "NPSスコアを依頼"
+      collection_page: "お客様の声を募集"
+      download_video: "動画をダウンロード"
       all_kinds: "すべての種類"
       search: "検索"
       search_placeholder: "テキスト・名前・メールを検索…"

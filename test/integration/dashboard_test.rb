@@ -49,6 +49,39 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, 'data-host-admin-layout="testimonials"'
     assert_includes response.body, 'Wonderful tool'
+    # The share link lives on the page, not in the gem's nav, so a host layout
+    # keeps it.
+    assert_includes response.body, 'http://www.example.com/testimonials/new'
+  end
+
+  test 'each index links to its own public page' do
+    as_admin!
+
+    get '/testimonials'
+    assert_includes response.body, 'http://www.example.com/testimonials/new'
+    refute_includes response.body, 'http://www.example.com/testimonials/nps/new'
+
+    get '/testimonials/nps_responses'
+    assert_includes response.body, 'http://www.example.com/testimonials/nps/new'
+    refute_includes response.body, 'http://www.example.com/testimonials/new"'
+  end
+
+  test 'index share links follow the public_collection and nps switches' do
+    as_admin!
+    Testimonials.config.public_collection = false
+
+    get '/testimonials'
+    refute_includes response.body, '/testimonials/new'
+
+    get '/testimonials/nps_responses'
+    refute_includes response.body, '/testimonials/nps/new'
+
+    # NPS history stays readable with NPS off, but the page it would link to
+    # 404s — so the link goes away.
+    Testimonials.config.public_collection = true
+    Testimonials.config.nps = false
+    get '/testimonials/nps_responses'
+    refute_includes response.body, '/testimonials/nps/new'
   end
 
   test 'lists testimonials by status tab' do

@@ -50,6 +50,8 @@ en:
     page:
       title: "Share your experience with %{app}"
       subtitle: "Your words help others decide — thank you!"
+      nps_title: "Help us improve %{app}"
+      nps_subtitle: "One quick question — it takes ten seconds."
     kinds:
       text: "Text"
       video: "Video"
@@ -57,8 +59,6 @@ en:
       widget: "In-app widget"
       page: "Collection page"
       nps: "NPS follow-up"
-      collection_page: "Ask for testimonials"
-      download_video: "Download video"
     statuses:
       pending: "Pending"
       approved: "Approved"
@@ -66,6 +66,9 @@ en:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Ask for NPS scores"
+      collection_page: "Ask for testimonials"
+      download_video: "Download video"
       all_kinds: "All kinds"
       search: "Search"
       search_placeholder: "Search text, name, email…"

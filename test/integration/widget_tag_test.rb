@@ -114,4 +114,29 @@ class WidgetTagTest < ActionDispatch::IntegrationTest
     get '/testimonials/new'
     assert_response :not_found
   end
+
+  test 'public NPS page serves the inline NPS card by default' do
+    get '/testimonials/nps/new'
+    assert_response :ok
+    assert_includes response.body, 'data-testimonials-inline'
+    assert_includes response.body, '"mode":"nps_page"'
+  end
+
+  test 'public NPS page disappears when nps is off' do
+    Testimonials.config.nps = false
+    get '/testimonials/nps/new'
+    assert_response :not_found
+  end
+
+  test 'public NPS page disappears when public_collection is off' do
+    Testimonials.config.public_collection = false
+    get '/testimonials/nps/new'
+    assert_response :not_found
+  end
+
+  test 'public NPS page is gated by the enabled lambda' do
+    Testimonials.config.enabled = ->(_request) { false }
+    get '/testimonials/nps/new'
+    assert_response :forbidden
+  end
 end

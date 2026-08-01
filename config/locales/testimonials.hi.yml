@@ -50,6 +50,8 @@ hi:
     page:
       title: "%{app} के साथ अपना अनुभव साझा करें"
       subtitle: "आपके शब्द दूसरों को निर्णय लेने में मदद करते हैं — धन्यवाद!"
+      nps_title: "%{app} को बेहतर बनाने में हमारी मदद करें"
+      nps_subtitle: "एक छोटा सवाल — दस सेकंड लगेंगे।"
     kinds:
       text: "टेक्स्ट"
       video: "वीडियो"
@@ -57,8 +59,6 @@ hi:
       widget: "इन-ऐप विजेट"
       page: "संग्रह पृष्ठ"
       nps: "NPS फ़ॉलो-अप"
-      collection_page: "प्रशंसापत्र माँगें"
-      download_video: "वीडियो डाउनलोड करें"
     statuses:
       pending: "लंबित"
       approved: "स्वीकृत"
@@ -66,6 +66,9 @@ hi:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "NPS स्कोर मांगें"
+      collection_page: "प्रशंसापत्र माँगें"
+      download_video: "वीडियो डाउनलोड करें"
       all_kinds: "सभी प्रकार"
       search: "खोजें"
       search_placeholder: "टेक्स्ट, नाम, ईमेल खोजें…"

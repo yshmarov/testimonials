@@ -74,7 +74,8 @@ module Testimonials
     ].freeze
 
     NPS_RESPONSES = [
-      { seed_id: 'promoter', score: 10, comment: 'Fast to install and easy to trust because the data stays in our app.' },
+      { seed_id: 'promoter', score: 10,
+        comment: 'Fast to install and easy to trust because the data stays in our app.' },
       { seed_id: 'passive', score: 8, comment: 'The flow is useful, but I would like more display examples.' },
       { seed_id: 'detractor', score: 4, comment: 'I was not sure when the prompt would appear again.' }
     ].freeze
@@ -100,10 +101,9 @@ module Testimonials
           author_id: "testimonials-demo:#{seed_id}",
           tenant: tenant.presence
         )
-        testimonial.assign_attributes(attributes.except(:seed_id).merge(
-          tenant: tenant.presence,
-          user_agent: 'testimonials demo seed'
-        ))
+        testimonial.assign_attributes(
+          attributes.except(:seed_id).merge(tenant: tenant.presence, user_agent: 'testimonials demo seed')
+        )
         testimonial.save!
         attach_demo_video!(testimonial) if seed_id == 'approved-video'
         testimonial
@@ -118,14 +118,16 @@ module Testimonials
           author_id: "testimonials-demo:nps-#{seed_id}",
           tenant: tenant.presence
         )
-        response.assign_attributes(attributes.except(:seed_id).merge(
-          name: 'Demo Respondent',
-          email: "#{seed_id}@example.com",
-          page_url: '/dashboard',
-          user_agent: 'testimonials demo seed',
-          locale: 'en',
-          tenant: tenant.presence
-        ))
+        response.assign_attributes(
+          attributes.except(:seed_id).merge(
+            name: 'Demo Respondent',
+            email: "#{seed_id}@example.com",
+            page_url: '/dashboard',
+            user_agent: 'testimonials demo seed',
+            locale: 'en',
+            tenant: tenant.presence
+          )
+        )
         response.save!
         response
       end

@@ -50,6 +50,8 @@ th:
     page:
       title: "แบ่งปันประสบการณ์ของคุณกับ %{app}"
       subtitle: "คำพูดของคุณช่วยให้คนอื่นตัดสินใจได้ — ขอบคุณ!"
+      nps_title: "ช่วยเราปรับปรุง %{app}"
+      nps_subtitle: "คำถามเดียวสั้น ๆ — ใช้เวลาสิบวินาที"
     kinds:
       text: "ข้อความ"
       video: "วิดีโอ"
@@ -57,8 +59,6 @@ th:
       widget: "วิดเจ็ตในแอป"
       page: "หน้ารวบรวม"
       nps: "ติดตามผล NPS"
-      collection_page: "ขอคำรับรอง"
-      download_video: "ดาวน์โหลดวิดีโอ"
     statuses:
       pending: "รอดำเนินการ"
       approved: "อนุมัติแล้ว"
@@ -66,6 +66,9 @@ th:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "ขอคะแนน NPS"
+      collection_page: "ขอคำรับรอง"
+      download_video: "ดาวน์โหลดวิดีโอ"
       all_kinds: "ทุกประเภท"
       search: "ค้นหา"
       search_placeholder: "ค้นหาข้อความ ชื่อ อีเมล…"

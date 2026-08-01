@@ -50,6 +50,8 @@ el:
     page:
       title: "Μοιραστείτε την εμπειρία σας με το %{app}"
       subtitle: "Τα λόγια σας βοηθούν άλλους να αποφασίσουν — ευχαριστούμε!"
+      nps_title: "Βοηθήστε μας να βελτιώσουμε το %{app}"
+      nps_subtitle: "Μία γρήγορη ερώτηση — παίρνει δέκα δευτερόλεπτα."
     kinds:
       text: "Κείμενο"
       video: "Βίντεο"
@@ -57,8 +59,6 @@ el:
       widget: "Widget εντός εφαρμογής"
       page: "Σελίδα συλλογής"
       nps: "Συνέχεια NPS"
-      collection_page: "Ζητήστε μαρτυρίες"
-      download_video: "Λήψη βίντεο"
     statuses:
       pending: "Σε εκκρεμότητα"
       approved: "Εγκεκριμένο"
@@ -66,6 +66,9 @@ el:
     dashboard:
       title: "Testimonials"
       nps: "NPS"
+      nps_page: "Ζητήστε βαθμολογίες NPS"
+      collection_page: "Ζητήστε μαρτυρίες"
+      download_video: "Λήψη βίντεο"
       all_kinds: "Όλα τα είδη"
       search: "Αναζήτηση"
       search_placeholder: "Αναζήτηση κειμένου, ονόματος, email…"
