@@ -72,4 +72,22 @@ class NpsTest < ActionDispatch::IntegrationTest
     post '/testimonials/nps', params: { nps: { score: 10 } }
     assert_response :forbidden
   end
+
+  test 'the dashboard is gone when config.nps is false' do
+    as_admin!
+    response_record = Testimonials::NpsResponse.create!(score: 9)
+    Testimonials.config.nps = false
+
+    # An install run with --skip-nps has no table behind these pages.
+    get '/testimonials/nps_responses'
+    assert_response :not_found
+
+    get "/testimonials/nps_responses/#{response_record.id}"
+    assert_response :not_found
+
+    # And the dashboard nav does not offer a link to them.
+    get '/testimonials'
+    assert_response :ok
+    refute_includes response.body, 'nps_responses'
+  end
 end

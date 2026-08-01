@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.9
+
+- NPS is now optional at install time. `bin/rails generate testimonials:install
+  --skip-nps` leaves out the `testimonials_nps_responses` table and writes
+  `config.nps = false`, so an app that only wants testimonials carries neither
+  the table nor the NPS tab. `bin/rails generate testimonials:nps` adds the
+  table later, mirroring the `testimonials:tenant` upgrade path.
+- The guard is `config.nps`, not table introspection — nothing checks the
+  schema at runtime and nothing touches the database at boot. Consequently
+  `/testimonials/nps_responses` now 404s when `config.nps` is false instead of
+  still serving history; flip the flag back to read old responses. The
+  dashboard nav already hid the tab, so only a typed URL reached it.
+- `testimonials:seed_demo` skips NPS rows when the flow is off, and the
+  `testimonials:tenant` migration skips the NPS table when it isn't there.
+
 ## 0.7.8
 
 - The NPS dashboard now says what the score means. The card carries the band

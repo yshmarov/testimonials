@@ -20,6 +20,16 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal 0, Testimonials::NpsResponse.score
   end
 
+  test 'skips NPS rows when the install left the table out' do
+    Testimonials.config.nps = false
+
+    result = Testimonials::Seeds.load!
+
+    assert_empty result[:nps_responses]
+    assert_equal 0, Testimonials::NpsResponse.count
+    assert_equal 4, result[:testimonials].size
+  end
+
   test 'attaches a real demo video when Active Storage is available' do
     Testimonials::Seeds.load!
 

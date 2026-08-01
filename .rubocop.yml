@@ -4,6 +4,8 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - "test/dummy/**/*"
+    # Generator output written by the generator tests, not source.
+    - "test/tmp/**/*"
     - "bin/**/*"
     - "vendor/**/*"
     - "tmp/**/*"

@@ -84,7 +84,15 @@ Testimonials.configure do |config|
   # config.public_api = false
 
   # NPS surveys. Promoters (9–10) are offered the testimonial form right away.
+<% if options[:skip_nps] -%>
+  # Installed with --skip-nps, so there is no testimonials_nps_responses table
+  # and the NPS flow, dashboard tab and public page stay off. To add it later:
+  # `bin/rails generate testimonials:nps && bin/rails db:migrate`, then flip
+  # this to true.
+  config.nps = false
+<% else -%>
   # config.nps = true
+<% end -%>
   # config.nps_reprompt_after = 90.days
 
   # Called with each saved Testimonial or NpsResponse — notify Slack, email…

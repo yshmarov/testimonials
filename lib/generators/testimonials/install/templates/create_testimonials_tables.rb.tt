@@ -27,6 +27,7 @@ class CreateTestimonialsTables < ActiveRecord::Migration<%= migration_version %>
     add_index :testimonials_testimonials, %i[tenant status]
     add_index :testimonials_testimonials, %i[tenant status consent_given]
 
+<% unless options[:skip_nps] -%>
     create_table :testimonials_nps_responses do |t|
       t.integer :score, null: false
       t.text :comment
@@ -42,6 +43,7 @@ class CreateTestimonialsTables < ActiveRecord::Migration<%= migration_version %>
     end
     add_index :testimonials_nps_responses, %i[tenant score]
 
+<% end -%>
     create_table :testimonials_prompt_events do |t|
       t.string :kind, null: false
       t.string :action, null: false

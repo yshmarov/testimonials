@@ -8,6 +8,9 @@ module Testimonials
     layout :testimonials_admin_layout
 
     before_action :require_admin
+    # An install run with --skip-nps has no table behind these pages, and the
+    # nav already hides the tab whenever config.nps is off.
+    before_action :require_nps
     before_action :set_response, only: :show
 
     def index
@@ -30,6 +33,10 @@ module Testimonials
     def show; end
 
     private
+
+    def require_nps
+      head :not_found unless Testimonials.config.nps
+    end
 
     def set_response
       @response = NpsResponse.for_tenant(current_tenant).find(params[:id])

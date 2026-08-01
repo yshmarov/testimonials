@@ -12,8 +12,15 @@ module Testimonials
 
       desc 'Installs testimonials: config initializer, migration, and engine mount.'
 
+      # NPS is the one part of the gem an app can genuinely not want. Skipping
+      # it leaves out the table and writes `config.nps = false`, so nothing
+      # ever reaches a table that isn't there — no runtime introspection, no
+      # boot-time database call. `testimonials:nps` adds it later.
+      class_option :skip_nps, type: :boolean, default: false,
+                              desc: 'Leave out the NPS table and turn the NPS flow off'
+
       def create_initializer
-        copy_file 'initializer.rb', 'config/initializers/testimonials.rb'
+        template 'initializer.rb.tt', 'config/initializers/testimonials.rb'
       end
 
       def create_migration_file
@@ -29,8 +36,12 @@ module Testimonials
         say "\ntestimonials installed. Run `rails db:migrate`, then add", :green
         say '`<%= testimonials_tag %>` before </body> in your layout.'
         say 'Triage testimonials at /testimonials (development only until you set config.authorize_admin).'
-        say 'Optional: run `bin/rails testimonials:seed_demo` for sample testimonials and NPS.'
+        samples = options[:skip_nps] ? 'testimonials' : 'testimonials and NPS'
+        say "Optional: run `bin/rails testimonials:seed_demo` for sample #{samples}."
         say "Collect from outside the app via /testimonials/new.\n"
+        return unless options[:skip_nps]
+
+        say 'Installed without NPS. Add it later with `bin/rails generate testimonials:nps`.', :yellow
       end
 
       private

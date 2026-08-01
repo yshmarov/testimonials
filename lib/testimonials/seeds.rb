@@ -90,7 +90,8 @@ module Testimonials
     def self.load!(tenant: nil)
       {
         testimonials: load_testimonials!(tenant: tenant),
-        nps_responses: load_nps_responses!(tenant: tenant),
+        # An install run with --skip-nps has no table to seed into.
+        nps_responses: (Testimonials.config.nps ? load_nps_responses!(tenant: tenant) : []),
         prompt_events: load_prompt_events!(tenant: tenant)
       }
     end

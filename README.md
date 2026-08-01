@@ -33,6 +33,15 @@ bin/rails db:migrate
 The generator writes the initializer, the migration, and mounts the engine at
 `/testimonials`. Nothing renders until the widget is opened.
 
+Don't want NPS? Install without it — no table, no dashboard tab, no prompt:
+
+```bash
+bin/rails generate testimonials:install --skip-nps
+```
+
+Changed your mind later: `bin/rails generate testimonials:nps`, migrate, and
+set `config.nps = true`.
+
 Optional demo data:
 
 ```bash
@@ -242,15 +251,28 @@ throttle would allow it. Detractors (0–6) trigger `on_detractor`, which pairs
 well with [ideasbugs](https://github.com/yshmarov/ideasbugs). Your score and
 every response live at `/testimonials/nps_responses`.
 
+| 1. One question, eleven taps | 2. The reason, optional |
+| --- | --- |
+| ![The NPS prompt: how likely are you to recommend us, scored 0 to 10](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/nps-01-score.jpg) | ![The follow-up asking for the main reason behind the score](https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/nps-02-comment.png) |
+| Ten seconds of work, and "Not now" is always there. | The comment is where the actionable half lives. Promoters go straight on to the testimonial form. |
+
 The score is `% promoters − % detractors`, from −100 to +100, and the dashboard
 reads it against the usual benchmarks so nobody has to go and google them:
 below 0 needs work, 0–29 is good, 30–69 is great, 70 and up is world-class. A
 scale under the number shows where you sit, and under 30 responses the card
 says the sample is too thin to read much into.
 
+<img src="https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/nps-dashboard.jpg" alt="The NPS dashboard: a score of 41 badged Great, a scale marking where it sits between −100 and +100, promoter/passive/detractor counts, and the collapsed panel explaining the formula and the benchmarks" width="820">
+
 `/testimonials/nps/new` is the same question on its own page — the link for an
 email campaign, where there is no app session to prompt inside of. A promoter
 who scores 9–10 gets the testimonial form right there on the page.
+
+NPS is optional. `config.nps = false` — what `--skip-nps` writes at install —
+turns off the prompt, the public page, the `/api/stats` score and the dashboard
+tab, and `/testimonials/nps_responses` then 404s. Turning it off on an install
+that has the table hides existing responses along with everything else; flip it
+back to read them.
 
 ## The public pages
 
