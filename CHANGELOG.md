@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.7
+
+- Shrank the gem from 1.0 MB back to ~90 KB by dropping the bundled 1.1 MB demo
+  video. `testimonials:seed_demo` now writes a ~4 KB embedded clip (three
+  seconds of 320x180 H.264) to Active Storage at seed time, so the demo
+  testimonial still plays and no app downloads media it never uses. Seeding
+  needs no ffmpeg and no network.
+
 ## 0.7.6
 
 - Added a standalone public NPS page at `/testimonials/nps/new`, the shareable

@@ -40,8 +40,9 @@ bin/rails testimonials:seed_demo
 ```
 
 It creates idempotent text testimonials, one approved video testimonial with a
-bundled real MP4 attachment, three NPS responses, and prompt-history examples.
-Running the task again refreshes those records instead of duplicating them.
+real playable MP4 (a ~4 KB clip written at seed time, so the gem ships no media),
+three NPS responses, and prompt-history examples. Running the task again
+refreshes those records instead of duplicating them.
 
 > [!IMPORTANT]
 > The dashboard defaults to **development only**. Set `authorize_admin` before

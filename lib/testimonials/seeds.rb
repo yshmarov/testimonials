@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+require 'stringio'
+require_relative 'demo_video'
+
 module Testimonials
   module Seeds
-    VIDEO_PATH = File.expand_path('demo/flower.mp4', __dir__)
-
     TESTIMONIALS = [
       {
         seed_id: 'approved-founder',
@@ -149,15 +150,12 @@ module Testimonials
       return unless Testimonials.config.video_enabled?
       return unless testimonial.respond_to?(:video_file)
       return if testimonial.video_file.attached?
-      return unless File.exist?(VIDEO_PATH)
 
-      File.open(VIDEO_PATH, 'rb') do |file|
-        testimonial.video_file.attach(
-          io: file,
-          filename: 'testimonials-demo-flower.mp4',
-          content_type: 'video/mp4'
-        )
-      end
+      testimonial.video_file.attach(
+        io: StringIO.new(DemoVideo.bytes),
+        filename: DemoVideo::FILENAME,
+        content_type: DemoVideo::CONTENT_TYPE
+      )
     end
     private_class_method :attach_demo_video!
   end
