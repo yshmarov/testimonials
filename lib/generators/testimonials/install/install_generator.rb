@@ -29,6 +29,7 @@ module Testimonials
         say "\ntestimonials installed. Run `rails db:migrate`, then add", :green
         say '`<%= testimonials_tag %>` before </body> in your layout.'
         say 'Triage testimonials at /testimonials (development only until you set config.authorize_admin).'
+        say 'Optional: run `bin/rails testimonials:seed_demo` for sample testimonials and NPS.'
         say "Collect from outside the app via /testimonials/new.\n"
       end
 

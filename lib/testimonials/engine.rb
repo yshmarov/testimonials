@@ -4,6 +4,10 @@ module Testimonials
   class Engine < ::Rails::Engine
     isolate_namespace Testimonials
 
+    rake_tasks do
+      load File.expand_path('../tasks/testimonials_tasks.rake', __dir__)
+    end
+
     initializer 'testimonials.helpers' do
       ActiveSupport.on_load(:action_view) do
         include Testimonials::WidgetHelper

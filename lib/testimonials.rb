@@ -5,6 +5,7 @@ require 'testimonials/configuration'
 require 'testimonials/widget'
 require 'testimonials/prompt_helper'
 require 'testimonials/has_testimonials'
+require 'testimonials/seeds'
 require 'testimonials/engine'
 
 # Testimonials, reviews and NPS for Rails. An iOS-style in-app widget collects
