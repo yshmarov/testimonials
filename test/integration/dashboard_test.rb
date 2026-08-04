@@ -50,7 +50,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get '/testimonials/dashboard.css'
     assert_response :ok
     assert_equal 'text/css', response.media_type
-    assert_includes response.body, '.tml-nav'
+    assert_includes response.body, '& .nav'
     assert_includes response.body, '.tm-show { min-height: 100vh; overflow: auto; }'
   end
 
@@ -189,7 +189,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get "/testimonials/#{@testimonial.id}"
 
     assert_response :ok
-    assert_includes response.body, 'class="tm-show"'
+    assert_includes response.body, 'tm-show"'
     assert_includes response.body, 'Wonderful tool'
     assert_includes response.body, 'Best line'
   end
@@ -249,9 +249,32 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get "/testimonials/nps_responses/#{nps_response.id}"
 
     assert_response :ok
-    assert_includes response.body, 'class="tm-show"'
+    assert_includes response.body, 'tm-show"'
     assert_includes response.body, 'Superb'
     assert_includes response.body, 'Ada'
+  end
+
+  # A comment containing a comma used to be split as if it were a selector list,
+  # which invalidates the whole list and silently drops the rule that follows.
+  # Three of these gems shipped that. Nothing in a rendered stylesheet should
+  # ever have comment syntax in selector position.
+  test 'no selector contains comment syntax' do
+    get '/testimonials/dashboard.css'
+
+    stripped = response.body.gsub(%r{/\*.*?\*/}m, '')
+    stripped.scan(/([^{}]*)\{/).flatten.each do |selector|
+      refute_includes selector, '/*', "selector #{selector.strip.inspect} has an unclosed comment in it"
+      refute_includes selector, '*/', "selector #{selector.strip.inspect} has a stray comment terminator"
+    end
+  end
+
+  # Braces must balance once comments are removed, or a nesting bug has eaten a
+  # rule somewhere.
+  test 'the stylesheet braces balance' do
+    get '/testimonials/dashboard.css'
+
+    stripped = response.body.gsub(%r{/\*.*?\*/}m, '')
+    assert_equal stripped.count('{'), stripped.count('}'), 'unbalanced braces in dashboard.css'
   end
 
   private
