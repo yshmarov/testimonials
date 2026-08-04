@@ -12,6 +12,35 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  # The routes used to be constrained to `id: /\d+/`, which quietly made the
+  # whole gem bigint-only: a uuid-keyed host could not use uuid tables without
+  # 404ing show, update, destroy and all three media routes.
+  test 'record routes accept a non-integer primary key' do
+    uuid = '0f8fad5b-d9cb-469f-a165-70867728950e'
+    engine = Testimonials::Engine.routes
+
+    assert_equal({ controller: 'testimonials/testimonials', action: 'show', id: uuid },
+                 engine.recognize_path("/#{uuid}", method: :get))
+    assert_equal({ controller: 'testimonials/testimonials', action: 'update', id: uuid },
+                 engine.recognize_path("/#{uuid}", method: :patch))
+    assert_equal({ controller: 'testimonials/testimonials', action: 'destroy', id: uuid },
+                 engine.recognize_path("/#{uuid}", method: :delete))
+    assert_equal({ controller: 'testimonials/media', action: 'video', id: uuid },
+                 engine.recognize_path("/#{uuid}/video", method: :get))
+  end
+
+  # The fixed-name routes are declared first, so dropping the id constraint
+  # must not let "/new" or "/dashboard.css" fall through to #show.
+  test 'the fixed-name routes still win over the catch-all id route' do
+    engine = Testimonials::Engine.routes
+
+    assert_equal 'testimonials/collection', engine.recognize_path('/new', method: :get)[:controller]
+    assert_equal 'testimonials/widgets', engine.recognize_path('/dashboard.css', method: :get)[:controller]
+    assert_equal 'testimonials/widgets', engine.recognize_path('/widget.js', method: :get)[:controller]
+    assert_equal 'testimonials/nps_responses', engine.recognize_path('/nps_responses', method: :get)[:controller]
+    assert_equal 'testimonials/api/testimonials', engine.recognize_path('/api/testimonials', method: :get)[:controller]
+  end
+
   test 'serves the dashboard helper script and stylesheet as same-origin static assets' do
     get '/testimonials/dashboard.js'
     assert_response :ok

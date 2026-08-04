@@ -2,7 +2,7 @@
 
 class CreateTestimonialsNpsResponses < ActiveRecord::Migration<%= migration_version %>
   def change
-    create_table :testimonials_nps_responses do |t|
+    create_table :testimonials_nps_responses<%= primary_key_type_option %> do |t|
       t.integer :score, null: false
       t.text :comment
       t.string :author_id

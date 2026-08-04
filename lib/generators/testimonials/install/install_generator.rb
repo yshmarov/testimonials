@@ -2,11 +2,13 @@
 
 require 'rails/generators'
 require 'rails/generators/active_record'
+require_relative '../migration_helpers'
 
 module Testimonials
   module Generators
     class InstallGenerator < Rails::Generators::Base
       include ActiveRecord::Generators::Migration
+      include MigrationHelpers
 
       source_root File.expand_path('templates', __dir__)
 
@@ -58,12 +60,6 @@ module Testimonials
         say 'Installed without prompt history, so testimonial_prompt! will not auto-open the ' \
             'widget — open it from your own button. Add it later with ' \
             '`bin/rails generate testimonials:prompt_events`.', :yellow
-      end
-
-      private
-
-      def migration_version
-        "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
       end
     end
   end

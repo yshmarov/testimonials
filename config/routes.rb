@@ -22,14 +22,21 @@ Testimonials::Engine.routes.draw do
   end
 
   # Media by testimonial id, gated (admin, author, or public_api + publishable).
-  get ':id/video', to: 'media#video', as: :testimonial_video, constraints: { id: /\d+/ }
-  get ':id/poster', to: 'media#poster', as: :testimonial_poster, constraints: { id: /\d+/ }
-  get ':id/avatar', to: 'media#avatar', as: :testimonial_avatar, constraints: { id: /\d+/ }
+  get ':id/video', to: 'media#video', as: :testimonial_video
+  get ':id/poster', to: 'media#poster', as: :testimonial_poster
+  get ':id/avatar', to: 'media#avatar', as: :testimonial_avatar
 
   # Flat, human URLs: the mount path IS the resource. /testimonials is the
   # dashboard, POST /testimonials the widget endpoint, /testimonials/2 a testimonial.
-  resources :testimonials, path: '', only: %i[create index show update destroy],
-                           constraints: { id: /\d+/ }
+  #
+  # No `id: /\d+/` constraint: it made these routes bigint-only, which forced
+  # the tables to be bigint too, which meant a uuid-keyed host could never
+  # attach a video or avatar (its active_storage_attachments.record_id is a
+  # uuid column). The constraint was never load-bearing — every fixed-name
+  # route above is declared first, so ordering already does the disambiguating,
+  # and an id that matches no record still 404s, just via RecordNotFound rather
+  # than a routing error.
+  resources :testimonials, path: '', only: %i[create index show update destroy]
 
   root to: 'testimonials#index'
 end

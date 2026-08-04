@@ -2,6 +2,7 @@
 
 require 'rails/generators'
 require 'rails/generators/active_record'
+require_relative '../migration_helpers'
 
 module Testimonials
   module Generators
@@ -13,6 +14,7 @@ module Testimonials
     #   bin/rails generate testimonials:prompt_events && bin/rails db:migrate
     class PromptEventsGenerator < Rails::Generators::Base
       include ActiveRecord::Generators::Migration
+      include MigrationHelpers
 
       source_root File.expand_path('templates', __dir__)
 
@@ -27,12 +29,6 @@ module Testimonials
         say "\nPrompt history table queued. Run `rails db:migrate`, then set", :green
         say 'config.prompt_events = true in config/initializers/testimonials.rb to let'
         say 'testimonial_prompt! auto-open the widget again.'
-      end
-
-      private
-
-      def migration_version
-        "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
       end
     end
   end

@@ -2,7 +2,7 @@
 
 class CreateTestimonialsTables < ActiveRecord::Migration<%= migration_version %>
   def change
-    create_table :testimonials_testimonials do |t|
+    create_table :testimonials_testimonials<%= primary_key_type_option %> do |t|
       t.string :kind, null: false, default: 'text'
       t.text :body
       t.integer :rating
@@ -28,7 +28,7 @@ class CreateTestimonialsTables < ActiveRecord::Migration<%= migration_version %>
     add_index :testimonials_testimonials, %i[tenant status consent_given]
 <% unless options[:skip_nps] -%>
 
-    create_table :testimonials_nps_responses do |t|
+    create_table :testimonials_nps_responses<%= primary_key_type_option %> do |t|
       t.integer :score, null: false
       t.text :comment
       t.string :author_id
@@ -45,7 +45,7 @@ class CreateTestimonialsTables < ActiveRecord::Migration<%= migration_version %>
 <% end -%>
 <% unless options[:skip_prompt_events] -%>
 
-    create_table :testimonials_prompt_events do |t|
+    create_table :testimonials_prompt_events<%= primary_key_type_option %> do |t|
       t.string :kind, null: false
       t.string :action, null: false
       t.string :author_id

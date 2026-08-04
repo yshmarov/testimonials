@@ -2,6 +2,7 @@
 
 require 'rails/generators'
 require 'rails/generators/active_record'
+require_relative '../migration_helpers'
 
 module Testimonials
   module Generators
@@ -12,6 +13,7 @@ module Testimonials
     #   bin/rails generate testimonials:nps && bin/rails db:migrate
     class NpsGenerator < Rails::Generators::Base
       include ActiveRecord::Generators::Migration
+      include MigrationHelpers
 
       source_root File.expand_path('templates', __dir__)
 
@@ -25,12 +27,6 @@ module Testimonials
       def post_install
         say "\nNPS table queued. Run `rails db:migrate`, then set", :green
         say 'config.nps = true in config/initializers/testimonials.rb to turn the flow on.'
-      end
-
-      private
-
-      def migration_version
-        "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
       end
     end
   end

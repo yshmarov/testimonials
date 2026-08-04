@@ -2,6 +2,7 @@
 
 require 'rails/generators'
 require 'rails/generators/active_record'
+require_relative '../migration_helpers'
 
 module Testimonials
   module Generators
@@ -15,6 +16,7 @@ module Testimonials
     #   bin/rails generate testimonials:tenant && bin/rails db:migrate
     class TenantGenerator < Rails::Generators::Base
       include ActiveRecord::Generators::Migration
+      include MigrationHelpers
 
       source_root File.expand_path('templates', __dir__)
 
@@ -28,12 +30,6 @@ module Testimonials
       def post_install
         say "\ntenant column queued. Run `rails db:migrate`, then set", :green
         say 'config.tenant in config/initializers/testimonials.rb to scope per tenant.'
-      end
-
-      private
-
-      def migration_version
-        "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
       end
     end
   end

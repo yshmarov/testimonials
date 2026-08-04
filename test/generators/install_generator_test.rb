@@ -34,6 +34,46 @@ class InstallGeneratorTest < Rails::Generators::TestCase
     end
   end
 
+  # A uuid-keyed host has a uuid `active_storage_attachments.record_id`, so
+  # bigint tables here could never hold a video or avatar — the attachment's
+  # foreign key has nowhere to point. Follow the host's setting, like Rails'
+  # own Active Storage / Action Text / Action Mailbox migrations do.
+  test 'the tables follow the host generators primary_key_type' do
+    with_primary_key_type(:uuid) do
+      run_generator
+
+      assert_migration 'db/migrate/create_testimonials_tables.rb' do |migration|
+        assert_match 'create_table :testimonials_testimonials, id: :uuid', migration
+        assert_match 'create_table :testimonials_nps_responses, id: :uuid', migration
+        assert_match 'create_table :testimonials_prompt_events, id: :uuid', migration
+      end
+    end
+  end
+
+  test 'the tables take no id option when the host sets nothing' do
+    with_primary_key_type(nil) do
+      run_generator
+
+      assert_migration 'db/migrate/create_testimonials_tables.rb' do |migration|
+        assert_match 'create_table :testimonials_testimonials do |t|', migration
+        refute_match 'id:', migration
+      end
+    end
+  end
+
+  # A template is expanded at generate time, so the option has to be the
+  # resolved value. Emitting the helper's name would leave `id: primary_key_type`
+  # in the migration, which raises NameError on db:migrate.
+  test 'the generated migration carries no unresolved helper call' do
+    with_primary_key_type(:uuid) do
+      run_generator
+
+      assert_migration 'db/migrate/create_testimonials_tables.rb' do |migration|
+        refute_match 'primary_key_type', migration
+      end
+    end
+  end
+
   test '--skip-nps leaves out the table and turns the flow off' do
     run_generator ['--skip-nps']
 
@@ -110,6 +150,15 @@ class InstallGeneratorTest < Rails::Generators::TestCase
   def write_routes
     FileUtils.mkdir_p(File.join(destination_root, 'config'))
     File.write(File.join(destination_root, 'config/routes.rb'), "Rails.application.routes.draw do\nend\n")
+  end
+
+  def with_primary_key_type(type)
+    config = Rails.configuration.generators
+    previous = config.options[config.orm][:primary_key_type]
+    config.options[config.orm][:primary_key_type] = type
+    yield
+  ensure
+    config.options[config.orm][:primary_key_type] = previous
   end
 end
 
