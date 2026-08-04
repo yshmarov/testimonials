@@ -30,6 +30,17 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal 4, result[:testimonials].size
   end
 
+  test 'skips prompt history when the install left that table out' do
+    Testimonials.config.prompt_events = false
+
+    result = Testimonials::Seeds.load!
+
+    assert_empty result[:prompt_events]
+    assert_equal 0, Testimonials::PromptEvent.count
+    assert_equal 4, result[:testimonials].size
+    assert_equal 3, result[:nps_responses].size
+  end
+
   test 'attaches a real demo video when Active Storage is available' do
     Testimonials::Seeds.load!
 

@@ -69,6 +69,15 @@ module Testimonials
     # (clicking your link) always work.
     attr_accessor :reprompt_after, :max_prompts
 
+    # The throttling ledger itself (testimonials_prompt_events). Off means no
+    # per-user prompt history is written — and therefore no auto-prompts:
+    # `testimonial_prompt!` stops opening the widget, because a prompt that
+    # can't be throttled would reopen on every page. Explicit opens — your
+    # own button, `data-testimonial-prompt`, `window.Testimonials.open()`,
+    # the public pages — are unaffected. For apps that only ever open the
+    # widget on a click; `--skip-prompt-events` writes it at install time.
+    attr_accessor :prompt_events
+
     # Consent line stored verbatim with each submission. nil uses the
     # localized default.
     attr_accessor :consent_text
@@ -123,6 +132,7 @@ module Testimonials
       @storage_service = nil
       @reprompt_after = 90 * 24 * 60 * 60
       @max_prompts = 3
+      @prompt_events = true
       @consent_text = nil
       @public_collection = true
       @public_api = false

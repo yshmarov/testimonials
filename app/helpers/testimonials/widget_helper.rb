@@ -72,6 +72,10 @@ module Testimonials
       kind = flash[:testimonials_prompt].to_s
       return unless Testimonials::PromptEvent::KINDS.include?(kind)
       return if kind == 'nps' && !Testimonials.config.nps
+      # Without the ledger there is no record of who has been asked already, so
+      # an auto-open would reopen on every page a testimonial_prompt! reaches.
+      # An install with --skip-prompt-events opens on a click and nothing else.
+      return unless Testimonials.config.prompt_events
 
       author = testimonials_author
       return unless Testimonials::PromptEvent.eligible?(

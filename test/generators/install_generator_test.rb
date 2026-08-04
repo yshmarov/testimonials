@@ -4,16 +4,18 @@ require 'test_helper'
 require 'rails/generators/test_case'
 require 'generators/testimonials/install/install_generator'
 require 'generators/testimonials/nps/nps_generator'
+require 'generators/testimonials/prompt_events/prompt_events_generator'
 
-# NPS is the one part an app can opt out of, and opting out changes the schema
-# — so both shapes are pinned here rather than left to a manual install.
+# NPS and the prompt-history ledger are the two parts an app can opt out of,
+# and opting out changes the schema — so every shape is pinned here rather than
+# left to a manual install.
 class InstallGeneratorTest < Rails::Generators::TestCase
   tests Testimonials::Generators::InstallGenerator
   destination File.expand_path('../tmp/generator', __dir__)
   setup :prepare_destination
   setup :write_routes
 
-  test 'a full install creates every table and leaves config.nps at its default' do
+  test 'a full install creates every table and leaves both flags at their defaults' do
     run_generator
 
     assert_migration 'db/migrate/create_testimonials_tables.rb' do |migration|
@@ -21,11 +23,14 @@ class InstallGeneratorTest < Rails::Generators::TestCase
       assert_match 'create_table :testimonials_nps_responses', migration
       assert_match 'create_table :testimonials_prompt_events', migration
       assert_match 'add_index :testimonials_nps_responses, %i[tenant score]', migration
+      assert_match 'add_index :testimonials_prompt_events, %i[tenant author_id kind]', migration
     end
 
     assert_file 'config/initializers/testimonials.rb' do |initializer|
       assert_match '# config.nps = true', initializer
+      assert_match '# config.prompt_events = true', initializer
       refute_match(/^  config\.nps = false/, initializer)
+      refute_match(/^  config\.prompt_events = false/, initializer)
     end
   end
 
@@ -41,23 +46,65 @@ class InstallGeneratorTest < Rails::Generators::TestCase
     assert_file 'config/initializers/testimonials.rb' do |initializer|
       assert_match(/^  config\.nps = false/, initializer)
       assert_match 'testimonials:nps', initializer
+      refute_match(/^  config\.prompt_events = false/, initializer)
     end
   end
 
-  test 'the initializer template stays valid ruby either way' do
-    run_generator ['--skip-nps']
-    path = File.join(destination_root, 'config/initializers/testimonials.rb')
+  test '--skip-prompt-events leaves out the ledger and turns auto-prompts off' do
+    run_generator ['--skip-prompt-events']
 
-    assert RubyVM::InstructionSequence.compile(File.read(path))
+    assert_migration 'db/migrate/create_testimonials_tables.rb' do |migration|
+      assert_match 'create_table :testimonials_testimonials', migration
+      assert_match 'create_table :testimonials_nps_responses', migration
+      refute_match 'testimonials_prompt_events', migration
+    end
+
+    assert_file 'config/initializers/testimonials.rb' do |initializer|
+      assert_match(/^  config\.prompt_events = false/, initializer)
+      assert_match 'testimonials:prompt_events', initializer
+      refute_match(/^  config\.nps = false/, initializer)
+    end
   end
 
-  test 'both installs mount the engine' do
-    run_generator ['--skip-nps']
+  test 'skipping both leaves the testimonials table alone' do
+    run_generator %w[--skip-nps --skip-prompt-events]
+
+    assert_migration 'db/migrate/create_testimonials_tables.rb' do |migration|
+      assert_match 'create_table :testimonials_testimonials', migration
+      refute_match 'testimonials_nps_responses', migration
+      refute_match 'testimonials_prompt_events', migration
+    end
+
+    assert_file 'config/initializers/testimonials.rb' do |initializer|
+      assert_match(/^  config\.nps = false/, initializer)
+      assert_match(/^  config\.prompt_events = false/, initializer)
+    end
+  end
+
+  # The migration and the initializer are both ERB with conditional bodies, so
+  # every combination has to come out as compilable Ruby.
+  test 'the templates stay valid ruby in every shape' do
+    [[], %w[--skip-nps], %w[--skip-prompt-events], %w[--skip-nps --skip-prompt-events]].each do |flags|
+      prepare_destination
+      write_routes
+      run_generator flags
+
+      assert_ruby File.join(destination_root, 'config/initializers/testimonials.rb')
+      assert_ruby Dir[File.join(destination_root, 'db/migrate/*_create_testimonials_tables.rb')].sole
+    end
+  end
+
+  test 'every install shape mounts the engine' do
+    run_generator %w[--skip-nps --skip-prompt-events]
 
     assert_file 'config/routes.rb', %r{mount_testimonials at: "/testimonials"}
   end
 
   private
+
+  def assert_ruby(path)
+    assert RubyVM::InstructionSequence.compile(File.read(path)), "#{path} is not valid Ruby"
+  end
 
   # `route` needs somewhere to inject; without it the generator only warns.
   def write_routes
@@ -78,6 +125,23 @@ class NpsGeneratorTest < Rails::Generators::TestCase
       assert_match 'create_table :testimonials_nps_responses', migration
       assert_match 't.string :tenant', migration
       assert_match 'add_index :testimonials_nps_responses, %i[tenant score]', migration
+    end
+  end
+end
+
+class PromptEventsGeneratorTest < Rails::Generators::TestCase
+  tests Testimonials::Generators::PromptEventsGenerator
+  destination File.expand_path('../tmp/generator', __dir__)
+  setup :prepare_destination
+
+  test 'adds the ledger a --skip-prompt-events install left out, tenant column included' do
+    run_generator
+
+    assert_migration 'db/migrate/create_testimonials_prompt_events.rb' do |migration|
+      assert_match 'create_table :testimonials_prompt_events', migration
+      assert_match 't.string :tenant', migration
+      assert_match 'add_index :testimonials_prompt_events, %i[tenant author_id kind]', migration
+      assert_match 'add_index :testimonials_prompt_events, %i[tenant visitor_token kind]', migration
     end
   end
 end

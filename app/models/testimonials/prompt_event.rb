@@ -12,6 +12,12 @@ module Testimonials
   #   * shown max_prompts times     -> never auto-prompted for that kind again
   #
   # Explicit opens (the user clicked something) bypass all of this.
+  #
+  # The ledger is optional: an install run with --skip-prompt-events has no
+  # table behind this class and config.prompt_events is false, so record! is a
+  # no-op and eligible? answers without a query. Every write and every read
+  # goes through the two methods below, so that flag is the only guard needed
+  # — nothing here asks the schema at runtime.
   class PromptEvent < ApplicationRecord
     KINDS = %w[testimonial nps].freeze
     ACTIONS = %w[shown dismissed submitted].freeze
@@ -21,6 +27,7 @@ module Testimonials
 
     class << self
       def record!(kind:, action:, author_id: nil, visitor_token: nil, tenant: nil)
+        return unless Testimonials.config.prompt_events
         return if author_id.blank? && visitor_token.blank?
 
         create!(kind: kind.to_s, action: action.to_s, tenant: tenant.presence,
@@ -34,6 +41,11 @@ module Testimonials
         return false unless KINDS.include?(kind)
         # No identity, no history: a brand-new visitor is always eligible.
         return true if author_id.blank? && visitor_token.blank?
+        # No ledger, no history either — the same answer, one flag earlier.
+        # This is not a licence to nag: with the ledger off nothing auto-opens
+        # (see WidgetHelper#testimonials_auto_open), and the one caller left is
+        # the promoter offered the form inside a flow they opened themselves.
+        return true unless Testimonials.config.prompt_events
 
         history = subject(author_id, visitor_token, tenant).where(kind: kind)
         config = Testimonials.config

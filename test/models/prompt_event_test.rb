@@ -56,4 +56,30 @@ class PromptEventTest < ActiveSupport::TestCase
     Testimonials::PromptEvent.record!(kind: 'testimonial', action: 'shown')
     assert_equal 0, Testimonials::PromptEvent.count
   end
+
+  # An install run with --skip-prompt-events has no table behind this class, so
+  # both entry points have to answer without a query. See skip_prompt_events_test
+  # for the same guarantees with the table actually dropped.
+  test 'records nothing when the ledger is off' do
+    Testimonials.config.prompt_events = false
+
+    Testimonials::PromptEvent.record!(kind: 'testimonial', action: 'submitted', author_id: '42')
+
+    assert_equal 0, Testimonials::PromptEvent.count
+  end
+
+  test 'no ledger means no history to disqualify anyone' do
+    Testimonials::PromptEvent.record!(kind: 'testimonial', action: 'submitted', author_id: '42')
+    refute eligible?(author_id: '42')
+
+    Testimonials.config.prompt_events = false
+
+    assert eligible?(author_id: '42')
+  end
+
+  test 'an unknown kind is still rejected with the ledger off' do
+    Testimonials.config.prompt_events = false
+
+    refute Testimonials::PromptEvent.eligible?(kind: 'nonsense', author_id: '42')
+  end
 end

@@ -107,6 +107,9 @@ module Testimonials
             maxSize: config.max_avatar_size.to_i
           },
           nps: { enabled: config.nps ? true : false },
+          # The throttle ledger. Off, and the widget skips the shown/dismissed
+          # posts: the endpoint would only refuse them.
+          promptEvents: { enabled: config.prompt_events ? true : false },
           labels: labels
         }
         # Escape "</" so a value can't close the <script> block early.

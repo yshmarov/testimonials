@@ -69,6 +69,21 @@ Testimonials.configure do |config|
   # config.reprompt_after = 90.days
   # config.max_prompts = 3
 
+  # The prompt history the throttle reads (testimonials_prompt_events).
+<% if options[:skip_prompt_events] -%>
+  # Installed with --skip-prompt-events, so there is no table and no history is
+  # written. Nothing is throttled, so nothing auto-opens either:
+  # testimonial_prompt! is a no-op here and the widget opens from your own
+  # button, data-testimonial-prompt, or window.Testimonials.open(). To turn
+  # auto-prompts on later: `bin/rails generate testimonials:prompt_events &&
+  # bin/rails db:migrate`, then flip this to true.
+  config.prompt_events = false
+<% else -%>
+  # False keeps no history — and then nothing auto-opens, since nothing could
+  # throttle it. For apps that only open the widget on a click.
+  # config.prompt_events = true
+<% end -%>
+
   # The public-use consent line, stored verbatim when a customer picks
   # "use publicly". nil = localized default ("You can use my testimonial
   # publicly in your marketing and sales."). The private-use line is

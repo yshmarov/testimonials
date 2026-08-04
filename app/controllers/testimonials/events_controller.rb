@@ -10,6 +10,9 @@ module Testimonials
     CLIENT_ACTIONS = %w[shown dismissed].freeze
 
     before_action :require_enabled
+    # An install run with --skip-prompt-events has no ledger to write to, and
+    # the widget it serves knows not to post here in the first place.
+    before_action :require_prompt_events
 
     def create
       kind = params[:kind].to_s
@@ -20,6 +23,12 @@ module Testimonials
       PromptEvent.record!(kind: kind, action: action, tenant: current_tenant,
                           author_id: current_author_id, visitor_token: ensure_visitor_token)
       head :no_content
+    end
+
+    private
+
+    def require_prompt_events
+      head :forbidden unless Testimonials.config.prompt_events
     end
   end
 end

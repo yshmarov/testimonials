@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.7.10
+
+- The prompt-history ledger is now optional too. `bin/rails generate
+  testimonials:install --skip-prompt-events` leaves out the
+  `testimonials_prompt_events` table and writes `config.prompt_events = false`,
+  for apps that open the widget from their own button. `bin/rails generate
+  testimonials:prompt_events` adds the table later, like `testimonials:nps`.
+- With the flag off **nothing auto-opens**: `testimonial_prompt!` is a no-op,
+  because the history exists only to throttle auto-prompts and a prompt nothing
+  can throttle would reopen on every page. Explicit opens
+  (`data-testimonial-prompt`, `window.Testimonials.open()`), both public pages,
+  the dashboard and every submission path work unchanged.
+- `POST /testimonials/events` is refused when the flag is off, and the widget
+  stops posting shown/dismissed at all (`promptEvents.enabled` in its config).
+- `testimonials:seed_demo` skips the demo prompt history when the ledger is
+  off, and the `testimonials:tenant` migration skips either optional table when
+  it isn't there.
+
 ## 0.7.9
 
 - NPS is now optional at install time. `bin/rails generate testimonials:install

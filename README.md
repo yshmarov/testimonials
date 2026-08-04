@@ -33,14 +33,23 @@ bin/rails db:migrate
 The generator writes the initializer, the migration, and mounts the engine at
 `/testimonials`. Nothing renders until the widget is opened.
 
-Don't want NPS? Install without it — no table, no dashboard tab, no prompt:
+Two parts are optional at install time, and skipping either leaves out its
+table:
 
 ```bash
-bin/rails generate testimonials:install --skip-nps
+bin/rails generate testimonials:install --skip-nps            # no NPS at all
+bin/rails generate testimonials:install --skip-prompt-events  # no auto-prompts
 ```
 
-Changed your mind later: `bin/rails generate testimonials:nps`, migrate, and
-set `config.nps = true`.
+`--skip-nps` drops the 0–10 survey: no table, no dashboard tab, no prompt.
+`--skip-prompt-events` drops the prompt history — for apps that open the widget
+from their own button and never call `testimonial_prompt!`, since that history
+exists only to throttle auto-prompts. See
+[Prompting users](#prompting-users) for what changes.
+
+Changed your mind later: `bin/rails generate testimonials:nps` or
+`bin/rails generate testimonials:prompt_events`, migrate, and set the matching
+flag (`config.nps`, `config.prompt_events`) to `true`.
 
 Optional demo data:
 
@@ -132,6 +141,15 @@ The widget auto-opens on the next rendered page **if** the throttle allows:
 `data-testimonial-prompt` (or `="nps"`), or `window.Testimonials.open()` /
 `window.Testimonials.openNps()`.
 
+That history lives in `testimonials_prompt_events`, one row per shown,
+dismissed or submitted, and it is optional. `config.prompt_events = false` —
+what `--skip-prompt-events` writes at install — keeps no history at all, and so
+**nothing auto-opens**: `testimonial_prompt!` becomes a no-op, because a prompt
+nothing can throttle would reopen on every page. Explicit opens, the public
+pages, and everything above them are untouched, so an app that opens the widget
+from its own button loses nothing. Want auto-prompts back:
+`bin/rails generate testimonials:prompt_events`, migrate, flip the flag.
+
 ## Configure
 
 Everything is optional — a fresh install works with zero config. In
@@ -155,6 +173,7 @@ Everything is optional — a fresh install works with zero config. In
 | `storage_service` | app default | Active Storage service for uploads (a `storage.yml` key) |
 | `reprompt_after` | `90.days` | Cooldown after a dismissal |
 | `max_prompts` | `3` | Lifetime auto-prompt cap per user |
+| `prompt_events` | `true` | The prompt history the throttle reads. `false` = no history, no auto-prompts |
 | `public_collection` | `true` | The shareable `/testimonials/new` and `/testimonials/nps/new` pages |
 | `public_api` | `false` | Serve the read API without auth (CORS `*`) |
 | `nps` | `true` | The 0–10 NPS flow |
