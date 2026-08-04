@@ -68,6 +68,11 @@ refreshes those records instead of duplicating them.
 
 Ruby >= 3.2 · Rails >= 7.1 · Active Storage only if you want video/avatar uploads.
 
+Installing with a coding agent? Point it at [AGENTS.md](AGENTS.md) — the same
+steps in the order an agent needs them, plus the gates it tends to get wrong
+and the things it should not do. It ships inside the gem, so
+`cat "$(bundle show testimonials)/AGENTS.md"` works from any app that bundles it.
+
 ## What you get
 
 |                 |                                                                         |

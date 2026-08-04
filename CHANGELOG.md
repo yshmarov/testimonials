@@ -17,6 +17,11 @@
 - `testimonials:seed_demo` skips the demo prompt history when the ledger is
   off, and the `testimonials:tenant` migration skips either optional table when
   it isn't there.
+- Adds `AGENTS.md`: install and integration instructions written for coding
+  agents, covering the request-shaped config lambdas, both skip flags, and the
+  mistakes agents actually make. It ships inside the gem, so
+  `cat "$(bundle show testimonials)/AGENTS.md"` works from a host app —
+  `examples/` now ships for the same reason.
 
 ## 0.7.9
 
