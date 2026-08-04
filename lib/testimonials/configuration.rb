@@ -5,6 +5,10 @@ module Testimonials
   # works with zero configuration; the hooks below let an app decide who gets
   # prompted, who can triage, and how submissions are attributed.
   class Configuration
+    # The gem's own dashboard layout. Compared against, so DashboardController
+    # can tell "the host left this alone" from "the host chose this".
+    DEFAULT_ADMIN_LAYOUT = 'testimonials/application'
+
     # Shown in the widget ("Enjoying %{app}?") and interpolated into the
     # default questions. nil resolves to the Rails application name.
     attr_accessor :app_name
@@ -135,7 +139,7 @@ module Testimonials
       @app_name = nil
       @enabled = ->(_request) { true }
       @authorize_admin = ->(_request) { Rails.env.development? }
-      @admin_layout = 'testimonials/application'
+      @admin_layout = DEFAULT_ADMIN_LAYOUT
       @base_controller_class = 'ActionController::Base'
       @current_user = ->(_request) {}
       @tenant = ->(_request) {}

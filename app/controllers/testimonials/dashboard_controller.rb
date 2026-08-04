@@ -17,7 +17,14 @@ module Testimonials
   class DashboardController < Testimonials.base_controller
     include RequestContext
 
-    layout :testimonials_admin_layout
+    # A host base controller brings its own layout, and declaring one here would
+    # override it — the dashboard would render in the gem's standalone shell
+    # inside an app that just told us where its admin lives. So the gem only
+    # claims the layout when it owns the decision: no host base controller, or a
+    # host that named an `admin_layout` explicitly.
+    layout :testimonials_admin_layout unless superclass != ActionController::Base &&
+                                             Testimonials.config.admin_layout ==
+                                             Configuration::DEFAULT_ADMIN_LAYOUT
 
     before_action :require_admin
 

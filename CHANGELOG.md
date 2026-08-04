@@ -23,6 +23,7 @@
   request context — the things `admin_layout` cannot give you, and which hosts
   were hand-wiring as a shim layout plus a concern to populate `Current`. Same
   hook pgbus, avo and mission_control-jobs use. Default is unchanged.
+  Layout precedence with it: a host base controller keeps its own layout, unless the host also named an `admin_layout` explicitly.
 - **Migrations follow the host's `primary_key_type`,** the same
   `Rails.configuration.generators` lookup Rails' own Active Storage, Action Text
   and Action Mailbox migrations do. A uuid-keyed app has a uuid
