@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.8.1
+
+- Dropped the redundant `(tenant, status)` index from the install and tenant
+  migration templates. A B-tree serves any leftmost prefix, so
+  `(tenant, status, consent_given)` already covers it, and every scope on the
+  model starts with `for_tenant` — carrying both only cost write time and disk.
+  Flagged by `active_record_doctor` in a host app.
+- Existing installs keep the index until they drop it themselves; nothing
+  breaks either way. To reclaim it:
+
+  ```ruby
+  class RemoveRedundantTestimonialsIndex < ActiveRecord::Migration[8.0]
+    def change
+      remove_index :testimonials_testimonials, %i[tenant status]
+    end
+  end
+  ```
+
+- A generator test now fails the build if any index is a leftmost prefix of
+  another on the same table.
+
 ## 0.8.0
 
 - **`config.admin_layout` now works on its own.** The dashboard's stylesheet and

@@ -29,7 +29,6 @@ ActiveRecord::Schema.define do
     t.timestamps
   end
   add_index :testimonials_testimonials, :status
-  add_index :testimonials_testimonials, %i[tenant status]
   add_index :testimonials_testimonials, %i[tenant status consent_given]
 
   create_table :testimonials_nps_responses, force: true do |t|

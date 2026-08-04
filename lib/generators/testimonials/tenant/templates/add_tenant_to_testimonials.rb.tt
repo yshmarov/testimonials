@@ -3,7 +3,6 @@
 class AddTenantToTestimonials < ActiveRecord::Migration<%= migration_version %>
   def change
     add_column :testimonials_testimonials, :tenant, :string
-    add_index :testimonials_testimonials, %i[tenant status]
     add_index :testimonials_testimonials, %i[tenant status consent_given]
 
     # The optional tables: an install run with --skip-nps or

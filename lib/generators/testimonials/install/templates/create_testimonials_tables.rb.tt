@@ -24,7 +24,6 @@ class CreateTestimonialsTables < ActiveRecord::Migration<%= migration_version %>
       t.timestamps
     end
     add_index :testimonials_testimonials, :status
-    add_index :testimonials_testimonials, %i[tenant status]
     add_index :testimonials_testimonials, %i[tenant status consent_given]
 <% unless options[:skip_nps] -%>
 

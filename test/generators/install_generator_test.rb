@@ -74,6 +74,25 @@ class InstallGeneratorTest < Rails::Generators::TestCase
     end
   end
 
+  # A B-tree serves any leftmost prefix, so (tenant, status) is already covered
+  # by (tenant, status, consent_given) — and every scope on the model starts
+  # with for_tenant. Carrying both only costs write time and disk.
+  test 'no index duplicates a leftmost prefix of another' do
+    run_generator
+
+    assert_migration 'db/migrate/create_testimonials_tables.rb' do |migration|
+      indexes = migration.scan(/add_index :(\w+), (?:%i\[([\w\s]+)\]|:(\w+))/).map do |table, composite, single|
+        [table, composite ? composite.split : [single]]
+      end
+
+      indexes.each do |table, columns|
+        others = indexes.reject { |t, c| t != table || c == columns }
+        redundant = others.find { |_, other| other.first(columns.length) == columns }
+        assert_nil redundant, "#{table} index on #{columns.inspect} is a prefix of #{redundant&.last.inspect}"
+      end
+    end
+  end
+
   test '--skip-nps leaves out the table and turns the flow off' do
     run_generator ['--skip-nps']
 
