@@ -148,7 +148,7 @@ organization.testimonials.approved
 
 - **Do not hand-write the migration or the initializer.** Use the generators; the templates track the schema.
 - **Do not copy `widget.js` into `app/javascript`, or add a `<script>` tag for it.** `testimonials_tag` renders both tags itself, and the engine serves the code at `/testimonials/widget.js` with a content fingerprint. There is no build step and nothing for esbuild/importmap/Tailwind to know about.
-- **Do not edit views inside the gem.** Override the dashboard's shell with `config.admin_layout = "admin/application"` if it needs to live inside an existing admin.
+- **Do not edit views inside the gem.** To put the dashboard inside an existing admin, set `config.base_controller_class = "Admin::BaseController"` (it inherits that controller's layout, helpers, authentication and request context) or, for the shell alone, `config.admin_layout = "admin/application"`. The dashboard's stylesheet and script are declared by its views, so both work with nothing else wired up.
 - **Do not check whether a table exists to decide if a feature is on.** `Testimonials.config.nps` and `Testimonials.config.prompt_events` are the source of truth, deliberately — nothing in the gem introspects the schema at runtime.
 - **Do not set config outside the initializer.** `rate_limit` in particular is read once when the controller class loads; assigning config in a controller or per-request is a global mutation across the process.
 - **Do not add `testimonials_tag` more than once per page,** and do not put it in a partial that some pages skip while still calling `testimonial_prompt!` — the prompt is consumed from the flash by whatever renders next.
@@ -163,6 +163,7 @@ Everything is optional; a fresh install works with zero config. Full list with c
 | `current_user`, `user_display`, `tenant`, `enabled` | no-ops | Lambdas over the raw request. |
 | `nps` | `true` | `false` = no prompt, no public NPS page, no dashboard tab, no `nps_score`. |
 | `prompt_events` | `true` | `false` = no prompt history, and therefore no auto-prompts at all. |
+| `base_controller_class` | `ActionController::Base` | Controller the DASHBOARD inherits. Public endpoints never do, so an admin base controller here cannot gate the widget. |
 | `reprompt_after`, `max_prompts` | `90.days`, `3` | Throttle for auto-prompts only. |
 | `video`, `avatars` | `true` | Need Active Storage; they self-disable when it isn't loaded. |
 | `public_collection` | `true` | `/testimonials/new` and `/testimonials/nps/new`. Shareable links. |
@@ -183,6 +184,8 @@ Turbo Drive and nonce-based CSP work out of the box; the widget config rides in 
 | `no such table: testimonials_nps_responses` (or `..._prompt_events`) | A flag was flipped to `true` before running the matching generator and `db:migrate`. |
 | `/testimonials/nps_responses` 404s | `config.nps` is false. The rows are still there; flip it back to read them. |
 | Video recording missing | Active Storage not installed, or `config.video = false`. |
+| `NameError` for a host helper in the dashboard | `isolate_namespace` scopes `helper` to the engine. Use `config.base_controller_class` so the dashboard inherits your helpers, rather than `admin_layout` alone. |
+| `NotNullViolation` attaching a video on a uuid-keyed app | The tables were generated bigint. Set `config.generators` `primary_key_type` before installing, or migrate the tables to uuid. |
 | `undefined local variable current_user` in the initializer | A gate lambda treated its argument as a controller. It is a `request`. |
 
 ---

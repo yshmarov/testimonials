@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.8.0
+
+- **`config.admin_layout` now works on its own.** The dashboard's stylesheet and
+  script were declared in the gem's layout, so replacing that layout dropped
+  both: the dashboard rendered unstyled with its delete confirmations and
+  auto-submitting filter dead. They move into the views (a shared
+  `testimonials/shared/_dashboard` partial), so every layout gets them with
+  nothing asked of the host.
+- **The dashboard stylesheet no longer claims selectors it does not own.** It
+  styled bare `body`, `a`, `table` and `*`, and its `.card`, `.badge`, `.tabs`
+  and `.container` are names Bootstrap and daisyUI use too, so a host that did
+  load it had its sidebar and topbar restyled. Component rules now nest inside a
+  `.tml-dashboard` wrapper the views render, every custom property is `--tml-`
+  prefixed, and `.container`/`.nav` became `.tml-page`/`.tml-nav`. The
+  full-viewport rules stay keyed to the `tm-index`/`tm-nps-index`/`tm-show` body
+  classes that only the gem's own layout sets, so inside a host admin the
+  dashboard scrolls with the host's page instead of fighting it for the
+  viewport. Two tests fail the build if a selector or property escapes again.
+- **Added `config.base_controller_class`.** Name the controller your own admin
+  inherits from and the dashboard adopts its layout, helpers, authentication and
+  request context — the things `admin_layout` cannot give you, and which hosts
+  were hand-wiring as a shim layout plus a concern to populate `Current`. Same
+  hook pgbus, avo and mission_control-jobs use. Default is unchanged.
+- **Migrations follow the host's `primary_key_type`,** the same
+  `Rails.configuration.generators` lookup Rails' own Active Storage, Action Text
+  and Action Mailbox migrations do. A uuid-keyed app has a uuid
+  `active_storage_attachments.record_id`, so bigint tables here could never hold
+  a video or avatar — `attach` raised `NotNullViolation`. A host that set
+  nothing gets no `id:` option and an identical migration to before.
+- **Dropped the `id: /\d+/` route constraints,** which were what forced the
+  tables to be bigint in the first place: uuid tables would have 404d show,
+  update, destroy and all three media routes. The constraint was never
+  load-bearing, since every fixed-name route is declared before the flat
+  `/:id` routes.
+- **`create` moved to `Testimonials::SubmissionsController`** and `POST` to the
+  mount path routes there. One controller used to serve both the widget's write
+  endpoint and the triage actions, which meant `base_controller_class` would
+  have put staff authentication in front of every member leaving a review. If
+  you referenced `Testimonials::TestimonialsController#create`, that is the
+  breaking change in this release; the URL is unchanged.
+- The shared request context (`current_author`, `current_tenant`,
+  `tenant_scope`, the gates) is now a `Testimonials::RequestContext` concern,
+  since the engine has two controller roots.
+
 ## 0.7.10
 
 - The prompt-history ledger is now optional too. `bin/rails generate

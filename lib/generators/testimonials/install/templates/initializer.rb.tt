@@ -13,9 +13,17 @@ Testimonials.configure do |config|
   # only — override before deploying.
   # config.authorize_admin = ->(request) { request.env["warden"]&.user&.admin? }
   #
-  # Render the dashboard inside your app's admin layout. Default: the gem's
-  # standalone dashboard layout.
+  # Two ways to put the dashboard inside an admin you already have.
+  #
+  # The layout only — the gem's controllers, your shell:
   # config.admin_layout = "admin/application"
+  #
+  # Or the whole stack. Name the controller your own admin inherits from and
+  # the dashboard picks up its layout, helpers, authentication and any request
+  # context its before_actions set up. Only the dashboard inherits it; the
+  # widget's endpoints stay public, so this cannot ask a member leaving a
+  # review for a staff session.
+  # config.base_controller_class = "Admin::BaseController"
 
   # Attribute submissions to a user (optional). Return an object responding
   # to #id, or nil. Receives the request.

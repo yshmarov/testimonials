@@ -163,6 +163,8 @@ Everything is optional — a fresh install works with zero config. In
 | Option | Default | What it does |
 | --- | --- | --- |
 | `authorize_admin` | development only | **Who can read the dashboard.** Override before deploying |
+| `base_controller_class` | `ActionController::Base` | The controller the dashboard inherits — name your admin's and it adopts its layout, helpers and auth |
+| `admin_layout` | the gem's own | Just the shell, if you don't want the whole controller |
 | `app_name` | Rails app name | Shown as "Enjoying %{app}?" and in the questions |
 | `enabled` | everyone | Who gets the widget. `false` hides it and rejects posts |
 | `current_user` | `nil` | Attribute a submission to a user. Receives the request |
