@@ -376,12 +376,6 @@ Bug reports and pull requests welcome. The fastest way to help is to install it
 in a real app and
 [tell me where it hurt](https://github.com/yshmarov/testimonials/issues).
 
-## Also by the same author
-
-- [ideasbugs](https://github.com/yshmarov/ideasbugs) — in-app bug reports and
-  feature requests. Pairs with this gem's NPS detractor hook.
-- [SupeRails](https://superails.com) — Rails screencasts.
-
 ## One family
 
 Five Rails engines built on the same backbone, so adopting a second one is
