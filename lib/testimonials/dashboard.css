@@ -84,22 +84,6 @@
   }
 }
 
-/* Page frame — the gem's own layout only. */
-.tml-page { margin: 0; background: var(--tml-bg); color: var(--tml-text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-/* Desktop dashboard: queue on the left, selected record on the right. */
-.tm-index, .tm-index .container,
-.tm-nps-index, .tm-nps-index .container { height: 100vh; height: 100dvh; }
-.tm-index, .tm-nps-index { overflow: hidden; }
-.tm-index .container, .tm-nps-index .container { max-width: 1280px; display: flex; flex-direction: column; padding-bottom: 16px; }
-.tm-index .nav, .tm-nps-index .nav,
-.tm-index .container .page-head, .tm-nps-index .container .page-head,
-.tm-nps-index .stat-row { flex: 0 0 auto; }
-.tm-index .container .page-head, .tm-nps-index .container .page-head { margin-bottom: 14px; }
-.tm-nps-index .stat-row { margin-bottom: 14px; }
-/* Standalone show pages keep normal page scrolling. */
-.tm-show { min-height: 100vh; overflow: auto; }
-.tm-show .detail-scroll { overflow: visible; }
-
 /* Dashboard components — any layout. */
 .tml-dashboard {
   /* A scoping device, not a layout one: without this the wrapper would
@@ -255,3 +239,20 @@
   & .empty-state p { margin: 0; }
   & .mobile-back { display: none; }
 }
+
+/* Page frame — the gem's own layout only. Last, so it wins the
+   specificity ties against the component layer above. */
+.tml-page { margin: 0; background: var(--tml-bg); color: var(--tml-text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+/* Desktop dashboard: queue on the left, selected record on the right. */
+.tm-index, .tm-index .container,
+.tm-nps-index, .tm-nps-index .container { height: 100vh; height: 100dvh; }
+.tm-index, .tm-nps-index { overflow: hidden; }
+.tm-index .container, .tm-nps-index .container { max-width: 1280px; display: flex; flex-direction: column; padding-bottom: 16px; }
+.tm-index .nav, .tm-nps-index .nav,
+.tm-index .container .page-head, .tm-nps-index .container .page-head,
+.tm-nps-index .stat-row { flex: 0 0 auto; }
+.tm-index .container .page-head, .tm-nps-index .container .page-head { margin-bottom: 14px; }
+.tm-nps-index .stat-row { margin-bottom: 14px; }
+/* Standalone show pages keep normal page scrolling. */
+.tm-show { min-height: 100vh; overflow: auto; }
+.tm-show .detail-scroll { overflow: visible; }

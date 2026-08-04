@@ -190,6 +190,10 @@ Turbo Drive and nonce-based CSP work out of the box; the widget config rides in 
 
 ---
 
+## One family
+
+`ideasbugs`, `livechat`, `product_tours`, `i18n_proofreading` are the sibling engines. Same install shape, same host hooks (`base_controller_class`, `admin_layout`), same scoped dashboard CSS, same `primary_key_type`-aware migrations — so what you learn here transfers.
+
 ## Working on the gem itself
 
 ```bash
