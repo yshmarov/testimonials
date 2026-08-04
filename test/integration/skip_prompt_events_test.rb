@@ -10,23 +10,14 @@ require 'test_helper'
 # real: a guard that slips anywhere raises "no such table" instead of quietly
 # passing.
 class SkipPromptEventsTest < ActionDispatch::IntegrationTest
+  # Drops a table for the length of each test, as skip_nps_test does — see the
+  # note in test_helper.rb about why nothing here leans on rollback.
   setup do
     Testimonials.config.prompt_events = false
     ActiveRecord::Base.connection.drop_table(:testimonials_prompt_events, if_exists: true)
   end
 
-  teardown do
-    ActiveRecord::Base.connection.create_table :testimonials_prompt_events, force: true do |t|
-      t.string :kind, null: false
-      t.string :action, null: false
-      t.string :author_id
-      t.string :visitor_token
-      t.string :tenant
-      t.timestamps
-    end
-    ActiveRecord::Base.connection.add_index :testimonials_prompt_events, %i[tenant author_id kind]
-    ActiveRecord::Base.connection.add_index :testimonials_prompt_events, %i[tenant visitor_token kind]
-  end
+  teardown { restore_prompt_events_table! }
 
   test 'the widget renders and tells the browser not to report events' do
     get '/sample'
@@ -114,5 +105,20 @@ class SkipPromptEventsTest < ActionDispatch::IntegrationTest
     assert_empty result[:prompt_events]
     assert_equal 4, result[:testimonials].size
     assert_equal 3, result[:nps_responses].size
+  end
+
+  private
+
+  def restore_prompt_events_table!
+    ActiveRecord::Base.connection.create_table :testimonials_prompt_events, force: true do |t|
+      t.string :kind, null: false
+      t.string :action, null: false
+      t.string :author_id
+      t.string :visitor_token
+      t.string :tenant
+      t.timestamps
+    end
+    ActiveRecord::Base.connection.add_index :testimonials_prompt_events, %i[tenant author_id kind]
+    ActiveRecord::Base.connection.add_index :testimonials_prompt_events, %i[tenant visitor_token kind]
   end
 end

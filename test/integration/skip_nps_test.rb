@@ -8,26 +8,15 @@ require 'test_helper'
 # drops the table for real — a guard that slips anywhere raises "no such table"
 # instead of quietly passing.
 class SkipNpsTest < ActionDispatch::IntegrationTest
+  # Dropping a table ends the transaction a test would otherwise be rolled back
+  # in — one of the reasons the whole suite cleans up by hand instead. See the
+  # note in test_helper.rb.
   setup do
     Testimonials.config.nps = false
     ActiveRecord::Base.connection.drop_table(:testimonials_nps_responses, if_exists: true)
   end
 
-  teardown do
-    ActiveRecord::Base.connection.create_table :testimonials_nps_responses, force: true do |t|
-      t.integer :score, null: false
-      t.text :comment
-      t.string :author_id
-      t.string :name
-      t.string :email
-      t.string :page_url
-      t.string :user_agent
-      t.string :locale
-      t.string :tenant
-      t.timestamps
-    end
-    ActiveRecord::Base.connection.add_index :testimonials_nps_responses, %i[tenant score]
-  end
+  teardown { restore_nps_responses_table! }
 
   test 'the dashboard works and offers no NPS tab' do
     as_admin!
@@ -91,5 +80,23 @@ class SkipNpsTest < ActionDispatch::IntegrationTest
     assert_empty result[:nps_responses]
     assert_equal 4, result[:testimonials].size
     assert_equal 3, result[:prompt_events].size
+  end
+
+  private
+
+  def restore_nps_responses_table!
+    ActiveRecord::Base.connection.create_table :testimonials_nps_responses, force: true do |t|
+      t.integer :score, null: false
+      t.text :comment
+      t.string :author_id
+      t.string :name
+      t.string :email
+      t.string :page_url
+      t.string :user_agent
+      t.string :locale
+      t.string :tenant
+      t.timestamps
+    end
+    ActiveRecord::Base.connection.add_index :testimonials_nps_responses, %i[tenant score]
   end
 end
