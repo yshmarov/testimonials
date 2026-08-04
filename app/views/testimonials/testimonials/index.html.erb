@@ -1,124 +1,126 @@
 <% content_for :body_class, 'tm-index' %>
 
-<div class="page-head">
-  <h1><%= t('testimonials.dashboard.title', default: 'Testimonials') %></h1>
-  <%# The shareable public form — drop this link into an email or DM. It lives
-      on the page, not in the nav, so it survives a host's admin_layout. %>
-  <% if Testimonials.config.public_collection %>
-    <a class="button share-link" href="<%= collection_url %>" target="_blank" rel="noopener"
-       title="<%= collection_url %>">
-      🔗 <%= t('testimonials.dashboard.collection_page', default: 'Ask for testimonials') %>
-    </a>
-  <% end %>
-</div>
+<%= render layout: 'testimonials/shared/dashboard' do %>
+  <div class="page-head">
+    <h1><%= t('testimonials.dashboard.title', default: 'Testimonials') %></h1>
+    <%# The shareable public form — drop this link into an email or DM. It lives
+        on the page, not in the nav, so it survives a host's admin_layout. %>
+    <% if Testimonials.config.public_collection %>
+      <a class="button share-link" href="<%= collection_url %>" target="_blank" rel="noopener"
+         title="<%= collection_url %>">
+        🔗 <%= t('testimonials.dashboard.collection_page', default: 'Ask for testimonials') %>
+      </a>
+    <% end %>
+  </div>
 
-<div class="dashboard-shell <%= 'has-selected' if @selected_testimonial %>">
-  <aside class="dashboard-sidebar" aria-label="<%= t('testimonials.dashboard.testimonials', default: 'Testimonials') %>">
-    <div class="tabs">
-      <% Testimonials::Testimonial::STATUSES.each do |status| %>
-        <%= link_to testimonials_path(status: status, kind: @kind, q: @query),
-                    class: ('active' if status == @status) do %>
-          <%= t("testimonials.statuses.#{status}", default: status.humanize) %>
-          <span class="count"><%= @counts.fetch(status, 0) %></span>
-        <% end %>
-      <% end %>
-    </div>
-
-    <form class="filters" method="get">
-      <input type="hidden" name="status" value="<%= @status %>">
-      <select name="kind" data-autosubmit="true">
-        <option value=""><%= t('testimonials.dashboard.all_kinds', default: 'All kinds') %></option>
-        <% Testimonials::Testimonial::KINDS.each do |kind| %>
-          <option value="<%= kind %>" <%= 'selected' if kind == @kind %>>
-            <%= t("testimonials.kinds.#{kind}", default: kind.humanize) %>
-          </option>
-        <% end %>
-      </select>
-      <input type="search" name="q" value="<%= @query %>"
-             placeholder="<%= t('testimonials.dashboard.search_placeholder', default: 'Search text, name, email…') %>"
-             aria-label="<%= t('testimonials.dashboard.search', default: 'Search') %>">
-      <button><%= t('testimonials.dashboard.search', default: 'Search') %></button>
-    </form>
-
-    <div class="record-list">
-      <% if @testimonials.any? %>
-        <% @testimonials.each do |testimonial| %>
-          <%= link_to testimonials_path(status: @status, kind: @kind, q: @query, page: @page,
-                                        testimonial_id: testimonial.id),
-                      class: ['record-row testimonial-row',
-                              ('active' if @selected_testimonial&.id == testimonial.id)].compact do %>
-            <span class="record-main">
-              <span class="record-topline">
-                <% if testimonial.rating %>
-                  <span class="stars"><%= '★' * testimonial.rating %><span class="off"><%= '★' * (5 - testimonial.rating) %></span></span>
-                <% else %>
-                  <span class="badge locale"><%= t("testimonials.kinds.#{testimonial.kind}", default: testimonial.kind.humanize) %></span>
-                <% end %>
-                <span class="badge status-<%= testimonial.status %>">
-                  <%= t("testimonials.statuses.#{testimonial.status}", default: testimonial.status.humanize) %>
-                </span>
-                <span class="muted record-time" title="<%= testimonial.created_at %>">
-                  <%= time_ago_in_words(testimonial.created_at) %>
-                </span>
-              </span>
-              <span class="record-copy">
-                <% if testimonial.body.present? %>
-                  <%= truncate(testimonial.body, length: 120) %>
-                <% else %>
-                  <em><%= t('testimonials.kinds.video', default: 'Video') %></em>
-                <% end %>
-              </span>
-              <span class="muted record-meta">
-                <span>#<%= testimonial.id %></span>
-                <% if testimonial.display_name.present? %>
-                  <span><%= testimonial.display_name %></span>
-                <% end %>
-                <% if testimonial.title_company.present? %>
-                  <span><%= testimonial.title_company %></span>
-                <% end %>
-              </span>
-            </span>
-            <span class="record-side">
-              <% if testimonial.video_attached? %>
-                <span class="muted">🎥</span>
-              <% end %>
-              <% if testimonial.featured? %>
-                <span class="muted">⭐</span>
-              <% end %>
-              <span class="muted"><%= testimonial.consent_given? ? '✓' : '—' %></span>
-            </span>
+  <div class="dashboard-shell <%= 'has-selected' if @selected_testimonial %>">
+    <aside class="dashboard-sidebar" aria-label="<%= t('testimonials.dashboard.testimonials', default: 'Testimonials') %>">
+      <div class="tabs">
+        <% Testimonials::Testimonial::STATUSES.each do |status| %>
+          <%= link_to testimonials_path(status: status, kind: @kind, q: @query),
+                      class: ('active' if status == @status) do %>
+            <%= t("testimonials.statuses.#{status}", default: status.humanize) %>
+            <span class="count"><%= @counts.fetch(status, 0) %></span>
           <% end %>
         <% end %>
-      <% else %>
-        <div class="empty"><%= t('testimonials.dashboard.empty', default: 'Nothing here yet.') %></div>
-      <% end %>
-    </div>
-
-    <div class="pager">
-      <% if @page > 1 %>
-        <%= link_to t('testimonials.dashboard.newer', default: '← Newer'),
-                    testimonials_path(status: @status, kind: @kind, q: @query, page: @page - 1) %>
-      <% end %>
-      <% if @more %>
-        <%= link_to t('testimonials.dashboard.older', default: 'Older →'),
-                    testimonials_path(status: @status, kind: @kind, q: @query, page: @page + 1) %>
-      <% end %>
-    </div>
-  </aside>
-
-  <main class="dashboard-detail" aria-label="<%= t('testimonials.dashboard.current_testimonial', default: 'Current testimonial') %>">
-    <% if @selected_testimonial %>
-      <p class="mobile-back">
-        <%= link_to t('testimonials.dashboard.back', default: '← All testimonials'),
-                    testimonials_path(status: @status, kind: @kind, q: @query, page: @page) %>
-      </p>
-      <%= render 'testimonial_panel', testimonial: @selected_testimonial %>
-    <% else %>
-      <div class="empty-state">
-        <h2><%= t('testimonials.dashboard.select_testimonial', default: 'Select a testimonial') %></h2>
-        <p class="muted"><%= t('testimonials.dashboard.select_testimonial_hint',
-                               default: 'Open a review from the list to approve, feature, or tune the best line.') %></p>
       </div>
-    <% end %>
-  </main>
-</div>
+
+      <form class="filters" method="get">
+        <input type="hidden" name="status" value="<%= @status %>">
+        <select name="kind" data-autosubmit="true">
+          <option value=""><%= t('testimonials.dashboard.all_kinds', default: 'All kinds') %></option>
+          <% Testimonials::Testimonial::KINDS.each do |kind| %>
+            <option value="<%= kind %>" <%= 'selected' if kind == @kind %>>
+              <%= t("testimonials.kinds.#{kind}", default: kind.humanize) %>
+            </option>
+          <% end %>
+        </select>
+        <input type="search" name="q" value="<%= @query %>"
+               placeholder="<%= t('testimonials.dashboard.search_placeholder', default: 'Search text, name, email…') %>"
+               aria-label="<%= t('testimonials.dashboard.search', default: 'Search') %>">
+        <button><%= t('testimonials.dashboard.search', default: 'Search') %></button>
+      </form>
+
+      <div class="record-list">
+        <% if @testimonials.any? %>
+          <% @testimonials.each do |testimonial| %>
+            <%= link_to testimonials_path(status: @status, kind: @kind, q: @query, page: @page,
+                                          testimonial_id: testimonial.id),
+                        class: ['record-row testimonial-row',
+                                ('active' if @selected_testimonial&.id == testimonial.id)].compact do %>
+              <span class="record-main">
+                <span class="record-topline">
+                  <% if testimonial.rating %>
+                    <span class="stars"><%= '★' * testimonial.rating %><span class="off"><%= '★' * (5 - testimonial.rating) %></span></span>
+                  <% else %>
+                    <span class="badge locale"><%= t("testimonials.kinds.#{testimonial.kind}", default: testimonial.kind.humanize) %></span>
+                  <% end %>
+                  <span class="badge status-<%= testimonial.status %>">
+                    <%= t("testimonials.statuses.#{testimonial.status}", default: testimonial.status.humanize) %>
+                  </span>
+                  <span class="muted record-time" title="<%= testimonial.created_at %>">
+                    <%= time_ago_in_words(testimonial.created_at) %>
+                  </span>
+                </span>
+                <span class="record-copy">
+                  <% if testimonial.body.present? %>
+                    <%= truncate(testimonial.body, length: 120) %>
+                  <% else %>
+                    <em><%= t('testimonials.kinds.video', default: 'Video') %></em>
+                  <% end %>
+                </span>
+                <span class="muted record-meta">
+                  <span>#<%= testimonial.id %></span>
+                  <% if testimonial.display_name.present? %>
+                    <span><%= testimonial.display_name %></span>
+                  <% end %>
+                  <% if testimonial.title_company.present? %>
+                    <span><%= testimonial.title_company %></span>
+                  <% end %>
+                </span>
+              </span>
+              <span class="record-side">
+                <% if testimonial.video_attached? %>
+                  <span class="muted">🎥</span>
+                <% end %>
+                <% if testimonial.featured? %>
+                  <span class="muted">⭐</span>
+                <% end %>
+                <span class="muted"><%= testimonial.consent_given? ? '✓' : '—' %></span>
+              </span>
+            <% end %>
+          <% end %>
+        <% else %>
+          <div class="empty"><%= t('testimonials.dashboard.empty', default: 'Nothing here yet.') %></div>
+        <% end %>
+      </div>
+
+      <div class="pager">
+        <% if @page > 1 %>
+          <%= link_to t('testimonials.dashboard.newer', default: '← Newer'),
+                      testimonials_path(status: @status, kind: @kind, q: @query, page: @page - 1) %>
+        <% end %>
+        <% if @more %>
+          <%= link_to t('testimonials.dashboard.older', default: 'Older →'),
+                      testimonials_path(status: @status, kind: @kind, q: @query, page: @page + 1) %>
+        <% end %>
+      </div>
+    </aside>
+
+    <main class="dashboard-detail" aria-label="<%= t('testimonials.dashboard.current_testimonial', default: 'Current testimonial') %>">
+      <% if @selected_testimonial %>
+        <p class="mobile-back">
+          <%= link_to t('testimonials.dashboard.back', default: '← All testimonials'),
+                      testimonials_path(status: @status, kind: @kind, q: @query, page: @page) %>
+        </p>
+        <%= render 'testimonial_panel', testimonial: @selected_testimonial %>
+      <% else %>
+        <div class="empty-state">
+          <h2><%= t('testimonials.dashboard.select_testimonial', default: 'Select a testimonial') %></h2>
+          <p class="muted"><%= t('testimonials.dashboard.select_testimonial_hint',
+                                 default: 'Open a review from the list to approve, feature, or tune the best line.') %></p>
+        </div>
+      <% end %>
+    </main>
+  </div>
+<% end %>

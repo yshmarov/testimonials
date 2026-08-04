@@ -1,8 +1,10 @@
 <% content_for :body_class, 'tm-show' %>
 
-<div class="breadcrumb">
-  <%= link_to t('testimonials.dashboard.title', default: 'Testimonials'), root_path %>
-  / #<%= @testimonial.id %>
-</div>
+<%= render layout: 'testimonials/shared/dashboard' do %>
+  <div class="breadcrumb">
+    <%= link_to t('testimonials.dashboard.title', default: 'Testimonials'), root_path %>
+    / #<%= @testimonial.id %>
+  </div>
 
-<%= render 'testimonial_panel', testimonial: @testimonial %>
+  <%= render 'testimonial_panel', testimonial: @testimonial %>
+<% end %>

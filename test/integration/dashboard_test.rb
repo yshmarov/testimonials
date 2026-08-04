@@ -21,8 +21,28 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get '/testimonials/dashboard.css'
     assert_response :ok
     assert_equal 'text/css', response.media_type
-    assert_includes response.body, '.nav'
+    assert_includes response.body, '.tml-nav'
     assert_includes response.body, '.tm-show { min-height: 100vh; overflow: auto; }'
+  end
+
+  # Everything a host admin already styles. A bare `body`/`a`/`table`/`*` rule
+  # or an unprefixed `.card`/`.badge`/`.tabs` here restyles the host's own
+  # chrome the moment `admin_layout` loads this file into their page.
+  test 'the stylesheet claims no selector outside its own namespace' do
+    get '/testimonials/dashboard.css'
+
+    top_level_selectors(response.body).each do |part|
+      assert part.start_with?('.tm-index', '.tm-nps-index', '.tm-show', '.tml-', ':root'),
+             "top-level selector #{part.inspect} is not namespaced to the dashboard"
+    end
+  end
+
+  test 'the stylesheet prefixes every custom property' do
+    get '/testimonials/dashboard.css'
+
+    response.body.scan(/(--[a-z0-9-]+)\s*:/).flatten.uniq.each do |property|
+      assert property.start_with?('--tml-'), "custom property #{property} could collide with a host's"
+    end
   end
 
   test 'loads dashboard assets, CSP metadata, and no inline dashboard style or JS handlers' do
@@ -52,6 +72,29 @@ class DashboardTest < ActionDispatch::IntegrationTest
     # The share link lives on the page, not in the gem's nav, so a host layout
     # keeps it.
     assert_includes response.body, 'http://www.example.com/testimonials/new'
+
+    # The assets are the whole point. They used to be declared in the gem's
+    # layout, so replacing it left the dashboard unstyled with its delete
+    # confirmations and auto-submitting filter dead — and this test still
+    # passed, because the dummy host layout renders neither.
+    assert_includes response.body, 'href="/testimonials/dashboard.css?v='
+    assert_includes response.body, 'src="/testimonials/dashboard.js?v='
+    # And the wrapper the stylesheet scopes itself to.
+    assert_includes response.body, 'class="tml-dashboard"'
+  end
+
+  test 'a host admin layout gets the assets on every dashboard page' do
+    as_admin!
+    Testimonials.config.admin_layout = 'host_admin'
+
+    ['/testimonials', "/testimonials/#{@testimonial.id}", '/testimonials/nps_responses'].each do |path|
+      get path
+
+      assert_response :ok, "#{path} did not render"
+      assert_includes response.body, 'href="/testimonials/dashboard.css?v=', "#{path} is missing the stylesheet"
+      assert_includes response.body, 'src="/testimonials/dashboard.js?v=', "#{path} is missing the script"
+      assert_includes response.body, 'class="tml-dashboard"', "#{path} is missing the scoping wrapper"
+    end
   end
 
   test 'each index links to its own public page' do
@@ -180,5 +223,38 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'class="tm-show"'
     assert_includes response.body, 'Superb'
     assert_includes response.body, 'Ada'
+  end
+
+  private
+
+  # Selectors at nesting depth 0 — the ones that can reach a host's markup.
+  # Anything nested inside `.tml-dashboard { ... }` is already scoped, and
+  # at-rules (`@media`) are descended into rather than treated as selectors.
+  def top_level_selectors(css)
+    css = css.gsub(%r{/\*.*?\*/}m, '')
+    selectors = []
+    buffer = +''
+    depth = 0
+
+    css.each_char do |char|
+      case char
+      when '{'
+        head = buffer.strip
+        # An @media block contributes no selector of its own; its children are
+        # still top level, so depth stays where it is.
+        selectors.concat(head.split(',').map(&:strip).reject(&:empty?)) if depth.zero? && !head.start_with?('@')
+        depth += 1 unless head.start_with?('@')
+        buffer = +''
+      when '}'
+        depth -= 1 if depth.positive?
+        buffer = +''
+      when ';'
+        buffer = +''
+      else
+        buffer << char
+      end
+    end
+
+    selectors
   end
 end

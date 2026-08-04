@@ -1,8 +1,10 @@
 <% content_for :body_class, 'tm-show' %>
 
-<div class="breadcrumb">
-  <%= link_to t('testimonials.dashboard.nps', default: 'NPS'), nps_responses_path %>
-  / #<%= @response.id %>
-</div>
+<%= render layout: 'testimonials/shared/dashboard' do %>
+  <div class="breadcrumb">
+    <%= link_to t('testimonials.dashboard.nps', default: 'NPS'), nps_responses_path %>
+    / #<%= @response.id %>
+  </div>
 
-<%= render 'response_panel', response: @response %>
+  <%= render 'response_panel', response: @response %>
+<% end %>

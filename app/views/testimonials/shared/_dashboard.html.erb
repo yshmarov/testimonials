@@ -1,0 +1,18 @@
+<%# The dashboard's own shell, rendered by the views rather than the layout.
+    That is deliberate: `config.admin_layout` lets a host replace the layout, and
+    assets declared in a layout the host replaces simply vanish — the dashboard
+    then renders unstyled with its delete confirmations and auto-submitting
+    filter dead. Declaring them here means every layout works, host or gem, and
+    a host has nothing to wire up.
+
+    The `tml-dashboard` wrapper is what scopes dashboard.css (see the comment at
+    the top of that file), so it has to enclose the content, not precede it. %>
+<%= stylesheet_link_tag "#{dashboard_stylesheet_path}?v=#{Testimonials::Widget.dashboard_stylesheet_fingerprint}",
+                        'data-turbo-track': 'reload' %>
+<%# Same-origin script instead of inline handlers, so delete confirms and the
+    auto-submitting filter work under strict script-src CSPs. %>
+<%= javascript_include_tag "#{dashboard_script_path}?v=#{Testimonials::Widget.dashboard_fingerprint}",
+                           'data-turbo-track': 'reload', defer: true, nonce: true %>
+<div class="tml-dashboard">
+  <%= yield %>
+</div>

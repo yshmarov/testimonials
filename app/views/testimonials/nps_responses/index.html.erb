@@ -1,169 +1,171 @@
 <% content_for :body_class, 'tm-nps-index' %>
 
-<div class="page-head">
-  <h1><%= t('testimonials.dashboard.nps', default: 'NPS') %></h1>
-  <%# The shareable NPS page, same idea as the testimonial one. config.nps is
-      already true here — the controller 404s otherwise — so only the public
-      switch is left to check. %>
-  <% if Testimonials.config.public_collection %>
-    <a class="button share-link" href="<%= nps_collection_url %>" target="_blank" rel="noopener"
-       title="<%= nps_collection_url %>">
-      🔗 <%= t('testimonials.dashboard.nps_page', default: 'Ask for NPS scores') %>
-    </a>
-  <% end %>
-</div>
-
-<%# How the industry reads a score, so nobody has to go and google it. Range
-    labels are digits on purpose — no translation needed for "< 0". %>
-<% bands = [
-     { key: 'needs-work', range: '< 0',
-       name: t('testimonials.dashboard.nps_band_needs_work', default: 'Needs work'),
-       note: t('testimonials.dashboard.nps_guide_needs_work', default: 'More detractors than promoters.') },
-     { key: 'good', range: '0 – 29',
-       name: t('testimonials.dashboard.nps_band_good', default: 'Good'),
-       note: t('testimonials.dashboard.nps_guide_good', default: 'Where most companies land.') },
-     { key: 'great', range: '30 – 69',
-       name: t('testimonials.dashboard.nps_band_great', default: 'Great'),
-       note: t('testimonials.dashboard.nps_guide_great', default: 'Strong loyalty.') },
-     { key: 'excellent', range: '70 +',
-       name: t('testimonials.dashboard.nps_band_excellent', default: 'Excellent'),
-       note: t('testimonials.dashboard.nps_guide_excellent', default: 'World-class, and rare.') }
-   ] %>
-<% current = bands.find { |b| b[:key] == @band.to_s.tr('_', '-') } if @band %>
-<% if current
-     band_class = "badge nps-band-#{current[:key]}"
-     meter_label = "#{@score} — #{current[:name]} #{current[:note]}"
-   end %>
-
-<div class="stat-row">
-  <div class="stat stat-nps">
-    <div class="stat-headline">
-      <b><%= @score.nil? ? '—' : @score %></b>
-      <% if current %>
-        <span class="<%= band_class %>"><%= current[:name] %></span>
-      <% end %>
-    </div>
-    <span><%= t('testimonials.dashboard.nps_score', default: 'NPS score') %></span>
-    <%# Where this score sits on the −100..100 scale, so the number reads as
-        good or bad at a glance. Kept LTR: it is a number line, not prose. %>
-    <% if current %>
-      <div class="nps-meter" role="img" aria-label="<%= meter_label %>">
-        <div class="nps-meter-track">
-          <i class="nps-seg nps-band-needs-work"></i><i class="nps-seg nps-band-good"></i>
-          <i class="nps-seg nps-band-great"></i><i class="nps-seg nps-band-excellent"></i>
-          <%# Position is data, not markup: dashboard.js places it, so a strict
-              style-src has no inline style to refuse. %>
-          <i class="nps-marker" data-nps-marker="<%= @score %>"></i>
-        </div>
-        <div class="nps-meter-ticks" aria-hidden="true">
-          <span class="tick-min">−100</span><span class="tick-zero">0</span>
-          <span class="tick-good">30</span><span class="tick-great">70</span>
-          <span class="tick-max">100</span>
-        </div>
-      </div>
-    <% end %>
-    <% if @total.positive? && @total < Testimonials::NpsResponse::THIN_SAMPLE %>
-      <p class="muted nps-sample"><%= t('testimonials.dashboard.nps_sample_note', count: @total,
-                                        default: 'Based on %{count} responses — too few to read much into.') %></p>
+<%= render layout: 'testimonials/shared/dashboard' do %>
+  <div class="page-head">
+    <h1><%= t('testimonials.dashboard.nps', default: 'NPS') %></h1>
+    <%# The shareable NPS page, same idea as the testimonial one. config.nps is
+        already true here — the controller 404s otherwise — so only the public
+        switch is left to check. %>
+    <% if Testimonials.config.public_collection %>
+      <a class="button share-link" href="<%= nps_collection_url %>" target="_blank" rel="noopener"
+         title="<%= nps_collection_url %>">
+        🔗 <%= t('testimonials.dashboard.nps_page', default: 'Ask for NPS scores') %>
+      </a>
     <% end %>
   </div>
-  <div class="stat">
-    <b><%= @promoters %></b>
-    <span><%= t('testimonials.dashboard.promoters', default: 'Promoters (9–10)') %></span>
-  </div>
-  <div class="stat">
-    <b><%= @passives %></b>
-    <span><%= t('testimonials.dashboard.passives', default: 'Passives (7–8)') %></span>
-  </div>
-  <div class="stat">
-    <b><%= @detractors %></b>
-    <span><%= t('testimonials.dashboard.detractors', default: 'Detractors (0–6)') %></span>
-  </div>
-</div>
 
-<%# The formula and the benchmarks, closed by default — there when someone
-    wonders whether their number is any good, out of the way the rest of the time. %>
-<details class="nps-guide">
-  <summary><%= t('testimonials.dashboard.nps_guide', default: 'How is this calculated, and what is a good score?') %></summary>
-  <div class="nps-guide-body">
-    <p><%= t('testimonials.dashboard.nps_guide_formula',
-             default: 'NPS = the % of promoters minus the % of detractors. Passives count in the total but on ' \
-                      'neither side, so they pull the score toward zero. The result runs from −100 to +100 — ' \
-                      'a score, not a percentage.') %></p>
-    <ul class="nps-bands">
-      <% bands.each do |band| %>
-        <% badge_class = "badge nps-band-#{band[:key]}" %>
-        <li>
-          <span class="<%= badge_class %>"><%= band[:name] %></span>
-          <b><%= band[:range] %></b>
-          <span class="muted"><%= band[:note] %></span>
-        </li>
-      <% end %>
-    </ul>
-    <p class="muted"><%= t('testimonials.dashboard.nps_guide_caveat',
-                           default: 'Benchmarks move with the industry — software often sits near 40, airlines ' \
-                                    'and internet providers near 0. The trend over time tells you more than any ' \
-                                    'single number, and the comments tell you more than the score.') %></p>
-  </div>
-</details>
+  <%# How the industry reads a score, so nobody has to go and google it. Range
+      labels are digits on purpose — no translation needed for "< 0". %>
+  <% bands = [
+       { key: 'needs-work', range: '< 0',
+         name: t('testimonials.dashboard.nps_band_needs_work', default: 'Needs work'),
+         note: t('testimonials.dashboard.nps_guide_needs_work', default: 'More detractors than promoters.') },
+       { key: 'good', range: '0 – 29',
+         name: t('testimonials.dashboard.nps_band_good', default: 'Good'),
+         note: t('testimonials.dashboard.nps_guide_good', default: 'Where most companies land.') },
+       { key: 'great', range: '30 – 69',
+         name: t('testimonials.dashboard.nps_band_great', default: 'Great'),
+         note: t('testimonials.dashboard.nps_guide_great', default: 'Strong loyalty.') },
+       { key: 'excellent', range: '70 +',
+         name: t('testimonials.dashboard.nps_band_excellent', default: 'Excellent'),
+         note: t('testimonials.dashboard.nps_guide_excellent', default: 'World-class, and rare.') }
+     ] %>
+  <% current = bands.find { |b| b[:key] == @band.to_s.tr('_', '-') } if @band %>
+  <% if current
+       band_class = "badge nps-band-#{current[:key]}"
+       meter_label = "#{@score} — #{current[:name]} #{current[:note]}"
+     end %>
 
-<div class="dashboard-shell <%= 'has-selected' if @selected_response %>">
-  <aside class="dashboard-sidebar" aria-label="<%= t('testimonials.dashboard.nps_responses', default: 'NPS responses') %>">
-    <div class="record-list">
-      <% if @responses.any? %>
-        <% @responses.each do |response| %>
-          <%= link_to nps_responses_path(page: @page, response_id: response.id),
-                      class: ['record-row nps-row', ('active' if @selected_response&.id == response.id)].compact do %>
-            <span class="record-main">
-              <span class="record-topline">
-                <span class="badge nps-<%= response.promoter? ? 'promoter' : (response.detractor? ? 'detractor' : 'passive') %>">
-                  <%= response.score %>
-                </span>
-                <span class="muted record-time" title="<%= response.created_at %>">
-                  <%= time_ago_in_words(response.created_at) %>
-                </span>
-              </span>
-              <span class="record-copy"><%= response.comment.presence || t('testimonials.dashboard.no_comment', default: 'No comment') %></span>
-              <span class="muted record-meta">
-                <span>#<%= response.id %></span>
-                <% if response.name.present? || response.author_id.present? %>
-                  <span><%= response.name.presence || "##{response.author_id}" %></span>
-                <% end %>
-                <% if response.email.present? %>
-                  <span><%= response.email %></span>
-                <% end %>
-              </span>
-            </span>
-          <% end %>
+  <div class="stat-row">
+    <div class="stat stat-nps">
+      <div class="stat-headline">
+        <b><%= @score.nil? ? '—' : @score %></b>
+        <% if current %>
+          <span class="<%= band_class %>"><%= current[:name] %></span>
         <% end %>
-      <% else %>
-        <div class="empty"><%= t('testimonials.dashboard.empty', default: 'Nothing here yet.') %></div>
-      <% end %>
-    </div>
-
-    <div class="pager">
-      <% if @page > 1 %>
-        <%= link_to t('testimonials.dashboard.newer', default: '← Newer'), nps_responses_path(page: @page - 1) %>
-      <% end %>
-      <% if @more %>
-        <%= link_to t('testimonials.dashboard.older', default: 'Older →'), nps_responses_path(page: @page + 1) %>
-      <% end %>
-    </div>
-  </aside>
-
-  <main class="dashboard-detail" aria-label="<%= t('testimonials.dashboard.current_nps_response', default: 'Current NPS response') %>">
-    <% if @selected_response %>
-      <p class="mobile-back">
-        <%= link_to t('testimonials.dashboard.back_to_nps', default: '← All responses'),
-                    nps_responses_path(page: @page) %>
-      </p>
-      <%= render 'response_panel', response: @selected_response %>
-    <% else %>
-      <div class="empty-state">
-        <h2><%= t('testimonials.dashboard.select_response', default: 'Select a response') %></h2>
-        <p class="muted"><%= t('testimonials.dashboard.select_response_hint',
-                               default: 'Open a score from the list to review the comment and source details.') %></p>
       </div>
-    <% end %>
-  </main>
-</div>
+      <span><%= t('testimonials.dashboard.nps_score', default: 'NPS score') %></span>
+      <%# Where this score sits on the −100..100 scale, so the number reads as
+          good or bad at a glance. Kept LTR: it is a number line, not prose. %>
+      <% if current %>
+        <div class="nps-meter" role="img" aria-label="<%= meter_label %>">
+          <div class="nps-meter-track">
+            <i class="nps-seg nps-band-needs-work"></i><i class="nps-seg nps-band-good"></i>
+            <i class="nps-seg nps-band-great"></i><i class="nps-seg nps-band-excellent"></i>
+            <%# Position is data, not markup: dashboard.js places it, so a strict
+                style-src has no inline style to refuse. %>
+            <i class="nps-marker" data-nps-marker="<%= @score %>"></i>
+          </div>
+          <div class="nps-meter-ticks" aria-hidden="true">
+            <span class="tick-min">−100</span><span class="tick-zero">0</span>
+            <span class="tick-good">30</span><span class="tick-great">70</span>
+            <span class="tick-max">100</span>
+          </div>
+        </div>
+      <% end %>
+      <% if @total.positive? && @total < Testimonials::NpsResponse::THIN_SAMPLE %>
+        <p class="muted nps-sample"><%= t('testimonials.dashboard.nps_sample_note', count: @total,
+                                          default: 'Based on %{count} responses — too few to read much into.') %></p>
+      <% end %>
+    </div>
+    <div class="stat">
+      <b><%= @promoters %></b>
+      <span><%= t('testimonials.dashboard.promoters', default: 'Promoters (9–10)') %></span>
+    </div>
+    <div class="stat">
+      <b><%= @passives %></b>
+      <span><%= t('testimonials.dashboard.passives', default: 'Passives (7–8)') %></span>
+    </div>
+    <div class="stat">
+      <b><%= @detractors %></b>
+      <span><%= t('testimonials.dashboard.detractors', default: 'Detractors (0–6)') %></span>
+    </div>
+  </div>
+
+  <%# The formula and the benchmarks, closed by default — there when someone
+      wonders whether their number is any good, out of the way the rest of the time. %>
+  <details class="nps-guide">
+    <summary><%= t('testimonials.dashboard.nps_guide', default: 'How is this calculated, and what is a good score?') %></summary>
+    <div class="nps-guide-body">
+      <p><%= t('testimonials.dashboard.nps_guide_formula',
+               default: 'NPS = the % of promoters minus the % of detractors. Passives count in the total but on ' \
+                        'neither side, so they pull the score toward zero. The result runs from −100 to +100 — ' \
+                        'a score, not a percentage.') %></p>
+      <ul class="nps-bands">
+        <% bands.each do |band| %>
+          <% badge_class = "badge nps-band-#{band[:key]}" %>
+          <li>
+            <span class="<%= badge_class %>"><%= band[:name] %></span>
+            <b><%= band[:range] %></b>
+            <span class="muted"><%= band[:note] %></span>
+          </li>
+        <% end %>
+      </ul>
+      <p class="muted"><%= t('testimonials.dashboard.nps_guide_caveat',
+                             default: 'Benchmarks move with the industry — software often sits near 40, airlines ' \
+                                      'and internet providers near 0. The trend over time tells you more than any ' \
+                                      'single number, and the comments tell you more than the score.') %></p>
+    </div>
+  </details>
+
+  <div class="dashboard-shell <%= 'has-selected' if @selected_response %>">
+    <aside class="dashboard-sidebar" aria-label="<%= t('testimonials.dashboard.nps_responses', default: 'NPS responses') %>">
+      <div class="record-list">
+        <% if @responses.any? %>
+          <% @responses.each do |response| %>
+            <%= link_to nps_responses_path(page: @page, response_id: response.id),
+                        class: ['record-row nps-row', ('active' if @selected_response&.id == response.id)].compact do %>
+              <span class="record-main">
+                <span class="record-topline">
+                  <span class="badge nps-<%= response.promoter? ? 'promoter' : (response.detractor? ? 'detractor' : 'passive') %>">
+                    <%= response.score %>
+                  </span>
+                  <span class="muted record-time" title="<%= response.created_at %>">
+                    <%= time_ago_in_words(response.created_at) %>
+                  </span>
+                </span>
+                <span class="record-copy"><%= response.comment.presence || t('testimonials.dashboard.no_comment', default: 'No comment') %></span>
+                <span class="muted record-meta">
+                  <span>#<%= response.id %></span>
+                  <% if response.name.present? || response.author_id.present? %>
+                    <span><%= response.name.presence || "##{response.author_id}" %></span>
+                  <% end %>
+                  <% if response.email.present? %>
+                    <span><%= response.email %></span>
+                  <% end %>
+                </span>
+              </span>
+            <% end %>
+          <% end %>
+        <% else %>
+          <div class="empty"><%= t('testimonials.dashboard.empty', default: 'Nothing here yet.') %></div>
+        <% end %>
+      </div>
+
+      <div class="pager">
+        <% if @page > 1 %>
+          <%= link_to t('testimonials.dashboard.newer', default: '← Newer'), nps_responses_path(page: @page - 1) %>
+        <% end %>
+        <% if @more %>
+          <%= link_to t('testimonials.dashboard.older', default: 'Older →'), nps_responses_path(page: @page + 1) %>
+        <% end %>
+      </div>
+    </aside>
+
+    <main class="dashboard-detail" aria-label="<%= t('testimonials.dashboard.current_nps_response', default: 'Current NPS response') %>">
+      <% if @selected_response %>
+        <p class="mobile-back">
+          <%= link_to t('testimonials.dashboard.back_to_nps', default: '← All responses'),
+                      nps_responses_path(page: @page) %>
+        </p>
+        <%= render 'response_panel', response: @selected_response %>
+      <% else %>
+        <div class="empty-state">
+          <h2><%= t('testimonials.dashboard.select_response', default: 'Select a response') %></h2>
+          <p class="muted"><%= t('testimonials.dashboard.select_response_hint',
+                                 default: 'Open a score from the list to review the comment and source details.') %></p>
+        </div>
+      <% end %>
+    </main>
+  </div>
+<% end %>
