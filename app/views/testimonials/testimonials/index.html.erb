@@ -1,4 +1,4 @@
-<% content_for :body_class, 'tm-index' %>
+<% content_for :body_class, 'tml-index' %>
 
 <%= render layout: 'testimonials/shared/dashboard' do %>
   <div class="page-head">
@@ -46,7 +46,7 @@
           <% @testimonials.each do |testimonial| %>
             <%= link_to testimonials_path(status: @status, kind: @kind, q: @query, page: @page,
                                           testimonial_id: testimonial.id),
-                        class: ['record-row testimonial-row',
+                        class: ['record-row',
                                 ('active' if @selected_testimonial&.id == testimonial.id)].compact do %>
               <span class="record-main">
                 <span class="record-topline">

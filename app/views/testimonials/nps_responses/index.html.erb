@@ -1,4 +1,4 @@
-<% content_for :body_class, 'tm-nps-index' %>
+<% content_for :body_class, 'tml-index tml-nps-index' %>
 
 <%= render layout: 'testimonials/shared/dashboard' do %>
   <div class="page-head">
@@ -114,7 +114,7 @@
         <% if @responses.any? %>
           <% @responses.each do |response| %>
             <%= link_to nps_responses_path(page: @page, response_id: response.id),
-                        class: ['record-row nps-row', ('active' if @selected_response&.id == response.id)].compact do %>
+                        class: ['record-row', ('active' if @selected_response&.id == response.id)].compact do %>
               <span class="record-main">
                 <span class="record-topline">
                   <span class="badge nps-<%= response.promoter? ? 'promoter' : (response.detractor? ? 'detractor' : 'passive') %>">

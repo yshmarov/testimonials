@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.9.0
+
+- **One design system across the family.** The stylesheet now opens with a
+  shared core — the colour tokens, `.page-head`, `.tabs`, `.filters`, `.card`,
+  `.badge`, buttons and form controls, and the `.dashboard-shell` +
+  `.record-row` + `.detail-panel` two-pane dashboard — identical in all five
+  gems of the family, apart from the `--tml-` prefix. The five had drifted:
+  sidebars between 380px and 430px, reading columns between 860px and 1020px,
+  two different tab styles and three different button styles. The sidebar is
+  now 330–430px everywhere, a reading page 1020px, a dashboard 1280px.
+  Everything below the `GEM-SPECIFIC` banner is what only this gem has.
+- **The dashboard markup uses the shared class names.** `.testimonial-panel`
+  and `.nps-panel` are both `.detail-panel` now, and the body classes are
+  `tml-index`, `tml-show` and `tml-index tml-nps-index` where they were
+  `tm-index`, `tm-show` and `tm-nps-index`. The row classes were already
+  shared. If you styled or scripted any of those names in a host app, that is
+  the breaking change — no configuration, route or database change is
+  involved.
+- **The narrow-screen rules work again.** The `max-width: 760px` block sat above
+  the component rules it means to override, and CSS nesting adds no specificity,
+  so the desktop grid won every tie: showing one pane at a time on a phone had
+  quietly stopped working. The media query moved to the end of the file.
+- Smaller fixes that came with the shared core: a submit input is styled as a
+  button rather than a full-width field, the filter row keeps its search box and
+  button on one line, and a `code.key` truncates inside a list row instead of
+  wrapping over three lines.
+
 ## 0.8.1
 
 - Dropped the redundant `(tenant, status)` index from the install and tenant

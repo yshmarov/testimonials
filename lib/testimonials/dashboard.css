@@ -4,83 +4,56 @@
  *
  *   :root            custom properties, all `--tml-` prefixed so they can
  *                    neither overwrite a host's nor be overwritten by them.
- *   .tml-page         the page frame (was bare html/body). Only the gem's own
+ *   .tml-page        the page frame (was bare html/body). Only the gem's own
  *                    layout puts this class on <body>, so inside a host admin
  *                    these rules simply do not apply.
- *   .tml-dashboard    everything else, nested. Names like .container, .card
+ *   .tml-dashboard   everything else, nested. Names like .container, .card
  *                    and .tabs are confined to the dashboard's own markup, so
  *                    loading this file inside a host cannot restyle its chrome.
  *
  * Nothing here styles a bare `body`, `a`, `table` or `*` at the top level.
+ *
+ * Two sections follow: the design system shared by the whole gem family,
+ * then what only this gem has. A rule that belongs in the shared section
+ * belongs in all five copies of it.
+ *
+ * Order inside a section matters — components, then the page frame, then the
+ * narrow-screen overrides. Nesting adds no specificity, so the last rule
+ * wins the ties, and an override placed before the rule it means to beat
+ * silently does nothing.
  */
 
+/* ---------------------------------------------------------------------------
+ * SHARED CORE — identical in testimonials, ideasbugs, livechat, product_tours
+ * and i18n_proofreading apart from the prefix. Diff it against a sibling gem
+ * before you change it, and carry the change to all five.
+ * ------------------------------------------------------------------------- */
 
 :root {
   color-scheme: light dark;
-  --tml-bg: #f6f7f9; --tml-surface: #fff; --tml-text: #1c2024; --tml-muted: #6b7280;
-  --tml-border: #e5e7eb; --tml-accent: #2563eb; --tml-accent-text: #fff;
-  --tml-pending: #d97706; --tml-approved: #16a34a; --tml-archived: #6b7280;
-  --tml-star: #f59e0b; --tml-danger: #dc2626;
-  --tml-promoter: #16a34a; --tml-passive: #d97706; --tml-detractor: #dc2626;
-  /* The four bands an NPS number falls into: bad, ordinary, strong, rare. */
-  --tml-nps-needs-work: #dc2626; --tml-nps-good: #d97706; --tml-nps-great: #16a34a; --tml-nps-excellent: #0f766e;
+  --tml-bg: #f6f7f9;
+  --tml-surface: #fff;
+  --tml-text: #1c2024;
+  --tml-muted: #6b7280;
+  --tml-border: #e5e7eb;
+  --tml-accent: #2563eb;
+  --tml-accent-text: #fff;
+  --tml-code: #f0f1f3;
+  /* The four semantic states every gem in the family badges something with. */
+  --tml-success: #16a34a;
+  --tml-warning: #d97706;
+  --tml-danger: #dc2626;
+  --tml-neutral: #6b7280;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --tml-bg: #111418; --tml-surface: #1a1f26; --tml-text: #e6e8ea; --tml-muted: #9aa2ab;
-    --tml-border: #2a313a; --tml-accent: #3b82f6;
-}
-}
-@media (max-width: 760px) {
-  .tml-page { font-size: 14px; }
-  .tm-index, .tm-nps-index, .tm-show { overflow-x: hidden; }
-  .tm-index, .tm-nps-index { overflow-y: auto; overflow-x: hidden; }
-  .tm-index, .tm-index .container,
-  .tm-nps-index, .tm-nps-index .container { min-height: 100vh; height: auto; }
-  .tm-index .container, .tm-nps-index .container { padding-bottom: 10px; }
-  .tml-dashboard {
-  & .container { padding: 14px 10px 24px; }
-  & .dashboard-detail,
-  & .testimonial-panel,
-  & .nps-panel,
-  & .detail-scroll,
-  & .card,
-  & dl,
-  & dd,
-  & .best-line-form,
-  & .best-line-form textarea { min-width: 0; max-width: 100%; }
-  & .testimonial-panel .card,
-  & .nps-panel .card { width: calc(100vw - 20px); }
-  & .best-line-form textarea { width: 100%; }
-  & .message,
-  & .best-line-hint,
-  & dd,
-  & .muted { overflow-wrap: anywhere; }
-  & .message,
-  & .best-line-hint,
-  & dd,
-  & .muted { max-width: calc(100vw - 54px); }
-  & .dashboard-shell { display: block; min-height: calc(100vh - 76px); }
-  & .dashboard-sidebar,
-  & .dashboard-detail { min-height: calc(100vh - 76px); }
-  & .dashboard-shell.has-selected .dashboard-sidebar { display: none; }
-  & .dashboard-shell:not(.has-selected) .dashboard-detail { display: none; }
-  & .record-list { overflow: visible; }
-  & .record-row { padding: 12px; }
-  & .record-meta { display: none; }
-  & .dashboard-detail .testimonial-panel,
-  & .dashboard-detail .nps-panel { min-height: calc(100vh - 64px); }
-  & .mobile-back { display: block; flex: 0 0 auto; margin: 10px 10px 0; font-size: 13px; }
-  & .panel-head h1 { font-size: 18px; }
-  & dl { grid-template-columns: 1fr; gap: 3px; }
-  & .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  & .stat { min-width: 0; padding: 10px 12px; }
-  & .stat b { font-size: 22px; }
-  & .stat-nps { grid-column: 1 / -1; }
-  & .nps-bands { grid-template-columns: max-content 1fr; }
-  & .nps-bands b { grid-column: 2; }
-  & .nps-bands li > .muted { grid-column: 1 / -1; }
-  & .share-link { flex: 1 0 100%; margin-left: 0; text-align: center; }
+    --tml-bg: #111418;
+    --tml-surface: #1a1f26;
+    --tml-text: #e6e8ea;
+    --tml-muted: #9aa2ab;
+    --tml-border: #2a313a;
+    --tml-accent: #3b82f6;
+    --tml-code: #232a33;
   }
 }
 
@@ -93,70 +66,259 @@
   & * { box-sizing: border-box; }
   & a { color: var(--tml-accent); text-decoration: none; }
   & a:hover { text-decoration: underline; }
+  & :focus-visible { outline: 2px solid var(--tml-accent); outline-offset: 2px; }
+
+  /* Page furniture. `.container` is the reading width; an index page widens it
+     to 1280px in the page frame below. */
   & .container { max-width: 1020px; margin: 0 auto; padding: 24px 16px 64px; }
-  & h1 { font-size: 22px; margin: 0 0 16px; }
-  & h1.title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  /* Index heading row: title on the left, the shareable public link on the right. */
-  & .page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  & h1 { margin: 0 0 16px; font-size: 22px; }
+  & h2 { margin: 0 0 12px; font-size: 16px; }
+  & .page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
   & .page-head h1 { margin: 0; }
-  & .nav { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  & .lede { margin: 4px 0 0; color: var(--tml-muted); }
+  & .breadcrumb { margin: 0 0 12px; font-size: 13px; }
+  & .muted { color: var(--tml-muted); font-size: 13px; }
+  & .case-id { color: var(--tml-muted); font-weight: 400; font-size: 15px; }
+  & .spacer { flex: 1; }
+  & .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+  /* Section switcher: the pills above the dashboard when a gem has more than
+     one section. Lives on the page, so a host `admin_layout` can drop it. */
+  & .nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
   & .nav a { padding: 6px 16px; border: 1px solid var(--tml-border); border-radius: 999px; background: var(--tml-surface); color: var(--tml-muted); font-weight: 600; }
   & .nav a:hover { text-decoration: none; color: var(--tml-text); }
-  & .nav a.active { background: var(--tml-accent); border-color: var(--tml-accent); color: var(--tml-accent-text); }
+  & .nav a.active { border-color: var(--tml-accent); background: var(--tml-accent); color: var(--tml-accent-text); }
   & .nav a.active:hover { color: var(--tml-accent-text); }
-  & .share-link { margin-left: auto; font-size: 13px; font-weight: 400; }
-  & .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--tml-border); margin-bottom: 16px; flex-wrap: wrap; }
-  & .tabs a { padding: 8px 14px; border-radius: 8px 8px 0 0; color: var(--tml-muted); }
-  & .tabs a.active { color: var(--tml-text); font-weight: 600; border: 1px solid var(--tml-border); border-bottom: 2px solid var(--tml-surface); background: var(--tml-surface); margin-bottom: -1px; }
-  & .tabs a:hover { text-decoration: none; color: var(--tml-text); }
-  & .count { display: inline-block; min-width: 20px; padding: 0 6px; margin-left: 4px; border-radius: 999px; background: var(--tml-border); font-size: 12px; text-align: center; }
-  & .filters { margin-bottom: 16px; display: flex; gap: 8px; align-items: center; }
-  & .filters select,
-  & .filters input[type=search] { padding: 6px 8px; border: 1px solid var(--tml-border); border-radius: 8px; background: var(--tml-surface); color: var(--tml-text); font: inherit; }
-  & .filters input[type=search] { flex: 1; max-width: 320px; }
-  & .card { background: var(--tml-surface); border: 1px solid var(--tml-border); border-radius: 12px; overflow: hidden; }
+
+  /* Tabs: one system for the whole family — an underlined row of equal-width
+     tabs, sized to sit at the top of the sidebar. */
+  & .tabs { display: flex; gap: 6px; }
+  & .tabs a { position: relative; display: flex; flex: 1 1 0; align-items: center; justify-content: center; gap: 6px; min-height: 34px; padding: 5px 10px 8px; border-radius: 8px; color: var(--tml-muted); font-weight: 600; }
+  & .tabs a:hover { background: var(--tml-bg); color: var(--tml-text); text-decoration: none; }
+  & .tabs a.active { color: var(--tml-text); }
+  & .tabs a.active::after { content: ""; position: absolute; right: 20px; bottom: 0; left: 20px; height: 2px; border-radius: 999px; background: var(--tml-accent); }
+  & .count { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 999px; background: color-mix(in srgb, var(--tml-muted) 14%, transparent); font-size: 12px; text-align: center; font-variant-numeric: tabular-nums; }
+  & .tabs a.active .count { background: var(--tml-border); }
+
+  /* Filter row under the tabs: a full-width select over a search + submit row,
+     however many of the three a gem actually has. */
+  & .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 12px; border-bottom: 1px solid var(--tml-border); }
+  & .filters label { flex: 1 1 100%; color: var(--tml-muted); font-size: 13px; }
+  & .filters select { flex: 1 1 100%; }
+  /* Basis 0, not auto: the controls below are `width: 100%`, which would
+     otherwise push the submit button onto its own row. */
+  & .filters input[type="search"] { flex: 1 1 0; min-width: 0; }
+  & .filters button,
+  & .filters input[type="submit"] { flex: 0 0 auto; }
+
+  /* Form controls. 16px so iOS does not zoom the page on focus. */
+  & input,
+  & select,
+  & textarea { width: 100%; min-height: 38px; padding: 7px 9px; border: 1px solid var(--tml-border); border-radius: 8px; background: var(--tml-surface); color: var(--tml-text); font: inherit; font-size: 16px; letter-spacing: 0; }
+  & textarea { resize: vertical; }
+  & input[type="checkbox"],
+  & input[type="radio"] { width: auto; min-width: 0; min-height: 0; }
+  & input:focus,
+  & select:focus,
+  & textarea:focus { border-color: var(--tml-accent); outline: 2px solid color-mix(in srgb, var(--tml-accent) 22%, transparent); outline-offset: 0; }
+  & .field { margin-bottom: 16px; }
+  & .field label { display: block; margin-bottom: 5px; font-weight: 600; }
+  & .field small { display: block; margin-top: 5px; color: var(--tml-muted); }
+
+  /* A submit input is a button, whatever the markup says. */
+  & button,
+  & .button,
+  & input[type="submit"] { display: inline-flex; width: auto; align-items: center; justify-content: center; min-height: 38px; padding: 8px 14px; border: 1px solid var(--tml-border); border-radius: 8px; background: var(--tml-surface); color: var(--tml-text); font: inherit; cursor: pointer; }
+  & button:hover,
+  & .button:hover,
+  & input[type="submit"]:hover { border-color: var(--tml-muted); text-decoration: none; }
+  & button.primary,
+  & .button.primary,
+  & input[type="submit"].primary { border-color: var(--tml-accent); background: var(--tml-accent); color: var(--tml-accent-text); }
+  & button.danger,
+  & .button.danger { color: var(--tml-danger); }
+  & button.small,
+  & .button.small { min-height: 32px; padding: 4px 10px; font-size: 13px; }
+  & .actions,
+  & .form-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  & .actions form { display: inline; }
+  & .form-actions { padding-top: 12px; }
+
+  & .card { overflow: hidden; border: 1px solid var(--tml-border); border-radius: 12px; background: var(--tml-surface); }
   & .card.pad { padding: 16px; overflow: visible; }
   & table { width: 100%; border-collapse: collapse; }
   & th,
   & td { padding: 10px 14px; text-align: left; vertical-align: top; }
   & th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--tml-muted); border-bottom: 1px solid var(--tml-border); }
   & tr + tr td { border-top: 1px solid var(--tml-border); }
-  & .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #fff; white-space: nowrap; }
+  & td.row-actions { white-space: nowrap; text-align: right; }
+  & td.row-actions form { display: inline-block; }
+  & td.row-actions form + form { margin-left: 6px; }
+
+  & .badge { display: inline-flex; padding: 2px 10px; border-radius: 999px; color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  & .badge.locale { border: 1px solid var(--tml-border); background: transparent; color: var(--tml-muted); }
+  & code.key { max-width: 100%; padding: 2px 7px; border-radius: 6px; background: var(--tml-code); font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+
+  & .flash,
+  & .errors { margin-bottom: 16px; padding: 10px 12px; border: 1px solid var(--tml-border); border-radius: 8px; background: var(--tml-surface); }
+  & .flash.notice { border-color: var(--tml-success); }
+  & .flash.alert,
+  & .errors { border-color: var(--tml-danger); }
+  & .errors ul { margin-bottom: 0; }
+
+  & dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+  & dt { color: var(--tml-muted); }
+  & dd { margin: 0; overflow-wrap: anywhere; }
+  & .message { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  & .empty { padding: 48px 16px; color: var(--tml-muted); text-align: center; }
+  & .empty-state { max-width: 320px; margin: auto; padding: 24px; text-align: center; }
+  & .empty-state h2 { margin: 0 0 6px; font-size: 18px; }
+  & .empty-state p { margin: 0; }
+
+  /* The two-pane dashboard: the queue on the left, the selected record on the
+     right, each pane owning its own scroll. */
+  & .dashboard-shell { display: grid; flex: 1 1 auto; grid-template-columns: minmax(330px, 430px) 1fr; gap: 16px; min-height: 0; }
+  & .dashboard-sidebar { display: flex; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden; border: 1px solid var(--tml-border); border-radius: 8px; background: var(--tml-surface); }
+  & .dashboard-sidebar .tabs { flex: 0 0 auto; margin: 12px 12px 0; }
+  & .dashboard-sidebar .filters { flex: 0 0 auto; }
+
+  /* One row shape for every gem: a topline of badges and a timestamp, the copy
+     that identifies the record, then a muted line of ids and authors. */
+  & .record-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+  & .record-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 13px 14px; border-bottom: 1px solid var(--tml-border); color: var(--tml-text); }
+  & .record-row:hover { background: var(--tml-bg); text-decoration: none; }
+  & .record-row.active { background: color-mix(in srgb, var(--tml-accent) 9%, var(--tml-surface)); box-shadow: inset 3px 0 0 var(--tml-accent); }
+  & .record-main { display: flex; min-width: 0; flex-direction: column; gap: 5px; }
+  & .record-topline,
+  & .record-meta { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  & .record-name,
+  & .record-copy,
+  & .record-meta span,
+  /* A key is `overflow-wrap: anywhere` in prose; in a row it truncates. */
+  & .record-topline code.key,
+  & .record-meta code.key { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  & .record-name { font-weight: 600; }
+  & .record-copy { display: block; font-weight: 600; }
+  & .record-time { margin-left: auto; white-space: nowrap; }
+  & .record-side { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: 8px; padding-top: 1px; }
+  & .pager { display: flex; flex: 0 0 auto; justify-content: space-between; gap: 16px; min-height: 42px; margin: 0; padding: 10px 12px; border-top: 1px solid var(--tml-border); }
+
+  /* The selected record. `.detail-scroll` is the only part that scrolls, so the
+     panel heading and its actions stay put. */
+  & .dashboard-detail { display: flex; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden; }
+  & .dashboard-detail .detail-panel { flex: 1 1 auto; min-height: 0; }
+  & .dashboard-detail .detail-scroll { flex: 1 1 auto; overflow-y: auto; padding-right: 2px; }
+  & .dashboard-detail .actions { margin-bottom: 0; }
+  & .detail-panel { display: flex; min-width: 0; flex-direction: column; }
+  /* The panel's own heading row: the title on the left, whatever acts on the
+     whole record on the right. */
+  & .panel-head { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  & .panel-head h1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0; }
+  & .detail-scroll { display: flex; min-height: 0; flex-direction: column; gap: 12px; }
+  & .mobile-back { display: none; }
+}
+
+/* Page frame — the gem's own layout only. After the components, so it wins the
+   specificity ties against them. */
+.tml-page { margin: 0; min-height: 100vh; background: var(--tml-bg); color: var(--tml-text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; letter-spacing: 0; }
+/* An index page is the dashboard: it fills the viewport and never scrolls
+   itself, because the queue and the detail pane each scroll on their own. */
+.tml-index, .tml-index .container { height: 100vh; height: 100dvh; }
+.tml-index { overflow: hidden; }
+.tml-index .container { display: flex; max-width: 1280px; flex-direction: column; padding-bottom: 16px; }
+.tml-index .nav,
+.tml-index .page-head { flex: 0 0 auto; }
+/* Standalone show pages keep normal page scrolling. */
+.tml-show { min-height: 100vh; overflow: auto; }
+.tml-show .detail-panel { width: 100%; }
+.tml-show .detail-scroll { overflow: visible; }
+
+/* Narrow screens: one pane at a time, the queue until a record is picked.
+   Last in the file, so these overrides actually reach the rules above. */
+@media (max-width: 760px) {
+  .tml-page { font-size: 14px; }
+  .tml-index, .tml-show { overflow-x: hidden; }
+  .tml-index { overflow-y: auto; }
+  .tml-index, .tml-index .container { min-height: 100vh; height: auto; }
+  .tml-index .container { padding-bottom: 10px; }
+  .tml-dashboard {
+    & .container { padding: 14px 10px 24px; }
+    & .page-head { margin-bottom: 12px; }
+    & .detail-panel,
+    & .detail-scroll,
+    & .card,
+    & dl,
+    & dd { min-width: 0; max-width: 100%; }
+    & .dashboard-detail .card { width: 100%; }
+    & .message,
+    & .lede,
+    & dd,
+    & .muted { overflow-wrap: anywhere; }
+    & .dashboard-shell { display: block; min-height: calc(100vh - 62px); }
+    & .dashboard-sidebar,
+    & .dashboard-detail { min-height: calc(100vh - 62px); }
+    & .dashboard-shell.has-selected .dashboard-sidebar { display: none; }
+    & .dashboard-shell:not(.has-selected) .dashboard-detail { display: none; }
+    & .record-list { overflow: visible; }
+    & .record-row { padding: 12px; }
+    & .record-meta { display: none; }
+    & .dashboard-detail .detail-panel { min-height: calc(100vh - 64px); }
+    & .mobile-back { display: block; flex: 0 0 auto; margin: 4px 0 10px; font-size: 13px; }
+    & .panel-head h1 { font-size: 18px; }
+    & dl { grid-template-columns: 1fr; gap: 3px; }
+    & dd { margin-bottom: 8px; }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * GEM-SPECIFIC — testimonials only: star ratings, the video player, the best
+ * line editor, and the NPS score card with its meter and benchmarks.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --tml-pending: var(--tml-warning);
+  --tml-approved: var(--tml-success);
+  --tml-archived: var(--tml-neutral);
+  --tml-star: #f59e0b;
+  --tml-promoter: var(--tml-success);
+  --tml-passive: var(--tml-warning);
+  --tml-detractor: var(--tml-danger);
+  /* The four bands an NPS number falls into: bad, ordinary, strong, rare. */
+  --tml-nps-needs-work: var(--tml-danger);
+  --tml-nps-good: var(--tml-warning);
+  --tml-nps-great: var(--tml-success);
+  --tml-nps-excellent: #0f766e;
+}
+
+.tml-dashboard {
+  /* The shareable public form, sitting in the index heading row. */
+  & .share-link { font-size: 13px; font-weight: 400; }
+
   & .badge.status-pending { background: var(--tml-pending); }
   & .badge.status-approved { background: var(--tml-approved); }
   & .badge.status-archived { background: var(--tml-archived); }
   & .badge.nps-promoter { background: var(--tml-promoter); }
   & .badge.nps-passive { background: var(--tml-passive); }
   & .badge.nps-detractor { background: var(--tml-detractor); }
-  & .badge.locale { background: transparent; color: var(--tml-muted); border: 1px solid var(--tml-border); }
   & .stars { color: var(--tml-star); letter-spacing: 1px; white-space: nowrap; }
   & .stars .off { color: var(--tml-border); }
-  & .muted { color: var(--tml-muted); font-size: 13px; }
-  & .pager { margin-top: 16px; display: flex; gap: 16px; }
-  & .actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
-  & .actions form { display: inline; }
-  & td.row-actions { white-space: nowrap; text-align: right; }
-  & td.row-actions form { display: inline-block; }
-  & td.row-actions form + form { margin-left: 6px; }
-  & button,
-  & .button { padding: 8px 14px; border: 1px solid var(--tml-border); border-radius: 8px; cursor: pointer; background: var(--tml-surface); color: var(--tml-text); font: inherit; }
-  & button.primary { background: var(--tml-accent); border-color: var(--tml-accent); color: var(--tml-accent-text); }
-  & button.danger { color: var(--tml-danger); }
-  & button.small { padding: 3px 10px; font-size: 13px; }
-  & .message { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-  & dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
-  & dt { color: var(--tml-muted); }
-  & dd { margin: 0; overflow-wrap: anywhere; }
+
   & video.playback { width: 100%; max-width: 480px; border-radius: 10px; background: #000; }
   & img.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
-  & .empty { padding: 48px 16px; text-align: center; color: var(--tml-muted); }
-  & .breadcrumb { margin-bottom: 12px; font-size: 13px; }
-  & .case-id { color: var(--tml-muted); font-weight: 400; font-size: 15px; }
+
+  & .best-line-form { margin-top: 14px; }
+  & .best-line-form label { font-weight: 600; }
+  & .best-line-hint { margin: 2px 0 6px; }
+  & .best-line-save { margin-top: 8px; }
+
+  /* NPS summary row. */
   & .stat-row { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-  & .stat { flex: 1; min-width: 140px; background: var(--tml-surface); border: 1px solid var(--tml-border); border-radius: 12px; padding: 14px 16px; }
+  & .stat { flex: 1; min-width: 140px; padding: 14px 16px; border: 1px solid var(--tml-border); border-radius: 12px; background: var(--tml-surface); }
   & .stat b { display: block; font-size: 26px; }
   & .stat span { color: var(--tml-muted); font-size: 13px; }
-  /* NPS score card: the number, the band it falls in, and where it sits on the −100..100 scale — so nobody has to google whether 50 is any good. */
+  /* The score card: the number, the band it falls in, and where it sits on the
+     −100..100 scale — so nobody has to google whether 50 is any good. */
   & .stat-nps { flex: 2.4; min-width: 240px; }
   & .stat-headline { display: flex; align-items: center; gap: 10px; }
   & .stat-headline b { display: inline-block; }
@@ -173,7 +335,8 @@
   & .nps-seg.nps-band-good { flex: 30; background: var(--tml-nps-good); }
   & .nps-seg.nps-band-great { flex: 40; background: var(--tml-nps-great); }
   & .nps-seg.nps-band-excellent { flex: 30; background: var(--tml-nps-excellent); }
-  /* Hidden until dashboard.js reads data-nps-marker and positions it, so a score of 50 never renders as if it were −100. */
+  /* Hidden until dashboard.js reads data-nps-marker and positions it, so a score
+     of 50 never renders as if it were −100. */
   & .nps-marker { display: none; position: absolute; top: -3px; width: 4px; height: 12px; margin-left: -2px; border-radius: 2px; background: var(--tml-text); box-shadow: 0 0 0 2px var(--tml-surface); }
   & .nps-marker.placed { display: block; }
   & .nps-meter-ticks { position: relative; height: 14px; margin-top: 3px; color: var(--tml-muted); font-size: 11px; }
@@ -185,7 +348,7 @@
   & .nps-meter-ticks .tick-max { left: 100%; transform: translateX(-100%); }
   & .nps-sample { margin: 8px 0 0; font-size: 12px; }
   /* The formula and the benchmarks, tucked behind a disclosure. */
-  & .nps-guide { flex: 0 0 auto; margin-bottom: 14px; background: var(--tml-surface); border: 1px solid var(--tml-border); border-radius: 12px; }
+  & .nps-guide { flex: 0 0 auto; margin-bottom: 14px; border: 1px solid var(--tml-border); border-radius: 12px; background: var(--tml-surface); }
   & .nps-guide summary { padding: 10px 16px; color: var(--tml-muted); font-size: 13px; cursor: pointer; }
   & .nps-guide summary:hover { color: var(--tml-text); }
   & .nps-guide[open] summary { border-bottom: 1px solid var(--tml-border); }
@@ -194,65 +357,24 @@
   & .nps-bands { display: grid; grid-template-columns: max-content max-content 1fr; gap: 8px 14px; margin: 12px 0; padding: 0; list-style: none; align-items: baseline; }
   & .nps-bands li { display: contents; }
   & .nps-bands b { font-variant-numeric: tabular-nums; white-space: nowrap; }
-  & .best-line-form textarea { width: 100%; padding: 8px; border: 1px solid var(--tml-border); border-radius: 8px; background: var(--tml-surface); color: var(--tml-text); font: inherit; resize: vertical; }
-  & .best-line-hint { margin: 2px 0 6px; }
-  & .best-line-save { margin-top: 8px; }
-  & .panel-head { flex: 0 0 auto; }
-  & .panel-head h1 { margin-bottom: 12px; }
-  & .detail-scroll { min-height: 0; display: flex; flex-direction: column; gap: 12px; }
-  & .testimonial-panel,
-  & .nps-panel { min-width: 0; display: flex; flex-direction: column; }
-  & .testimonial-panel .actions { flex: 0 0 auto; }
-  & .testimonial-panel .detail-scroll > .actions { margin: 0; }
-  & .dashboard-shell { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(330px, 430px) 1fr; gap: 16px; }
-  & .dashboard-sidebar { min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--tml-surface); border: 1px solid var(--tml-border); border-radius: 8px; overflow: hidden; }
-  & .dashboard-sidebar .tabs { flex: 0 0 auto; margin: 12px 12px 0; padding: 0; background: transparent; border: 0; border-radius: 0; gap: 6px; flex-wrap: nowrap; }
-  & .dashboard-sidebar .tabs a { flex: 1 1 0; position: relative; display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 34px; padding: 5px 10px 8px; border-radius: 8px; color: var(--tml-muted); font-weight: 600; }
-  & .dashboard-sidebar .tabs a.active { color: var(--tml-text); border: 0; background: transparent; box-shadow: none; margin: 0; }
-  & .dashboard-sidebar .tabs a.active::after { content: ""; position: absolute; left: 20px; right: 20px; bottom: 0; height: 2px; border-radius: 999px; background: var(--tml-accent); }
-  & .dashboard-sidebar .tabs a:not(.active):hover { text-decoration: none; color: var(--tml-text); background: var(--tml-bg); }
-  & .dashboard-sidebar .tabs .count { margin-left: 0; background: color-mix(in srgb, var(--tml-muted) 14%, transparent); }
-  & .dashboard-sidebar .tabs a.active .count { background: var(--tml-border); }
-  & .dashboard-sidebar .filters { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; margin: 0; padding: 12px; border-bottom: 1px solid var(--tml-border); }
-  & .dashboard-sidebar .filters select { grid-column: 1 / -1; width: 100%; }
-  & .dashboard-sidebar .filters input[type=search] { min-width: 0; max-width: none; }
-  & .record-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
-  & .record-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 13px 14px; color: var(--tml-text); border-bottom: 1px solid var(--tml-border); }
-  & .record-row:hover { text-decoration: none; background: var(--tml-bg); }
-  & .record-row.active { background: color-mix(in srgb, var(--tml-accent) 9%, var(--tml-surface)); box-shadow: inset 3px 0 0 var(--tml-accent); }
-  & .record-main { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
-  & .record-topline,
-  & .record-meta { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  & .record-copy,
-  & .record-meta span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  & .record-copy { display: block; font-weight: 600; }
-  & .record-time { margin-left: auto; white-space: nowrap; }
-  & .record-side { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: 8px; padding-top: 1px; }
-  & .dashboard-sidebar .pager { flex: 0 0 auto; margin: 0; padding: 10px 12px; border-top: 1px solid var(--tml-border); }
-  & .dashboard-detail { min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
-  & .dashboard-detail .testimonial-panel,
-  & .dashboard-detail .nps-panel { flex: 1 1 auto; min-height: 0; }
-  & .dashboard-detail .detail-scroll { flex: 1 1 auto; overflow-y: auto; padding-right: 2px; }
-  & .dashboard-detail .actions { margin-bottom: 0; }
-  & .empty-state { margin: auto; max-width: 320px; padding: 24px; text-align: center; }
-  & .empty-state h2 { margin: 0 0 6px; font-size: 18px; }
-  & .empty-state p { margin: 0; }
-  & .mobile-back { display: none; }
 }
 
-/* Page frame — the gem's own layout only. Last, so it wins the
-   specificity ties against the component layer above. */
-.tml-page { margin: 0; background: var(--tml-bg); color: var(--tml-text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-/* Desktop dashboard: queue on the left, selected record on the right. */
-.tm-index, .tm-index .container,
-.tm-nps-index, .tm-nps-index .container { height: 100vh; height: 100dvh; }
-.tm-index, .tm-nps-index { overflow: hidden; }
-.tm-index .container, .tm-nps-index .container { max-width: 1280px; display: flex; flex-direction: column; padding-bottom: 16px; }
-.tm-index .nav, .tm-nps-index .nav,
-.tm-index .container .page-head, .tm-nps-index .container .page-head,
-.tm-nps-index .stat-row { flex: 0 0 auto; }
-.tm-index .container .page-head, .tm-nps-index .container .page-head { margin-bottom: 14px; }
-.tm-nps-index .stat-row { margin-bottom: 14px; }
-/* Standalone show pages keep normal page scrolling. */
-.tm-show { min-height: 100vh; overflow: auto; }
-.tm-show .detail-scroll { overflow: visible; }
+/* The NPS page carries `tml-index tml-nps-index`: the shared index frame plus
+   the summary row and the guide, which sit above the two panes. */
+.tml-nps-index .stat-row { flex: 0 0 auto; margin-bottom: 14px; }
+
+@media (max-width: 760px) {
+  .tml-dashboard {
+    & .best-line-form,
+    & .best-line-form textarea { min-width: 0; max-width: 100%; }
+    & .best-line-hint { overflow-wrap: anywhere; }
+    & .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    & .stat { min-width: 0; padding: 10px 12px; }
+    & .stat b { font-size: 22px; }
+    & .stat-nps { grid-column: 1 / -1; }
+    & .nps-bands { grid-template-columns: max-content 1fr; }
+    & .nps-bands b { grid-column: 2; }
+    & .nps-bands li > .muted { grid-column: 1 / -1; }
+    & .share-link { flex: 1 0 100%; text-align: center; }
+  }
+}

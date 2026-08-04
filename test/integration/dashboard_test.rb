@@ -51,7 +51,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal 'text/css', response.media_type
     assert_includes response.body, '& .nav'
-    assert_includes response.body, '.tm-show { min-height: 100vh; overflow: auto; }'
+    assert_includes response.body, '.tml-show { min-height: 100vh; overflow: auto; }'
   end
 
   # Everything a host admin already styles. A bare `body`/`a`/`table`/`*` rule
@@ -61,7 +61,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get '/testimonials/dashboard.css'
 
     top_level_selectors(response.body).each do |part|
-      assert part.start_with?('.tm-index', '.tm-nps-index', '.tm-show', '.tml-', ':root'),
+      assert part.start_with?('.tml-', ':root'),
              "top-level selector #{part.inspect} is not namespaced to the dashboard"
     end
   end
@@ -173,10 +173,10 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     assert_includes response.body, 'dashboard-shell has-selected'
-    assert_includes response.body, 'record-row testimonial-row active'
-    assert_select '.testimonial-panel > .panel-head', false
-    assert_select '.testimonial-panel dl dt', text: 'Status'
-    assert_select '.testimonial-panel dl dt', text: 'Rating'
+    assert_includes response.body, 'record-row active'
+    assert_select '.detail-panel > .panel-head', false
+    assert_select '.detail-panel dl dt', text: 'Status'
+    assert_select '.detail-panel dl dt', text: 'Rating'
     assert_includes response.body, 'Wonderful tool'
     assert_includes response.body, 'Best line'
     assert_operator response.body.rindex('Ada'), :<, response.body.rindex('Wonderful tool')
@@ -189,7 +189,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get "/testimonials/#{@testimonial.id}"
 
     assert_response :ok
-    assert_includes response.body, 'tm-show"'
+    assert_includes response.body, 'tml-show"'
     assert_includes response.body, 'Wonderful tool'
     assert_includes response.body, 'Best line'
   end
@@ -236,7 +236,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     assert_includes response.body, 'dashboard-shell has-selected'
-    assert_includes response.body, 'record-row nps-row active'
+    assert_includes response.body, 'record-row active'
     assert_includes response.body, 'Superb'
     assert_includes response.body, 'Ada'
     assert_operator response.body.rindex('Ada'), :<, response.body.rindex('Superb')
@@ -249,7 +249,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get "/testimonials/nps_responses/#{nps_response.id}"
 
     assert_response :ok
-    assert_includes response.body, 'tm-show"'
+    assert_includes response.body, 'tml-show"'
     assert_includes response.body, 'Superb'
     assert_includes response.body, 'Ada'
   end
