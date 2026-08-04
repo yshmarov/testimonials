@@ -1,63 +1,17 @@
 # frozen_string_literal: true
 
 module Testimonials
+  # Root of the engine's PUBLIC surface: widget.js, the submission endpoints,
+  # the prompt-event ledger, the public collection pages, media, and the read
+  # API. These stay on a plain ActionController::Base deliberately — a member
+  # posting a testimonial must not be routed through a host's admin controller,
+  # which would demand a staff session for the widget.
+  #
+  # The dashboard's root is DashboardController, and that is where
+  # `config.base_controller_class` applies.
   class ApplicationController < ActionController::Base
+    include RequestContext
+
     protect_from_forgery with: :exception
-
-    private
-
-    def testimonials_admin_layout
-      Testimonials.config.admin_layout
-    end
-
-    def current_author
-      return @current_author if defined?(@current_author)
-
-      @current_author = Testimonials.config.current_user.call(request)
-    end
-
-    def current_author_id
-      current_author.respond_to?(:id) ? current_author.id : nil
-    end
-
-    # The tenant for this request (nil = the single global collection). Every
-    # read and write in the engine scopes to it, so a resolved-tenant admin
-    # only ever sees and writes their own tenant's records.
-    def current_tenant
-      return @current_tenant if defined?(@current_tenant)
-
-      @current_tenant = Testimonials.tenant(request)
-    end
-
-    def require_enabled
-      head :forbidden unless Testimonials.enabled?(request)
-    end
-
-    def render_rate_limited
-      message = I18n.t('testimonials.error_rate_limited',
-                       default: 'Too many submissions. Please wait a moment and try again.')
-      render json: { errors: [message] }, status: :too_many_requests
-    end
-
-    # Server-side gate for the dashboard. Default: development only.
-    def require_admin
-      return if Testimonials.admin?(request)
-
-      render plain: 'Forbidden. Set Testimonials.config.authorize_admin to grant access.',
-             status: :forbidden
-    end
-
-    # Guests get a permanent random token so the throttle ledger can
-    # remember them across visits. Signed-in users are keyed by author_id
-    # instead and never receive the cookie.
-    def ensure_visitor_token
-      return if current_author
-
-      cookies[:testimonials_vid].presence || begin
-        token = SecureRandom.base58(24)
-        cookies.permanent[:testimonials_vid] = { value: token, httponly: true, same_site: :lax }
-        token
-      end
-    end
   end
 end

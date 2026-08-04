@@ -2,12 +2,9 @@
 
 module Testimonials
   # The NPS side of the dashboard: overall score plus the response list.
-  class NpsResponsesController < ApplicationController
+  class NpsResponsesController < DashboardController
     PER_PAGE = 50
 
-    layout :testimonials_admin_layout
-
-    before_action :require_admin
     # An install run with --skip-nps has no table behind these pages, and the
     # nav already hides the tab whenever config.nps is off.
     before_action :require_nps

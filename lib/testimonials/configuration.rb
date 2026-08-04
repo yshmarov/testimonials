@@ -19,7 +19,25 @@ module Testimonials
 
     # Layout used by the built-in dashboard. Override this to render
     # Testimonials inside your app's admin shell, e.g. "admin/application".
+    # The lighter of the two ways to adopt a host's chrome; see
+    # base_controller_class for the other.
     attr_accessor :admin_layout
+
+    # The controller the DASHBOARD inherits from, as a String so it resolves
+    # lazily rather than at config time. Default: a plain
+    # 'ActionController::Base', where `authorize_admin` is the only gate.
+    #
+    # Name the controller your own admin already inherits from and the
+    # dashboard adopts that whole stack — layout, helpers, authentication, and
+    # any request context your before_actions set up (a `Current` attribute the
+    # layout reads, say). `admin_layout` covers only the layout, which leaves a
+    # host layout calling its own helpers to raise NameError under the engine's
+    # isolated namespace.
+    #
+    # Only the dashboard uses it. The widget's endpoints stay on the engine's
+    # own public controller, so an admin base controller here can never demand
+    # a staff session from a member leaving a review.
+    attr_accessor :base_controller_class
 
     # Resolve the current user for attribution (optional). Return an object
     # responding to #id, or nil. Receives the request.
@@ -118,6 +136,7 @@ module Testimonials
       @enabled = ->(_request) { true }
       @authorize_admin = ->(_request) { Rails.env.development? }
       @admin_layout = 'testimonials/application'
+      @base_controller_class = 'ActionController::Base'
       @current_user = ->(_request) {}
       @tenant = ->(_request) {}
       @user_display = lambda { |user|

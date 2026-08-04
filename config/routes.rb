@@ -36,7 +36,13 @@ Testimonials::Engine.routes.draw do
   # route above is declared first, so ordering already does the disambiguating,
   # and an id that matches no record still 404s, just via RecordNotFound rather
   # than a routing error.
-  resources :testimonials, path: '', only: %i[create index show update destroy]
+  #
+  # POST goes to SubmissionsController, not to this resource: the widget's write
+  # endpoint is public and the rest is staff-only, and only the staff half
+  # inherits config.base_controller_class. Sharing one controller would put a
+  # host's admin authentication in front of a member leaving a review.
+  post '', to: 'submissions#create', as: :submissions
+  resources :testimonials, path: '', only: %i[index show update destroy]
 
   root to: 'testimonials#index'
 end
