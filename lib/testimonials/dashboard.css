@@ -144,6 +144,19 @@
   & .actions form { display: inline; }
   & .form-actions { padding-top: 12px; }
 
+  /* Status switch: one pill holding every state a record can be in, the state it
+     is in now lit. Each other segment is a submit button, so moving a record
+     takes one click and no JavaScript; the current segment is a `type="button"`
+     so clicking it cannot re-file the record it is already filed under. Two
+     states or five, the pill sizes itself. A gem tints the lit segment with its
+     own status colour — see the `GEM-SPECIFIC` section. */
+  & .status-switch { display: inline-flex; flex: 0 0 auto; margin: 0; padding: 3px; border: 1px solid var(--tml-border); border-radius: 999px; background: var(--tml-bg); }
+  & .status-switch button { min-height: 30px; padding: 0 12px; border: 0; border-radius: 999px; background: none; color: var(--tml-muted); font-size: 13px; font-weight: 700; white-space: nowrap; transition: background .16s ease, color .16s ease; }
+  & .status-switch button:hover { border: 0; background: color-mix(in srgb, var(--tml-muted) 12%, transparent); color: var(--tml-text); }
+  & .status-switch button.current { background: var(--tml-surface); color: var(--tml-text); box-shadow: 0 1px 2px rgba(15, 23, 42, .12); cursor: default; }
+  & .status-switch button.current:hover { background: var(--tml-surface); }
+  & .panel-head .status-switch { margin-left: auto; }
+
   & .card { overflow: hidden; border: 1px solid var(--tml-border); border-radius: 12px; background: var(--tml-surface); }
   & .card.pad { padding: 16px; overflow: visible; }
   & table { width: 100%; border-collapse: collapse; }
@@ -266,6 +279,7 @@
     & .dashboard-detail .detail-panel { min-height: calc(100vh - 64px); }
     & .mobile-back { display: block; flex: 0 0 auto; margin: 4px 0 10px; font-size: 13px; }
     & .panel-head h1 { font-size: 18px; }
+    & .status-switch button { padding: 0 9px; font-size: 12px; }
     & dl { grid-template-columns: 1fr; gap: 3px; }
     & dd { margin-bottom: 8px; }
   }
