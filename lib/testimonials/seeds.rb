@@ -9,8 +9,10 @@ module Testimonials
       {
         seed_id: 'approved-founder',
         kind: 'text',
-        body: 'We added the widget after onboarding and collected better customer quotes in the first week.',
-        best_line: 'Collected better customer quotes in the first week.',
+        body: 'We call testimonial_prompt! after a customer completes onboarding, when the value is still ' \
+              'fresh. The prompt feels earned, and the quotes are much more specific than the ones we used ' \
+              'to request by email.',
+        best_line: 'Ask after a real success moment and the quotes become specific.',
         rating: 5,
         status: 'approved',
         featured: true,
@@ -18,7 +20,7 @@ module Testimonials
         consent_text: 'You can use my testimonial publicly in your marketing and sales.',
         name: 'Maya Chen',
         email: 'maya@example.com',
-        title_company: 'Founder, DemoCRM',
+        title_company: 'Founder, Demo CRM',
         source: 'widget',
         page_url: '/onboarding/complete',
         locale: 'en'
@@ -26,7 +28,9 @@ module Testimonials
       {
         seed_id: 'pending-operator',
         kind: 'text',
-        body: 'The NPS prompt felt lightweight and did not interrupt the workflow.',
+        body: 'This response has public consent, but it is still pending. That separation gives our team a ' \
+              'chance to verify the quote, choose a best line, and approve it before anything appears on the ' \
+              'wall of love.',
         rating: 4,
         status: 'pending',
         featured: false,
@@ -34,7 +38,7 @@ module Testimonials
         consent_text: 'You can use my testimonial publicly in your marketing and sales.',
         name: 'Jon Bell',
         email: 'jon@example.com',
-        title_company: 'Operations Lead, ExampleCo',
+        title_company: 'Operations Lead, Example Co',
         source: 'nps',
         page_url: '/reports',
         locale: 'en'
@@ -42,7 +46,8 @@ module Testimonials
       {
         seed_id: 'private-archive',
         kind: 'text',
-        body: 'Useful for our internal rollout notes, but please do not publish my name.',
+        body: 'I am happy for the team to keep this feedback internally, but I did not consent to public ' \
+              'use. Archiving it keeps the learning without making it publishable.',
         rating: 3,
         status: 'archived',
         featured: false,
@@ -58,8 +63,10 @@ module Testimonials
       {
         seed_id: 'approved-video',
         kind: 'video',
-        body: 'Short demo video testimonial with a real MP4 attachment.',
-        best_line: 'A real video testimonial is ready to review.',
+        body: 'The attached clip is intentionally generic demo media. It proves the upload, review, and ' \
+              'protected playback path; replace it with a real customer recording before using this record ' \
+              'anywhere public.',
+        best_line: 'Video follows the same consent and approval workflow as text.',
         rating: 5,
         status: 'approved',
         featured: true,
@@ -67,7 +74,7 @@ module Testimonials
         consent_text: 'You can use my testimonial publicly in your marketing and sales.',
         name: 'Alex Rivera',
         email: 'alex@example.com',
-        title_company: 'Head of Product, VideoDemo',
+        title_company: 'Head of Product, Demo Video Co',
         source: 'page',
         page_url: '/testimonials/new',
         locale: 'en'
@@ -76,9 +83,12 @@ module Testimonials
 
     NPS_RESPONSES = [
       { seed_id: 'promoter', score: 10,
-        comment: 'Fast to install and easy to trust because the data stays in our app.' },
-      { seed_id: 'passive', score: 8, comment: 'The flow is useful, but I would like more display examples.' },
-      { seed_id: 'detractor', score: 4, comment: 'I was not sure when the prompt would appear again.' }
+        comment: 'A 9 or 10 is a promoter. One promoter contributes positively to the NPS score.' },
+      { seed_id: 'passive', score: 8,
+        comment: 'A 7 or 8 is passive. Keep the feedback, but this response does not move the NPS score.' },
+      { seed_id: 'detractor', score: 4,
+        comment: 'A score from 0 to 6 is a detractor. With one promoter and one detractor, this demo board ' \
+                 'totals 0 NPS.' }
     ].freeze
 
     PROMPT_EVENTS = [

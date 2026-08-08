@@ -18,6 +18,11 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal 3, demo_events.count
     assert_equal %w[approved archived pending], first[:testimonials].map(&:status).uniq.sort
     assert_equal 0, Testimonials::NpsResponse.score
+    assert_includes first[:testimonials].find(&:featured?).body, 'testimonial_prompt!'
+    assert_includes first[:testimonials].find { |testimonial| !testimonial.consent_given? }.body,
+                    'did not consent to public use'
+    assert_includes first[:nps_responses].find { |response| response.score == 8 }.comment,
+                    'does not move the NPS score'
   end
 
   test 'skips NPS rows when the install left the table out' do

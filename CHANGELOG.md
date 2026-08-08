@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.1
+
+- **The demo data now teaches responsible collection.** Its testimonials cover
+  success-moment prompting, pending moderation, public consent, private
+  archiving, best lines, and the shared approval rules for text and video. The
+  promoter, passive, and detractor comments explain why the balanced sample has
+  an NPS of zero.
+- The bundled video remains intentionally generic: it proves protected upload
+  and playback without pretending to be customer evidence. Rerunning
+  `testimonials:seed_demo` refreshes the existing demo rows and can overwrite
+  edits to them; non-demo customer records are not touched.
+
 ## 0.9.0
 
 - **One design system across the family.** The stylesheet now opens with a
