@@ -5,7 +5,7 @@ Instructions for coding agents. Two audiences:
 - **[Installing testimonials into a Rails app](#installing-into-a-rails-app)** — you are working in a host app and were asked to add testimonials, reviews, or NPS.
 - **[Working on the gem itself](#working-on-the-gem-itself)** — you are working in this repository.
 
-Requirements: Ruby >= 3.2, Rails >= 7.1. Active Storage only for video and avatar uploads.
+Requirements: Ruby >= 3.2, Rails >= 7.1 and < 9. Active Storage only for video and avatar uploads.
 
 If you are in a host app and this file is not in front of you, it ships inside the gem: `cat "$(bundle show testimonials)/AGENTS.md"`.
 
@@ -203,6 +203,7 @@ is uncertain, explicitly prepend the configured Ruby, for example
 
 ```bash
 bundle exec rake test            # minitest, dummy app under test/dummy
+bundle exec rake test:system     # real Chrome: NPS, testimonial, moderation, public read
 bundle exec rubocop             # must be clean
 BUNDLE_GEMFILE=gemfiles/rails_7.1.gemfile bundle exec rake test   # 7.1, 7.2, 8.0, 8.1 in gemfiles/
 ```

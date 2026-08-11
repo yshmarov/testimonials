@@ -5,34 +5,50 @@ module Testimonials
   # need to know about Active Storage. Admins can fetch anything; everyone
   # else only reaches media of publishable (approved + consented)
   # testimonials, and only when the read API is public. The actual bytes are
-  # served by Active Storage's own controllers (signed, expiring URLs, with
-  # Range support — video elements need that).
+  # streamed here after authorization. Keeping the browser on this route means
+  # an Active Storage URL cannot outlive the gate; Range support remains for
+  # video playback and seeking.
   class MediaController < ApplicationController
+    include ActiveStorage::Streaming if defined?(::ActiveStorage::Streaming)
+
     before_action :set_testimonial
     before_action :authorize_media
 
     def video
       head :not_found and return unless @testimonial.video_attached?
 
-      redirect_to main_app.rails_blob_path(@testimonial.video_file, disposition: disposition)
+      stream(@testimonial.video_file)
     end
 
     def poster
       head :not_found and return unless @testimonial.poster_attached?
 
-      redirect_to main_app.rails_blob_path(@testimonial.poster, disposition: disposition)
+      stream(@testimonial.poster)
     end
 
     def avatar
       head :not_found and return unless @testimonial.avatar_attached?
 
-      redirect_to main_app.rails_blob_path(@testimonial.avatar, disposition: disposition)
+      stream(@testimonial.avatar)
     end
 
     private
 
-    # ?download=1 turns the redirect into a file download instead of
-    # inline playback.
+    def stream(attachment)
+      blob = attachment.blob
+      response.headers['Cache-Control'] = 'private, no-store'
+      if request.headers['Range'].present?
+        send_blob_byte_range_data(blob, request.headers['Range'], disposition: disposition)
+      else
+        response.headers['Accept-Ranges'] = 'bytes'
+        response.headers['Content-Length'] = blob.byte_size.to_s
+        send_blob_stream(blob, disposition: disposition)
+      end
+    end
+
+    # ?download=1 explicitly requests a file download. Without it we request
+    # inline playback; Active Storage may still force attachment disposition
+    # for content types outside the host's safe-inline allowlist.
     def disposition
       params[:download].present? ? 'attachment' : 'inline'
     end
@@ -48,7 +64,11 @@ module Testimonials
       # Authors can always see their own media — the widget replays their
       # attached video when they edit their review.
       return if current_author_id.present? && @testimonial.author_id == current_author_id.to_s
-      return if Testimonials.config.public_api && @testimonial.approved? && @testimonial.consent_given?
+
+      if Testimonials.config.public_api && @testimonial.approved? && @testimonial.consent_given?
+        response.set_header('Access-Control-Allow-Origin', '*')
+        return
+      end
 
       head :forbidden
     end

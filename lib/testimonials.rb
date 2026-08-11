@@ -3,6 +3,7 @@
 require 'testimonials/version'
 require 'testimonials/configuration'
 require 'testimonials/widget'
+require 'testimonials/widget_helper'
 require 'testimonials/prompt_helper'
 require 'testimonials/has_testimonials'
 require 'testimonials/seeds'

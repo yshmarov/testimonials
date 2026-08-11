@@ -55,6 +55,7 @@ module Testimonials
       end
       testimonial.kind = wants_video?(testimonial) ? 'video' : 'text'
       testimonial.source = 'widget' unless Testimonial::SOURCES.include?(testimonial.source)
+      testimonial.page_url = clean_page_url(testimonial.page_url)
       testimonial.consent_text = Testimonials.consent_text_for(testimonial.consent_given?)
       testimonial.locale = I18n.locale.to_s
       testimonial.tenant = current_tenant

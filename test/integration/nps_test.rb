@@ -11,6 +11,16 @@ class NpsTest < ActionDispatch::IntegrationTest
     assert_equal 10, Testimonials::NpsResponse.last.score
   end
 
+  test 'stores only a safe query-free source page' do
+    post '/testimonials/nps', params: {
+      nps: { score: 8, page_url: 'https://example.com/success?session=secret#done' }
+    }
+    assert_equal 'https://example.com/success', Testimonials::NpsResponse.last.page_url
+
+    post '/testimonials/nps', params: { nps: { score: 8, page_url: 'data:text/html,unsafe' } }
+    assert_nil Testimonials::NpsResponse.last.page_url
+  end
+
   test 'does not offer the testimonial form to passives or detractors' do
     post '/testimonials/nps', params: { nps: { score: 7 } }
     refute response.parsed_body['offer_testimonial']

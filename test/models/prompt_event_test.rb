@@ -3,6 +3,11 @@
 require 'test_helper'
 
 class PromptEventTest < ActiveSupport::TestCase
+  test 'keeps the stable 1.x prompt vocabulary' do
+    assert_equal %w[testimonial nps], Testimonials::PromptEvent::KINDS
+    assert_equal %w[shown dismissed submitted], Testimonials::PromptEvent::ACTIONS
+  end
+
   def eligible?(**args)
     Testimonials::PromptEvent.eligible?(kind: 'testimonial', **args)
   end

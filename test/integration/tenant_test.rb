@@ -126,7 +126,9 @@ module Testimonials
       assert_response :not_found
 
       get "/testimonials/#{testimonial.id}/video", params: { tenant: 'acme' }
-      assert_response :redirect # found in-tenant, handed to Active Storage
+      assert_response :success
+      assert_equal 'bytes', response.body
+      assert_nil response.headers['Location']
     end
   end
 end

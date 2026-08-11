@@ -11,6 +11,7 @@ class SampleController < ActionController::Base
         <body>
           <h1>Sample page</h1>
           <a href="#" id="custom-opener" data-testimonial-prompt>Open</a>
+          <button type="button" id="nps-opener" data-testimonial-prompt="nps">Open NPS</button>
           <%= testimonials_button(class: "btn") %>
           <%= testimonials_tag %>
         </body>

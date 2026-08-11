@@ -66,7 +66,8 @@ refreshes those records instead of duplicating them.
 > The dashboard defaults to **development only**. Set `authorize_admin` before
 > you deploy — see [Configure](#configure).
 
-Ruby >= 3.2 · Rails >= 7.1 · Active Storage only if you want video/avatar uploads.
+Ruby >= 3.2 · Rails >= 7.1 and < 9 · Active Storage only if you want
+video/avatar uploads.
 
 Installing with a coding agent? Point it at [AGENTS.md](AGENTS.md) — the same
 steps in the order an agent needs them, plus the gates it tends to get wrong
@@ -240,7 +241,7 @@ playback, feature toggle, and a **Best line** picker.
 <img src="https://raw.githubusercontent.com/yshmarov/testimonials/main/docs/screenshots/dashboard-show.jpg" alt="A single testimonial in the dashboard: video playback, best-line picker, attribution metadata, and approve/archive/feature/delete actions" width="620">
 
 Every submission keeps its provenance — who sent it, the exact consent text
-they agreed to, the page, locale, browser, timestamp. **Best line** is the only
+they agreed to, the query-free page URL, locale, browser, timestamp. **Best line** is the only
 thing you write: the customer's words stay verbatim, you just choose which
 sentence your landing page pulls out.
 
@@ -255,6 +256,8 @@ Admin-only by default. `config.public_api = true` serves them without auth
 (CORS `*`) — ideal for a static marketing site rendering your wall of love at
 build time. **Emails and author ids are never serialized.** Video and avatar
 files go through the same gate, with Range support so `<video>` just works.
+The media response stays on that authorized engine URL with a private,
+`no-store` cache policy; it never redirects to a reusable signed blob URL.
 
 ## Rendering what you collect
 
@@ -358,6 +361,49 @@ collection — so nothing changes until you set `config.tenant`.
 
 </details>
 
+## Compatibility and public API
+
+The following are the model and integration contracts that 1.x will keep
+stable under semantic versioning:
+
+- `Testimonials::Testimonial`, including `KINDS`, `STATUSES`, `SOURCES`, its
+  persisted fields, attachment predicates, status predicates, `for_tenant`,
+  `newest_first`, `approved`, `publishable`, `featured_first`, `display_name`,
+  and `quote`.
+- `Testimonials::NpsResponse`, including its persisted fields, `for_tenant`,
+  `newest_first`, `promoter?`, `passive?`, `detractor?`, `.score`, and `.band`
+  when NPS is installed.
+- `Testimonials::PromptEvent`, including `KINDS`, `ACTIONS`, its persisted
+  fields, `.eligible?`, and `.record!` when prompt events are installed.
+- `has_testimonials`, `Testimonials.configure`, `mount_testimonials`,
+  `testimonials_tag`, the opener helpers/attributes, and `testimonial_prompt!`.
+- `config.on_submit` and `config.on_detractor`, each receiving the documented
+  saved record.
+
+Those domain model names are intentional and will not become a generic `Post`
+during 1.x. Engine controllers, partials, CSS classes, generated HTML, and
+widget implementation objects are private. Incompatible changes to the public
+list above wait for a new major version; a deprecation normally ships first.
+
+### Upgrading from 0.x
+
+Version 1.0.0 keeps the existing domain models and schema. There is no
+migration, initializer change, compatibility alias, or rename: continue using
+`Testimonials::Testimonial`, `Testimonials::NpsResponse`, and
+`Testimonials::PromptEvent`. Rails 9 is excluded until a 1.x release explicitly
+adds it. Media URLs are unchanged, but their responses now contain the gated
+bytes instead of redirecting to an Active Storage URL.
+
+## Security and deletion
+
+See [SECURITY.md](https://github.com/yshmarov/testimonials/blob/main/SECURITY.md)
+for private vulnerability reporting and the stored-data, consent, media,
+deletion, and retention boundaries. In short: the public API is off by default;
+when enabled it returns only approved, publicly consented records without email
+or author ids. Deleting the live testimonial, NPS, and prompt-event rows is the
+host's responsibility, as are object-store, backup, analytics, cache, and export
+retention policies.
+
 ## Who's using it
 
 - [PaidCollabs](https://paidcollabs.com) — the screenshots above
@@ -369,8 +415,16 @@ add yourself.
 
 ```bash
 bundle exec rake test
+bundle exec rake test:system
 bundle exec rubocop
+node --check lib/testimonials/widget.js
+node --check lib/testimonials/dashboard.js
 ```
+
+The default suite covers the Rails engine contract. The system task drives a
+real headless Chrome session from NPS through promoter handoff, testimonial
+submission, moderation, and public read. CI runs Rails 7.1, 7.2, 8.0, and 8.1
+against Ruby 3.2 through 4.0.
 
 Bug reports and pull requests welcome. The fastest way to help is to install it
 in a real app and

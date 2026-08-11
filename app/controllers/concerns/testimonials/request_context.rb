@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'uri'
+
 module Testimonials
   # Who is asking, which tenant they are in, and the gates that answer both.
   #
@@ -39,6 +41,21 @@ module Testimonials
     # here, so neither can reach across tenants.
     def tenant_scope
       Testimonial.for_tenant(current_tenant)
+    end
+
+    # Browser URLs can carry password-reset tokens, signed ids, and campaign
+    # details in their query or fragment. Store only a safe HTTP(S) page origin
+    # and path; invalid or executable schemes become nil before the dashboard
+    # ever renders them as links.
+    def clean_page_url(value)
+      uri = URI.parse(value.to_s)
+      return unless uri.is_a?(URI::HTTP) && uri.host.present? && uri.userinfo.nil?
+
+      uri.query = nil
+      uri.fragment = nil
+      uri.to_s
+    rescue URI::InvalidURIError
+      nil
     end
 
     def require_enabled

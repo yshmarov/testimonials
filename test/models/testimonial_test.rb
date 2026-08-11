@@ -3,6 +3,12 @@
 require 'test_helper'
 
 class TestimonialTest < ActiveSupport::TestCase
+  test 'keeps the stable 1.x kind, status, and source vocabularies' do
+    assert_equal %w[text video], Testimonials::Testimonial::KINDS
+    assert_equal %w[pending approved archived], Testimonials::Testimonial::STATUSES
+    assert_equal %w[widget page nps], Testimonials::Testimonial::SOURCES
+  end
+
   test 'requires a body for text testimonials' do
     refute Testimonials::Testimonial.new(kind: 'text').valid?
     assert Testimonials::Testimonial.new(kind: 'text', body: 'Great!').valid?

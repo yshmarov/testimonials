@@ -16,6 +16,8 @@ class WidgetTagTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal 'text/javascript', response.media_type
     assert_includes response.body, 'testimonials widget'
+    assert_includes response.body, 'data-testimonial-prompt'
+    assert_includes response.body, 'openNps'
     assert response.headers['ETag'].present?
   end
 

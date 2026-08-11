@@ -13,6 +13,7 @@ module Testimonials
       nps = NpsResponse.new(nps_params)
       nps.locale = I18n.locale.to_s
       nps.tenant = current_tenant
+      nps.page_url = clean_page_url(nps.page_url)
       nps.user_agent = request.user_agent
       attribute_author(nps)
 

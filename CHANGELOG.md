@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.0.0 - 2026-08-11
+
+- **The 1.x record names are settled.** `Testimonials::Testimonial`,
+  `Testimonials::NpsResponse`, and `Testimonials::PromptEvent` are now
+  documented as the stable model constants rather than being hidden behind a
+  generic `Post` name. Their existing optional-install boundaries are
+  unchanged.
+- **A real Chrome test now proves the revenue-adjacent path:** an NPS promoter
+  is offered the testimonial form, submits text with public consent, lands in
+  pending moderation, is approved, and appears through the public read API
+  without leaking email. Capybara and Selenium are development/test
+  dependencies only.
+- **Uploaded videos, posters, and avatars stay behind the engine gate.** Media
+  responses now stream full and byte-range data directly after authorization
+  instead of redirecting to a reusable signed Active Storage URL. Code that
+  inspected a media response's `Location` header must consume the engine URL
+  directly; browser `<video>` and image URLs are unchanged.
+- **Hosts that load Action View from an initializer boot normally.** The widget
+  helper is loaded from `lib` before the engine registers its Action View hook;
+  `testimonials_tag` and the opener helpers are unchanged.
+- Added a security policy documenting stored testimonial, NPS, prompt-event,
+  consent, media, deletion, and retention boundaries. GitHub private
+  vulnerability reporting is the disclosure channel. Submitted page URLs now
+  accept only HTTP(S) and drop query strings/fragments before storage, keeping
+  tokens out of the database and executable schemes out of dashboard links.
+- Supported combinations are Ruby 3.2 through 4.0 and Rails 7.1 through 8.1;
+  Rails now has a `< 9` upper bound. Release validation runs the browser test,
+  lint and JavaScript checks, builds the gem, verifies RubyGems indexing, and
+  creates the GitHub Release.
+- Existing 0.x installs need no migration, initializer change, constant alias,
+  or model rename. The new Rails upper bound and non-redirecting media response
+  are the only compatibility costs.
+
 ## 0.9.1
 
 - **The demo data now teaches responsible collection.** Its testimonials cover

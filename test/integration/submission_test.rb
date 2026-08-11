@@ -20,6 +20,19 @@ class SubmissionTest < ActionDispatch::IntegrationTest
     assert_equal 'en', testimonial.locale
   end
 
+  test 'stores only a safe query-free source page' do
+    post '/testimonials', params: {
+      testimonial: { body: 'Love it!', page_url: 'https://example.com/pricing?token=secret#checkout' }
+    }
+    assert_equal 'https://example.com/pricing', Testimonials::Testimonial.last.page_url
+
+    post '/testimonials', params: { testimonial: { body: 'Still safe', page_url: 'javascript:alert(1)' } }
+    assert_nil Testimonials::Testimonial.last.page_url
+
+    post '/testimonials', params: { testimonial: { body: 'No credentials', page_url: 'https://user:secret@example.com/' } }
+    assert_nil Testimonials::Testimonial.last.page_url
+  end
+
   test 'private-use consent is stored, snapshotted, and kept out of the public API' do
     post '/testimonials', params: {
       testimonial: { body: 'Internal only', rating: 5, consent_given: '0', name: 'Grace' }
@@ -109,11 +122,14 @@ class SubmissionTest < ActionDispatch::IntegrationTest
     testimonial = Testimonials::Testimonial.last
 
     get "/testimonials/#{testimonial.id}/video", params: { download: 1 }
-    assert_response :redirect
-    assert_includes response.headers['Location'], 'disposition=attachment'
+    assert_response :success
+    assert_includes response.headers['Content-Disposition'], 'attachment'
+    assert_nil response.headers['Location']
 
     get "/testimonials/#{testimonial.id}/video"
-    assert_includes response.headers['Location'], 'disposition=inline'
+    assert_response :success
+    assert_equal 'fake video bytes', response.body
+    assert_nil response.headers['Location']
   end
 
   test 'stores a poster alongside a recorded video and serves it' do
@@ -124,7 +140,8 @@ class SubmissionTest < ActionDispatch::IntegrationTest
 
     assert testimonial.poster_attached?
     get "/testimonials/#{testimonial.id}/poster"
-    assert_response :redirect
+    assert_response :success
+    assert_nil response.headers['Location']
   end
 
   test 'purges the poster when the video is removed' do
@@ -145,7 +162,8 @@ class SubmissionTest < ActionDispatch::IntegrationTest
     testimonial = Testimonials::Testimonial.last
 
     get "/testimonials/#{testimonial.id}/video"
-    assert_response :redirect
+    assert_response :success
+    assert_nil response.headers['Location']
 
     Testimonials.config.current_user = ->(_request) {}
     get "/testimonials/#{testimonial.id}/video"
