@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 - 2026-08-11
+
+- **Media responses now opt out of MIME sniffing.** Approved, consented media
+  keeps its existing authorization, streaming, and private cache behavior while
+  adding `X-Content-Type-Options: nosniff`.
+
 ## 1.0.0 - 2026-08-11
 
 - **The 1.x record names are settled.** `Testimonials::Testimonial`,

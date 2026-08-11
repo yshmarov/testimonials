@@ -36,6 +36,7 @@ module Testimonials
 
     def stream(attachment)
       blob = attachment.blob
+      response.headers['X-Content-Type-Options'] = 'nosniff'
       response.headers['Cache-Control'] = 'private, no-store'
       if request.headers['Range'].present?
         send_blob_byte_range_data(blob, request.headers['Range'], disposition: disposition)

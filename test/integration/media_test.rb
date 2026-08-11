@@ -23,6 +23,7 @@ class MediaTest < ActionDispatch::IntegrationTest
     assert_equal @content, response.body
     assert_equal 'bytes', response.headers['Accept-Ranges']
     assert_includes response.headers['Cache-Control'], 'no-store'
+    assert_equal 'nosniff', response.headers['X-Content-Type-Options']
     assert_nil response.headers['Location']
   end
 
