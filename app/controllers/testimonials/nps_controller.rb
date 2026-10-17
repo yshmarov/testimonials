@@ -6,7 +6,9 @@ module Testimonials
     before_action :require_nps
 
     if respond_to?(:rate_limit) && Testimonials.config.rate_limit
-      rate_limit(**Testimonials.config.rate_limit, only: :create, with: -> { render_rate_limited })
+      Testimonials::RactorSupport.rate_limit(self, **Testimonials.config.rate_limit, only: :create, with: lambda {
+        render_rate_limited
+      })
     end
 
     def create

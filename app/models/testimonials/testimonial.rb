@@ -37,9 +37,9 @@ module Testimonials
     scope :publishable, -> { approved.where(consent_given: true) }
     scope :featured_first, -> { order(featured: :desc, id: :desc) }
 
-    STATUSES.each do |status|
-      define_method(:"#{status}?") { self.status == status }
-    end
+    def pending? = status == 'pending'
+    def approved? = status == 'approved'
+    def archived? = status == 'archived'
 
     def video? = kind == 'video'
 

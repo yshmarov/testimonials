@@ -2,6 +2,7 @@
 
 require 'testimonials/version'
 require 'testimonials/configuration'
+require 'testimonials/ractor_support'
 require 'testimonials/widget'
 require 'testimonials/widget_helper'
 require 'testimonials/prompt_helper'

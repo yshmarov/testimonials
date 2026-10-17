@@ -22,8 +22,19 @@ module Testimonials
     def has_testimonials(as: :testimonials, key: nil) # rubocop:disable Naming/PredicatePrefix
       resolver = key || ->(record) { record.to_gid.to_s }
 
-      define_method(as) { Testimonials::Testimonial.for_tenant(resolver.call(self)) }
-      define_method(:"#{as}_nps") { Testimonials::NpsResponse.for_tenant(resolver.call(self)) }
+      class_attribute :_testimonials_tenant_resolvers, instance_accessor: false, default: {} unless
+        respond_to?(:_testimonials_tenant_resolvers)
+      relation_name = as.to_sym
+      declaring_model = self
+      self._testimonials_tenant_resolvers = _testimonials_tenant_resolvers.merge(relation_name => resolver)
+      { relation_name => :Testimonial, :"#{as}_nps" => :NpsResponse }.each do |name, model|
+        getter = proc do
+          key_resolver = declaring_model._testimonials_tenant_resolvers.fetch(relation_name)
+          Testimonials.const_get(model).for_tenant(key_resolver.call(self))
+        end
+        getter = Ractor.shareable_proc(&getter) if defined?(Ractor.shareable_proc)
+        define_method(name, &getter)
+      end
     end
   end
 end

@@ -2,7 +2,18 @@
 
 module Testimonials
   class Engine < ::Rails::Engine
+    initializer 'testimonials.ractor_middleware' do |app|
+      app.middleware.insert_before 0, RactorSupport::Middleware
+    end
+
     isolate_namespace Testimonials
+
+    initializer 'testimonials.ractorize', before: 'action_controller.ractorize' do
+      if Rails::Application.method_defined?(:ractorize!)
+        Engine.routes.singleton_class.prepend(RactorSupport::MountedRoutes)
+      end
+      ActiveSupport.on_load(:before_ractorize) { Testimonials::RactorSupport.prepare! }
+    end
 
     rake_tasks do
       load File.expand_path('../tasks/testimonials_tasks.rake', __dir__)

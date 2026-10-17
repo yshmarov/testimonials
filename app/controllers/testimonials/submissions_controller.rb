@@ -15,7 +15,9 @@ module Testimonials
     # into Rails 7.2+ (backed by Rails.cache); on Rails 7.1 this is a no-op.
     # Tune or disable via config.rate_limit — read once at boot.
     if respond_to?(:rate_limit) && Testimonials.config.rate_limit
-      rate_limit(**Testimonials.config.rate_limit, only: :create, with: -> { render_rate_limited })
+      Testimonials::RactorSupport.rate_limit(self, **Testimonials.config.rate_limit, only: :create, with: lambda {
+        render_rate_limited
+      })
     end
 
     def create
