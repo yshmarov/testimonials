@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+- **The tenant upgrade runs under strong_migrations.** On PostgreSQL,
+  `testimonials:tenant` now writes a migration that builds its four indexes
+  concurrently, outside a transaction. It used to add them with a plain
+  `CREATE INDEX`, which blocks writes to tables the widget writes to, and
+  strong_migrations refused to run it. Other adapters get the same migration
+  as before.
+- **Cost:** none for existing installs; only newly generated migrations change.
+  A concurrent build that fails leaves an invalid index behind, which you drop
+  before running the migration again.
+
 ## 1.1.0 - 2026-10-18
 
 - Add Rails edge CI and experimental Ruby 4.0+ Ractor request support. The host

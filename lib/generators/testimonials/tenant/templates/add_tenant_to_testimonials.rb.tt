@@ -1,21 +1,25 @@
 # frozen_string_literal: true
 
 class AddTenantToTestimonials < ActiveRecord::Migration<%= migration_version %>
+<% if concurrent_indexes? -%>
+  disable_ddl_transaction!
+
+<% end -%>
   def change
     add_column :testimonials_testimonials, :tenant, :string
-    add_index :testimonials_testimonials, %i[tenant status consent_given]
+    add_index :testimonials_testimonials, %i[tenant status consent_given]<%= concurrent_index_option %>
 
     # The optional tables: an install run with --skip-nps or
     # --skip-prompt-events has no table to add the column to.
     if table_exists?(:testimonials_nps_responses)
       add_column :testimonials_nps_responses, :tenant, :string
-      add_index :testimonials_nps_responses, %i[tenant score]
+      add_index :testimonials_nps_responses, %i[tenant score]<%= concurrent_index_option %>
     end
 
     return unless table_exists?(:testimonials_prompt_events)
 
     add_column :testimonials_prompt_events, :tenant, :string
-    add_index :testimonials_prompt_events, %i[tenant author_id kind]
-    add_index :testimonials_prompt_events, %i[tenant visitor_token kind]
+    add_index :testimonials_prompt_events, %i[tenant author_id kind]<%= concurrent_index_option %>
+    add_index :testimonials_prompt_events, %i[tenant visitor_token kind]<%= concurrent_index_option %>
   end
 end
