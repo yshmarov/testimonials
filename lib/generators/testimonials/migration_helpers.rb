@@ -30,6 +30,22 @@ module Testimonials
         type = config.options[config.orm][:primary_key_type]
         type ? ", id: :#{type}" : ''
       end
+
+      # Upgrade generators index tables that already hold rows. On PostgreSQL
+      # a plain CREATE INDEX blocks writes until the build finishes, and
+      # strong_migrations refuses to run one. A concurrent build cannot run
+      # inside a transaction, so those migrations opt out of it. Other adapters
+      # have no concurrent build and keep their transaction.
+      #
+      # Decided at generate time, like the key type, so the migration holds
+      # plain code rather than an adapter check.
+      def concurrent_indexes?
+        ActiveRecord::Base.connection_db_config.adapter.to_s.include?('postg')
+      end
+
+      def concurrent_index_option
+        concurrent_indexes? ? ', algorithm: :concurrently' : ''
+      end
     end
   end
 end

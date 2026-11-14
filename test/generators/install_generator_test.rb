@@ -5,6 +5,7 @@ require 'rails/generators/test_case'
 require 'generators/testimonials/install/install_generator'
 require 'generators/testimonials/nps/nps_generator'
 require 'generators/testimonials/prompt_events/prompt_events_generator'
+require 'generators/testimonials/tenant/tenant_generator'
 
 # NPS and the prompt-history ledger are the two parts an app can opt out of,
 # and opting out changes the schema — so every shape is pinned here rather than
@@ -211,5 +212,53 @@ class PromptEventsGeneratorTest < Rails::Generators::TestCase
       assert_match 'add_index :testimonials_prompt_events, %i[tenant author_id kind]', migration
       assert_match 'add_index :testimonials_prompt_events, %i[tenant visitor_token kind]', migration
     end
+  end
+end
+
+# The tenant upgrade indexes tables that already hold rows, so on PostgreSQL it
+# must build concurrently (outside a transaction), or it locks writes and
+# strong_migrations refuses it. Other adapters keep the plain migration. The
+# dummy app is SQLite, so the PostgreSQL shape is forced per run.
+class TenantGeneratorTest < Rails::Generators::TestCase
+  tests Testimonials::Generators::TenantGenerator
+  destination File.expand_path('../tmp/generator', __dir__)
+  setup :prepare_destination
+
+  test 'builds every tenant index concurrently on PostgreSQL' do
+    run_generator_on :postgresql
+
+    assert_migration 'db/migrate/add_tenant_to_testimonials.rb' do |migration|
+      assert_match 'disable_ddl_transaction!', migration
+      assert_equal 4, migration.scan('add_index').size
+      assert_equal 4, migration.scan('algorithm: :concurrently').size
+    end
+    assert_ruby migration_path
+  end
+
+  test 'keeps a plain transactional migration elsewhere' do
+    run_generator_on :sqlite3
+
+    assert_migration 'db/migrate/add_tenant_to_testimonials.rb' do |migration|
+      refute_match 'disable_ddl_transaction!', migration
+      refute_match 'concurrently', migration
+      assert_match 'add_index :testimonials_testimonials, %i[tenant status consent_given]', migration
+    end
+    assert_ruby migration_path
+  end
+
+  private
+
+  def run_generator_on(adapter)
+    instance = generator
+    instance.define_singleton_method(:concurrent_indexes?) { adapter == :postgresql }
+    quietly { instance.invoke_all }
+  end
+
+  def migration_path
+    Dir[File.join(destination_root, 'db/migrate/*_add_tenant_to_testimonials.rb')].sole
+  end
+
+  def assert_ruby(path)
+    assert RubyVM::InstructionSequence.compile(File.read(path)), "#{path} is not valid Ruby"
   end
 end
